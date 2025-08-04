@@ -126,9 +126,12 @@
     <a href="#" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-image mr-2"></i> Galeri
     </a>
-    <a href="#" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
+    <form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <a href="{{ route('logout') }}" onclick="event.preventDefault();this.closest('form').submit();" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-sign-out-alt mr-2"></i> Logout
     </a>
+    </form>
   </div>
 
   <!-- Navbar -->
