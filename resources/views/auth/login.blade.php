@@ -45,7 +45,7 @@
         </div>
     </form> --}}
 
-        <div class="bg-white rounded-[15px] shadow-[0_8px_30px_rgba(0,0,0,0.1)] flex overflow-hidden w-[90%] max-w-[900px] flex-col md:flex-row">
+        <div class="bg-white rounded-[15px] shadow-[0_8px_30px_rgba(0,0,0,0.1)] flex overflow-hidden flex-col md:flex-row">
 
             <!-- Login Section -->
             <div class="flex-1 p-10 bg-white">
