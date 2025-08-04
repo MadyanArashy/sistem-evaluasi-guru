@@ -17,4 +17,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/tambah-guru', function () {
+    return view('buatguru');
+})->middleware(['auth', 'verified'])->name('buatguru');
+
 require __DIR__.'/auth.php';
