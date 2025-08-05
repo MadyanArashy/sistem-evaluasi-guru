@@ -26,4 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
 });
 
+Route::get('/halaman-guru', function () {
+    return view('halamanguru');
+})->middleware(['auth', 'verified'])->name('halamanguru');
+
 require __DIR__.'/auth.php';

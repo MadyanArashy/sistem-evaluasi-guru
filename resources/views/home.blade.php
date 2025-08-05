@@ -60,6 +60,9 @@
                   Nama Guru
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Gelar
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Mata Pelajaran
                 </th>
                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -78,9 +81,12 @@
                       <i class="fas fa-user-tie text-blue-500 text-lg"></i>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-blue-600 font-semibold">Dr. Siti Rahayu, M.Pd</div>
+                      <div class="text-sm font-medium text-blue-600 font-semibold">Siti Rahayu</div>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">Dr., M.Pd</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -112,9 +118,12 @@
                       <i class="fas fa-user-tie text-green-500 text-lg"></i>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">Budi Santoso, S.Pd</div>
+                      <div class="text-sm font-medium text-gray-900">Budi Santoso</div>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">S.Pd</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -146,9 +155,12 @@
                       <i class="fas fa-user-tie text-purple-500 text-lg"></i>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">Ani Wijaya, M.Hum</div>
+                      <div class="text-sm font-medium text-gray-900">Ani Wijaya</div>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">M.Hum</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -180,9 +192,12 @@
                       <i class="fas fa-user-tie text-red-500 text-lg"></i>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">Dewi Lestari, S.Sn</div>
+                      <div class="text-sm font-medium text-gray-900">Dewi Lestari</div>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">S.Sn</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -214,9 +229,12 @@
                       <i class="fas fa-user-tie text-orange-500 text-lg"></i>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">Ahmad Fauzi, S.Pd</div>
+                      <div class="text-sm font-medium text-gray-900">Ahmad Fauzi</div>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">S.Pd</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
