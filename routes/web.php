@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
+    Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
 });
 
 Route::get('/halaman-guru', function () {
