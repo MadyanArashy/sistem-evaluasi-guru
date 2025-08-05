@@ -21,4 +21,8 @@ Route::get('/tambah-guru', function () {
     return view('buatguru');
 })->middleware(['auth', 'verified'])->name('buatguru');
 
+Route::get('/halaman-guru', function () {
+    return view('halamanguru');
+})->middleware(['auth', 'verified'])->name('halamanguru');
+
 require __DIR__.'/auth.php';
