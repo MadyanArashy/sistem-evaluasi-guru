@@ -23,6 +23,7 @@ Route::get('/tambah-guru', function () {
 })->middleware(['auth', 'verified'])->name('buatguru');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/teacher/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
@@ -31,5 +32,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/halaman-guru', function () {
     return view('halamanguru');
 })->middleware(['auth', 'verified'])->name('halamanguru');
+
+Route::get('/data-guru', function () {
+    return view(view: 'dataguru');
+})->middleware(['auth', 'verified'])->name('dataguru');
 
 require __DIR__.'/auth.php';
