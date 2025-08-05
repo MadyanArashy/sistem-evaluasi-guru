@@ -104,10 +104,16 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <div class="flex gap-2 justify-center">
+                    <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-eye mr-1"></i>
+                      Detail
+                    </button>
+                    <button class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-star mr-1"></i>
+                      Evaluasi
+                    </button>
+                  </div>
                 </td>
               </tr>
               
@@ -141,10 +147,16 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <div class="flex gap-2 justify-center">
+                    <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-eye mr-1"></i>
+                      Detail
+                    </button>
+                    <button class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-star mr-1"></i>
+                      Evaluasi
+                    </button>
+                  </div>
                 </td>
               </tr>
               
@@ -178,10 +190,16 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <div class="flex gap-2 justify-center">
+                    <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-eye mr-1"></i>
+                      Detail
+                    </button>
+                    <button class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-star mr-1"></i>
+                      Evaluasi
+                    </button>
+                  </div>
                 </td>
               </tr>
               
@@ -215,10 +233,16 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <div class="flex gap-2 justify-center">
+                    <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-eye mr-1"></i>
+                      Detail
+                    </button>
+                    <button class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-star mr-1"></i>
+                      Evaluasi
+                    </button>
+                  </div>
                 </td>
               </tr>
               
@@ -252,10 +276,16 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <div class="flex gap-2 justify-center">
+                    <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-eye mr-1"></i>
+                      Detail
+                    </button>
+                    <button class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                      <i class="fas fa-star mr-1"></i>
+                      Evaluasi
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
