@@ -12,7 +12,8 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('halamanguru');
+        $teachers = Teacher::latest();
+        return view('dataguru', compact('teachers'));
     }
 
     /**
@@ -36,7 +37,7 @@ class TeacherController extends Controller
 
         Teacher::create($validated);
 
-        return redirect()->back()->with('Guru berhasil ditambahkan!');
+        return redirect()->back()->with('','Guru berhasil ditambahkan!');
     }
 
     /**
@@ -44,8 +45,8 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        // if($id)$teacher = Teacher::findOrFail($id);
-        return view('halamanguru');
+        $teacher = Teacher::findOrFail($id);
+        return view('halamanguru', compact('teacher'));
     }
 
     /**

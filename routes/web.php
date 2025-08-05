@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
+    Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
 });
 
 Route::get('/halaman-guru', function () {
@@ -33,8 +34,13 @@ Route::get('/halaman-guru', function () {
 })->middleware(['auth', 'verified'])->name('halamanguru');
 
 Route::get('/data-guru', function () {
+<<<<<<< HEAD
     return view('dataguru');
 })->middleware(['auth', 'verified'])->name('buatguru');
 
+=======
+    return view(view: 'dataguru');
+})->middleware(['auth', 'verified'])->name('dataguru');
+>>>>>>> 7dd82e3217b27716ccc05d108ba1ae209c48e9a0
 
 require __DIR__.'/auth.php';
