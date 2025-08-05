@@ -20,7 +20,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
+        return view('buatguru');
     }
 
     /**
@@ -28,11 +28,15 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             "name" => "required|string",
             "degree" => "required|string",
             "subject" => "required|string",
         ]);
+
+        Teacher::create($validated);
+
+        return redirect()->back()->with('Guru berhasil ditambahkan!');
     }
 
     /**
