@@ -34,13 +34,7 @@ Route::get('/halaman-guru', function () {
 })->middleware(['auth', 'verified'])->name('halamanguru');
 
 Route::get('/data-guru', function () {
-<<<<<<< HEAD
-    return view('dataguru');
-})->middleware(['auth', 'verified'])->name('buatguru');
-
-=======
     return view(view: 'dataguru');
 })->middleware(['auth', 'verified'])->name('dataguru');
->>>>>>> 7dd82e3217b27716ccc05d108ba1ae209c48e9a0
 
 require __DIR__.'/auth.php';
