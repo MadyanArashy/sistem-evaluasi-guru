@@ -36,7 +36,7 @@ class TeacherController extends Controller
 
         Teacher::create($validated);
 
-        return redirect()->back()->with('Guru berhasil ditambahkan!');
+        return redirect()->back()->with('','Guru berhasil ditambahkan!');
     }
 
     /**
