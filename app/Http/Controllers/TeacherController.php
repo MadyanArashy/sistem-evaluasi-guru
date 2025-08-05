@@ -12,7 +12,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('halamanguru');
+        return view('dataguru');
     }
 
     /**
