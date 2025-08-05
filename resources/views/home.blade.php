@@ -1,7 +1,7 @@
 <x-app-layout>
 
   <!-- Content -->
-  <div class="ml-[250px] mt-[80px] p-8">
+  <div class="p-8">
     <div class="grid md:grid-cols-3 gap-6 mb-8">
       <div class="animate__animated animate__fadeInUp">
         <div class="relative rounded-xl shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl p-6 text-white" style="background: linear-gradient(45deg, #4e54c8, #8f94fb);">
@@ -51,7 +51,7 @@
           <i class="fas fa-table mr-2 text-purple-600"></i>
           Data Penilaian Guru Bulanan
         </h5>
-        
+
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -110,7 +110,7 @@
 </a>
                 </td>
               </tr>
-              
+
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -147,7 +147,7 @@
 </a>
                 </td>
               </tr>
-              
+
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -184,7 +184,7 @@
 </a>
                 </td>
               </tr>
-              
+
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -221,7 +221,7 @@
 </a>
                 </td>
               </tr>
-              
+
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -265,7 +265,7 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="animate__animated animate__fadeInUp animate__delay-4s mt-[40px]">
+    <div class="animate__animated animate__fadeInUps">
       <div class="bg-white rounded-xl shadow-lg p-6">
         <h5 class="text-lg font-semibold mb-4 text-gray-700">
           <i class="fas fa-clock mr-2 text-blue-600"></i>
