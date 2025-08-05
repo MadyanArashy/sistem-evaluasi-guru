@@ -1,6 +1,6 @@
 <x-app-layout>
   <!-- Content -->
-  <div class="ml-[250px] mt-[100px] p-8">
+  <div class="p-8">
     <div class="bg-white rounded-xl shadow-lg p-6">
       <div class="flex justify-between items-center mb-6">
         <h5 class="text-lg font-semibold text-gray-700">
@@ -12,7 +12,7 @@
           Tambah Guru
         </a>
       </div>
-      
+
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">

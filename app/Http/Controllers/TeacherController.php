@@ -46,7 +46,7 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-        return view('halamanguru');
+        return view('halamanguru', compact('teacher'));
     }
 
     /**
