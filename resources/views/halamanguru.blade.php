@@ -1,5 +1,5 @@
 <x-app-layout>
-    
+
 <!-- Header -->
     <div class="px-8 pt-20" style="margin-left: 260px;">
             <h1 class="text-4xl font-extrabold text-blue-800 flex items-center gap-4 mb-2 tracking-wide drop-shadow">
@@ -14,8 +14,6 @@
     </div>
 
     <div class="px-8 mt-10" style="margin-left: 260px;">
-
-       
 
         <!-- Card Guru -->
         <div class="bg-white rounded-2xl shadow-md p-6 border-l-8 border-yellow-400 mb-10 flex gap-6 items-center">

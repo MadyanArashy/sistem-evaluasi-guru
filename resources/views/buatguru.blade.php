@@ -8,13 +8,15 @@
             </div>
 
             <!-- Form -->
-            <form>
+            <form action="{{ route('teacher.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <!-- Input Nama Guru -->
                 <div class="mb-6">
-                    <label for="nama" class="block text-sm font-medium text-blue-700 mb-2">Nama Guru</label>
+                    <label for="name" class="block text-sm font-medium text-blue-700 mb-2">Nama Guru</label>
                     <div class="relative">
-                        <input type="text" id="nama" placeholder="Nama lengkap guru"
-                            class="w-full pl-10 pr-4 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <x-text-input type="text" id="name" placeholder="Nama lengkap guru"
+                            class="w-full pl-10 pr-4 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="name"/>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i class="fas fa-user text-blue-400"></i>
                         </div>
@@ -23,10 +25,11 @@
 
                 <!-- Input Gelar -->
                 <div class="mb-6">
-                    <label for="gelar" class="block text-sm font-medium text-blue-700 mb-2">Gelar</label>
+                    <label for="degree" class="block text-sm font-medium text-blue-700 mb-2">Gelar</label>
                     <div class="relative">
-                        <input type="text" id="gelar" placeholder="Contoh: S.Pd, M.Kom"
-                            class="w-full pl-10 pr-4 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <x-text-input type="text" id="degree" placeholder="Contoh: S.Pd, M.Kom"
+                            class="w-full pl-10 pr-4 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="degree"/>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i class="fas fa-graduation-cap text-blue-400"></i>
                         </div>
@@ -35,10 +38,11 @@
 
                 <!-- Input Mata Pelajaran -->
                 <div class="mb-8">
-                    <label for="mapel" class="block text-sm font-medium text-yellow-700 mb-2">Mata Pelajaran</label>
+                    <label for="subject" class="block text-sm font-medium text-yellow-700 mb-2">Mata Pelajaran</label>
                     <div class="relative">
-                        <input type="text" id="mapel" placeholder="Mata pelajaran yang diajarkan"
-                            class="w-full pl-10 pr-4 py-2 border border-yellow-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <x-text-input type="text" id="subject" placeholder="Mata pelajaran yang diajarkan"
+                            class="w-full pl-10 pr-4 py-2 border border-yellow-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                            name="subject"/>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i class="fas fa-book text-yellow-400"></i>
                         </div>
@@ -46,7 +50,7 @@
                 </div>
 
                 <!-- Tombol Simpan -->
-                <button type="button"
+                <button type="submit"
                     class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-lg hover:bg-sky-500 transition duration-200">
                     <i class="fas fa-save mr-2"></i> Simpan
                 </button>
