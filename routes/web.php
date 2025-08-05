@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/tambah-guru', function () {
     return view('buatguru');
 })->middleware(['auth', 'verified'])->name('buatguru');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
+});
 
 Route::get('/halaman-guru', function () {
     return view('halamanguru');
