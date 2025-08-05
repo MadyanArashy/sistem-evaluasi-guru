@@ -104,10 +104,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <a href="{{ route('teacher.show', ['id' => '1']) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+       <i class="fas fa-eye mr-1"></i>
+       Detail
+</a>
                 </td>
               </tr>
 
@@ -141,10 +141,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <a href="{{ route('teacher.show', ['id' => '1']) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+       <i class="fas fa-eye mr-1"></i>
+       Detail
+</a>
                 </td>
               </tr>
 
@@ -178,10 +178,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <a href="{{ route('teacher.show', ['id' => '1']) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+       <i class="fas fa-eye mr-1"></i>
+       Detail
+</a>
                 </td>
               </tr>
 
@@ -198,7 +198,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">S.Sn</div>
-                </td>
+
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-8 w-8">
@@ -215,10 +215,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                 <a href="{{ route('teacher.show', ['id' => '1']) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+       <i class="fas fa-eye mr-1"></i>
+       Detail
+</a>
                 </td>
               </tr>
 
@@ -252,10 +252,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <button class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
-                    <i class="fas fa-eye mr-1"></i>
-                    Detail
-                  </button>
+                  <a href="{{ route('teacher.show', ['id' => '1']) }}" class="text-blue-600 hover:text-blue-900 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors">
+       <i class="fas fa-eye mr-1"></i>
+       Detail
+</a>
                 </td>
               </tr>
             </tbody>
