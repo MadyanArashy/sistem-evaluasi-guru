@@ -117,7 +117,7 @@
     <a href="{{ route('teacher.create') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-star mr-2"></i> Tambah Guru
     </a>
-    <a href="{{ route('teacher.index', ['id' => '1']) }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
+    <a href="{{ route('teacher.index' ) }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-users mr-2"></i> Data Guru
     </a>
     <a href="#" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">

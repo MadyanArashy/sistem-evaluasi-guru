@@ -21,7 +21,7 @@
                 <i class="fa-solid fa-user text-white text-3xl"></i>
             </div>
             <div class="space-y-1">
-                <h2 class="text-2xl font-bold text-gray-900">Kafka Albizard</h2>
+                <h2 class="text-2xl font-bold text-gray-900">Cukimai</h2>
                 <div class="flex items-center gap-2 text-yellow-700 text-sm">
                     <i class="fa-solid fa-graduation-cap text-yellow-500"></i>
                     <span class="font-medium">Gelar:</span>
