@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="animate__animated animate__fadeInUp animate__delay-1s">
+      <div class="animate__animated animate__fadeInUp">
         <div class="relative rounded-xl shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl p-6 text-white" style="background: linear-gradient(45deg, #11998e, #38ef7d);">
           <div class="flex justify-between items-center relative z-10">
             <div>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="animate__animated animate__fadeInUp animate__delay-2s">
+      <div class="animate__animated animate__fadeInUp">
         <div class="relative rounded-xl shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl p-6 text-white" style="background: linear-gradient(45deg, #FF8008, #FFC837);">
           <div class="flex justify-between items-center relative z-10">
             <div>
@@ -45,7 +45,7 @@
     </div>
 
     <!-- Data Tabel Penilaian Guru -->
-    <div class="animate__animated animate__fadeInUp animate__delay-3s">
+    <div class="animate__animated animate__fadeInUp">
       <div class="bg-white rounded-xl shadow-lg p-6">
         <h5 class="text-lg font-semibold mb-4 text-gray-700">
           <i class="fas fa-table mr-2 text-purple-600"></i>
