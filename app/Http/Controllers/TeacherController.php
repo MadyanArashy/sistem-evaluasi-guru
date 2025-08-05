@@ -12,7 +12,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        return view('halamanguru');
     }
 
     /**
@@ -42,9 +42,10 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Teacher $teacher)
+    public function show(string $id)
     {
-        //
+        // if($id)$teacher = Teacher::findOrFail($id);
+        return view('halamanguru');
     }
 
     /**
