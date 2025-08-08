@@ -1,6 +1,5 @@
 <x-app-layout>
     <!-- Card Guru -->
-    <div class="bg-white shadow-md p-6 border-l-8 border-yellow-400 mb-10 flex gap-6 items-center">
         <div class="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center shadow-lg border-4 border-yellow-300">
             <i class="fa-solid fa-user text-white text-3xl"></i>
         </div>
@@ -17,10 +16,8 @@
                 <span class="text-gray-800">{{ $teacher->subject }}</span>
             </div>
         </div>
-    </div>
 
     <!-- TABEL UTAMA -->
-    <div class=" bg-white rounded-xl shadow p-4 mb-20">
         <table class="w-full text-sm text-left border border-gray-300">
             <thead class="bg-yellow-300 text-gray-900 font-bold text-center">
                 <tr>
@@ -148,5 +145,4 @@
                 </tr>
             </tbody>
         </table>
-    </div>
 </x-app-layout>

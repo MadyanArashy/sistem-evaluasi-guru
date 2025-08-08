@@ -12,7 +12,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::latest();
+        $teachers = Teacher::all();
         return view('dataguru', compact('teachers'));
     }
 
@@ -37,7 +37,7 @@ class TeacherController extends Controller
 
         Teacher::create($validated);
 
-        return redirect()->back()->with('','Guru berhasil ditambahkan!');
+        return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
     }
 
     /**

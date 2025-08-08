@@ -1,6 +1,12 @@
 <div
   x-show="sidebarOpen"
-  class="fixed left-0 w-[250px] min-h-screen bg-gradient-to-br from-blue-600 to-sky-500 text-white pt-[60px] shadow-lg z-[1000] transition-transform duration-300 transform lg:translate-x-0"
+  x-transition:enter="transition transform duration-300"
+  x-transition:enter-start="-translate-x-full"
+  x-transition:enter-end="translate-x-0"
+  x-transition:leave="transition transform duration-300"
+  x-transition:leave-start="translate-x-0"
+  x-transition:leave-end="-translate-x-full"
+  class="fixed left-0 w-[250px] min-h-screen bg-gradient-to-br from-blue-600 to-sky-500 text-white pt-[60px] shadow-lg z-[999] transition-transform duration-300 transform lg:translate-x-0"
   :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }"
 >
 
@@ -16,6 +22,9 @@
     </div>
     <a href="{{ route('home') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+    </a>
+    <a href="{{ route('admin') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
+      <i class="fa-solid fa-user-gear"></i> Admin
     </a>
     <a href="{{ route('teacher.create') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-star mr-2"></i> Tambah Guru

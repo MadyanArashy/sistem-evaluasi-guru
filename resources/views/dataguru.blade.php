@@ -1,294 +1,609 @@
 <x-app-layout>
-    <!-- Page Heading -->
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Guru') }}
-        </h2>
-    </x-slot>
+<style>
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 
-    <!-- Content -->
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+.header-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff, #e5e7eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-                    <!-- Header with Add Button -->
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-semibold text-gray-700">
-                            <i class="fas fa-chalkboard-teacher mr-2 text-blue-600"></i>
-                            Manajemen Data Guru
-                        </h3>
-                        <a href="{{ route('teacher.create') }}"
-                           class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center">
-                            <i class="fas fa-plus mr-2"></i>
-                            Tambah Guru
-                        </a>
-                    </div>
+.content-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(25px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  margin: 32px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
 
-                    <!-- Success Message -->
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                            <i class="fas fa-check-circle mr-2"></i>
-                            {{ session('success') }}
-                        </div>
-                    @endif
+.content-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #10b981);
+  background-size: 400% 400%;
+  animation: gradientShift 3s ease infinite;
+}
 
-                    <!-- Search and Filter -->
-                    <div class="mb-4 flex gap-4">
-                        <div class="flex-1">
-                            <input type="text"
-                                   id="searchInput"
-                                   placeholder="Cari teacher..."
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <select id="filterMapel"
-                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Mata Pelajaran</option>
-                            <option value="Matematika">Matematika</option>
-                            <option value="IPA">IPA</option>
-                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-                            <option value="Bahasa Inggris">Bahasa Inggris</option>
-                            <option value="Seni Budaya">Seni Budaya</option>
-                            <option value="Pendidikan Jasmani">Pendidikan Jasmani</option>
-                        </select>
-                    </div>
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+  position: relative;
+}
 
-                    <!-- Teachers Table -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200" id="guruTable">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        No
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nama Guru
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Gelar
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Mata Pelajaran
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Email
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        No. Telepon
-                                    </th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- Sample Data - Replace with actual data from database -->
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <i class="fas fa-user-tie text-blue-500 text-xl"></i>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Siti Rahayu</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Dr., M.Pd</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Matematika</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">siti.rahayu@smkpesat.sch.id</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">081234567890</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <div class="flex gap-2 justify-center">
-                                            <a href="{{ route('teacher.create', 1) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
-                                                <i class="fas fa-edit mr-1"></i>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('teacher.create', 1) }}"
-                                                  method="POST"
-                                                  class="inline-block"
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="text-red-600 hover:text-red-900 font-medium text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition-colors">
-                                                    <i class="fas fa-trash mr-1"></i>
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 1px;
+}
 
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <i class="fas fa-user-tie text-green-500 text-xl"></i>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Budi Santoso</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">S.Pd</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">IPA (Fisika)</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">budi.santoso@smkpesat.sch.id</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">082345678901</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <div class="flex gap-2 justify-center">
-                                            <a href="{{ route('teacher.create', 2) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
-                                                <i class="fas fa-edit mr-1"></i>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('teacher.create', 2) }}"
-                                                  method="POST"
-                                                  class="inline-block"
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="text-red-600 hover:text-red-900 font-medium text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition-colors">
-                                                    <i class="fas fa-trash mr-1"></i>
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+.add-teacher-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
 
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <i class="fas fa-user-tie text-purple-500 text-xl"></i>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Ani Wijaya</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">M.Hum</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Bahasa Indonesia</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ani.wijaya@smkpesat.sch.id</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">083456789012</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <div class="flex gap-2 justify-center">
-                                            <a href="{{ route('teacher.create', 3) }}"
-                                               class="text-yellow-600 hover:text-yellow-900 font-medium text-sm bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition-colors">
-                                                <i class="fas fa-edit mr-1"></i>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('teacher.create', 3) }}"
-                                                  method="POST"
-                                                  class="inline-block"
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="text-red-600 hover:text-red-900 font-medium text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition-colors">
-                                                    <i class="fas fa-trash mr-1"></i>
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+.add-teacher-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
 
-                                <!-- Add more rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
+.add-teacher-btn:hover::before {
+  left: 100%;
+}
 
-                    <!-- Pagination -->
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="text-sm text-gray-700">
-                            Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">10</span> dari <span class="font-medium">35</span> guru
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                Sebelumnya
-                            </button>
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                1
-                            </button>
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                2
-                            </button>
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                3
-                            </button>
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                Selanjutnya
-                            </button>
-                        </div>
-                    </div>
+.add-teacher-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(59, 130, 246, 0.4);
+}
 
-                </div>
-            </div>
+.success-alert {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #065f46;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.success-alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.search-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.6));
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+@media (min-width: 640px) {
+  .search-filter-section {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.search-input {
+  flex: 1;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(99, 102, 241, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+.filter-select {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(99, 102, 241, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.table-header th {
+  padding: 24px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+.px-6 py-6 {
+  padding: 20px 24px;
+  vertical-align: middle;
+}
+
+.score-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.score-badge:hover::before {
+  left: 100%;
+}
+
+.action-btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin: 0 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.4s ease;
+}
+
+.action-btn:hover::before {
+  left: 100%;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+}
+
+.pagination-section {
+  margin-top: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.6));
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pagination-info {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.pagination-info span {
+  color: #374151;
+  font-weight: 700;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(99, 102, 241, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 44px;
+  text-align: center;
+}
+
+.pagination-btn:hover {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+}
+
+.pagination-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+@media (max-width: 768px) {
+  .content-card {
+    margin: 16px;
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .search-filter-section {
+    padding: 16px;
+  }
+
+  .pagination-section {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
+  <!-- Main Content -->
+  <div class="mx-auto px-6 py-12 relative z-10">
+    <div class="content-card">
+      <div class="text-gray-900">
+
+        <!-- Section Header -->
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="fas fa-chalkboard-teacher text-blue-600"></i>
+            Manajemen Data Guru
+          </h3>
+          <a href="{{ route('teacher.create') }}" class="add-teacher-btn">
+            <i class="fas fa-plus mr-2"></i> Tambah Guru Baru
+          </a>
         </div>
+
+        <!-- Success Message -->
+        @if(session('success'))
+          <div class="success-alert">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-check text-white text-sm"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-800">Berhasil!</h4>
+              <p class="text-green-700">{{ session('success') }}</p>
+            </div>
+          </div>
+        @endif
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+          <div class="relative flex-1">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
+            <input type="text" id="searchInput" placeholder="Cari berdasarkan nama, gelar, atau mata pelajaran..."
+              class="search-input pl-12" />
+          </div>
+          <div class="relative">
+            <i class="fas fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <select id="filterMapel" class="filter-select pl-12">
+              <option value="" selected>Semua Mata Pelajaran</option>
+              @foreach($teachers->unique('subject') as $data)
+              <option value="{{ $data->subject }}">{{ $data->subject }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+        <!-- Teachers Table -->
+        <div class="table-container overflow-auto lg:overflow-hidden">
+          <table class="min-w-full" id="guruTable">
+            <thead class="table-header">
+              <tr>
+                <th class="text-left">No</th>
+                <th class="text-left">Profil Guru</th>
+                <th class="text-left">Kualifikasi</th>
+                <th class="text-left">Bidang Keahlian</th>
+                <th class="text-center">Performa</th>
+                <th class="text-center">Tindakan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php $no = 1 ?>
+              @foreach ($teachers as $data)
+                <tr class="table-row">
+                  <td class="px-6 py-6">
+                    <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                      {{ $no++ }}
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-4">
+                      <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        {{ substr($data->name, 0, 1) }}
+                      </div>
+                      <div>
+                        <p class="text-lg font-bold text-gray-900 block">{{ $data->name }}</p>
+                        <div class="text-sm text-gray-500 flex items-center mt-1">
+                          Guru Profesional
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 border border-purple-200">
+                      <i class="fas fa-graduation-cap mr-2"></i>
+                      {{ $data->degree }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-6">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book text-white"></i>
+                      </div>
+                      <div>
+                        <div class="font-bold text-gray-900">{{ $data->subject }}</div>
+                        <div class="text-sm text-gray-500">Mata Pelajaran</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-6 text-center">
+                    <div class="score-badge">
+                      <i class="fas fa-star"></i>
+                      4.5/5.0
+                    </div>
+                  </td>
+                  <td class="px-6 py-6 text-center">
+                    <div class="flex justify-center space-x-2">
+                      <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
+                        <i class="fas fa-eye mr-1"></i>Detail
+                      </a>
+                      <a href="{{ route('teacher.create', 1) }}" class="action-btn edit-btn">
+                        <i class="fas fa-edit mr-1"></i>Edit
+                      </a>
+                      <form action="{{ route('teacher.create', 1) }}" method="POST" class="inline-block"
+                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="action-btn delete-btn">
+                          <i class="fas fa-trash mr-1"></i>Hapus
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Section -->
+        <div class="pagination-section">
+          <div class="pagination-info">
+            Menampilkan <span>1</span> sampai <span>10</span> dari <span>35</span> guru
+          </div>
+          <div class="pagination-controls">
+            <button class="pagination-btn">
+              <i class="fas fa-chevron-left mr-1"></i>
+              Sebelumnya
+            </button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">4</button>
+            <button class="pagination-btn">
+              Selanjutnya
+              <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+</div>
 
-    <!-- JavaScript for Search and Filter -->
-    <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchValue = this.value.toLowerCase();
-            const table = document.getElementById('guruTable');
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+<!-- Enhanced JavaScript for Search and Filter -->
+<script>
+// Enhanced search functionality
+document.getElementById('searchInput').addEventListener('keyup', function () {
+  const searchValue = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#guruTable tbody tr');
+  let visibleCount = 0;
 
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let found = false;
+  rows.forEach((row, index) => {
+    const cells = row.querySelectorAll('td');
+    let found = false;
 
-                for (let j = 1; j < cells.length - 2; j++) { // Skip No and Aksi columns
-                    if (cells[j].textContent.toLowerCase().indexOf(searchValue) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
+    // Search in name, degree, and subject columns
+    for (let i = 1; i < cells.length - 1; i++) {
+      if (cells[i].textContent.toLowerCase().includes(searchValue)) {
+        found = true;
+        break;
+      }
+    }
 
-                rows[i].style.display = found ? '' : 'none';
-            }
-        });
+    if (found) {
+      row.style.display = '';
+      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
+      visibleCount++;
+    } else {
+      row.style.display = 'none';
+    }
+  });
 
-        // Filter by subject
-        document.getElementById('filterMapel').addEventListener('change', function() {
-            const filterValue = this.value.toLowerCase();
-            const table = document.getElementById('guruTable');
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+  // Update pagination info
+  updatePaginationInfo(visibleCount);
+});
 
-            for (let i = 0; i < rows.length; i++) {
-                const subjectCell = rows[i].getElementsByTagName('td')[3]; // Mata Pelajaran column
-                if (filterValue === '' || subjectCell.textContent.toLowerCase().indexOf(filterValue) > -1) {
-                    rows[i].style.display = '';
-                } else {
-                    rows[i].style.display = 'none';
-                }
-            }
-        });
-    </script>
+// Enhanced filter functionality
+document.getElementById('filterMapel').addEventListener('change', function () {
+  const filterValue = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#guruTable tbody tr');
+  let visibleCount = 0;
+
+  rows.forEach((row, index) => {
+    const subject = row.querySelectorAll('td')[3].textContent.toLowerCase();
+    const shouldShow = !filterValue || subject.includes(filterValue);
+
+    if (shouldShow) {
+      row.style.display = '';
+      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
+      visibleCount++;
+    } else {
+      row.style.display = 'none';
+    }
+  });
+
+  updatePaginationInfo(visibleCount);
+});
+
+// Update pagination info
+function updatePaginationInfo(count) {
+  const paginationInfo = document.querySelector('.pagination-info');
+  if (paginationInfo) {
+    paginationInfo.innerHTML = `Menampilkan <span>1</span> sampai <span>${Math.min(10, count)}</span> dari <span>${count}</span> guru`;
+  }
+}
+
+// Add fade-in animation keyframe
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Pagination button interactions
+document.querySelectorAll('.pagination-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    // Remove active class from all buttons
+    document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
+
+    // Add active class to clicked button (if it's a number)
+    if (!isNaN(this.textContent.trim())) {
+      this.classList.add('active');
+    }
+
+    // Add ripple effect
+    const ripple = document.createElement('div');
+    ripple.style.position = 'absolute';
+    ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+    ripple.style.borderRadius = '50%';
+    ripple.style.transform = 'scale(0)';
+    ripple.style.animation = 'ripple 0.6s linear';
+    ripple.style.left = '50%';
+    ripple.style.top = '50%';
+    ripple.style.width = ripple.style.height = '100px';
+    ripple.style.marginLeft = ripple.style.marginTop = '-50px';
+
+    this.style.position = 'relative';
+    this.style.overflow = 'hidden';
+    this.appendChild(ripple);
+
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  });
+});
+
+// Add ripple animation
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+  @keyframes ripple {
+    to {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(rippleStyle);
+</script>
 </x-app-layout>
