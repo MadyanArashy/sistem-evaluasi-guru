@@ -16,32 +16,6 @@
   background-clip: text;
 }
 
-.content-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(25px);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  margin: 32px;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-}
-
-.content-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #10b981);
-  background-size: 400% 400%;
-  animation: gradientShift 3s ease infinite;
-}
-
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -61,66 +35,6 @@
   height: 2px;
   background: linear-gradient(90deg, #6366f1, #8b5cf6);
   border-radius: 1px;
-}
-
-.add-teacher-btn {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-}
-
-.add-teacher-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.add-teacher-btn:hover::before {
-  left: 100%;
-}
-
-.add-teacher-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(59, 130, 246, 0.4);
-}
-
-.success-alert {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
-  border: 2px solid rgba(16, 185, 129, 0.2);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 32px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  color: #065f46;
-  font-weight: 600;
-  position: relative;
-  overflow: hidden;
-}
-
-.success-alert::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 100%;
-  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .search-filter-section {
@@ -177,20 +91,6 @@
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-.table-header th {
-  padding: 24px;
-  font-weight: 700;
-  color: #374151;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.875rem;
-}
-
-.px-6 py-6 {
-  padding: 20px 24px;
-  vertical-align: middle;
-}
-
 .score-badge::before {
   content: '';
   position: absolute;
@@ -203,34 +103,6 @@
 }
 
 .score-badge:hover::before {
-  left: 100%;
-}
-
-.action-btn {
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  margin: 0 4px;
-  position: relative;
-  overflow: hidden;
-}
-
-.action-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.4s ease;
-}
-
-.action-btn:hover::before {
   left: 100%;
 }
 
@@ -330,7 +202,7 @@
 }
 </style>
   <!-- Main Content -->
-  <div class="mx-auto px-6 py-12 relative z-10">
+  <div class="mx-auto px-2 py-12 relative z-10">
     <div class="content-card">
       <div class="text-gray-900">
 
@@ -340,7 +212,7 @@
             <i class="fas fa-chalkboard-teacher text-blue-600"></i>
             Manajemen Data Guru
           </h3>
-          <a href="{{ route('teacher.create') }}" class="add-teacher-btn">
+          <a href="{{ route('teacher.create') }}" class="add-btn">
             <i class="fas fa-plus mr-2"></i> Tambah Guru Baru
           </a>
         </div>
@@ -393,12 +265,12 @@
               <?php $no = 1 ?>
               @foreach ($teachers as $data)
                 <tr class="table-row">
-                  <td class="px-6 py-6">
+                  <td class="p-6">
                     <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                       {{ $no++ }}
                     </div>
                   </td>
-                  <td class="px-6 py-6">
+                  <td class="p-6">
                     <div class="flex items-center space-x-4">
                       <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                         {{ substr($data->name, 0, 1) }}
@@ -411,13 +283,13 @@
                       </div>
                     </div>
                   </td>
-                  <td class="px-6 py-6">
+                  <td class="p-6">
                     <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 border border-purple-200">
                       <i class="fas fa-graduation-cap mr-2"></i>
                       {{ $data->degree }}
                     </span>
                   </td>
-                  <td class="px-6 py-6">
+                  <td class="p-6">
                     <div class="flex items-center space-x-3">
                       <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
                         <i class="fas fa-book text-white"></i>
@@ -428,13 +300,13 @@
                       </div>
                     </div>
                   </td>
-                  <td class="px-6 py-6 text-center">
+                  <td class="p-6 text-center">
                     <div class="score-badge">
                       <i class="fas fa-star"></i>
                       4.5/5.0
                     </div>
                   </td>
-                  <td class="px-6 py-6 text-center">
+                  <td class="p-6 text-center">
                     <div class="flex justify-center space-x-2">
                       <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
                         <i class="fas fa-eye mr-1"></i>Detail

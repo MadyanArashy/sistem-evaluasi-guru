@@ -13,7 +13,7 @@ class TeacherController extends Controller
     public function index()
     {
         $teachers = Teacher::all();
-        return view('dataguru', compact('teachers'));
+        return view('index_teacher', compact('teachers'));
     }
 
     /**
@@ -21,7 +21,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('buatguru');
+        return view('create_teacher');
     }
 
     /**
@@ -46,7 +46,7 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-        return view('halamanguru', compact('teacher'));
+        return view('view_teacher', compact('teacher'));
     }
 
     /**

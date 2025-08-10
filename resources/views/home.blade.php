@@ -1,5 +1,5 @@
 <x-app-layout>
-  <div class="container mx-auto px-6 py-12 relative z-10">
+  <div class="container mx-auto px-2 py-12 relative z-10">
     <!-- Hero Section -->
     <div class="text-center mb-16">
       <h1 class="text-5xl font-bold text-white mb-4">
@@ -51,7 +51,7 @@
     </div>
 
     <!-- Teachers Table -->
-    <div class="table-container">
+    <div class="table-container overflow-auto lg:overflow-hidden">
       <div class="p-8">
         <h2 class="section-title">
           <i class="fas fa-graduation-cap mr-3"></i>
