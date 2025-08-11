@@ -7,4 +7,3 @@ use App\Models\EvalComponent;
 use App\Models\Evaluation;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
-
