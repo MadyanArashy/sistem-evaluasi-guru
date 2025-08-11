@@ -21,7 +21,7 @@ class CriteriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('create_criteria');
     }
 
     /**

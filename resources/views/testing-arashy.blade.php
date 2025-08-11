@@ -254,32 +254,36 @@
               <tr class="table-row">
                 <td class="p-6">
                   <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    {{ $no++ }}
+                    {{ $loop->iteration }}
                   </div>
                 </td>
                 <td class="flex items-center gap-4 p-6">
                   <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center pedagogik">
                     <i class="fas fa-chalkboard-teacher text-white"></i>
                   </div>
-                  <di class="min-w-60">
+                  <div class="min-w-60">
                     <div class="component-name">{{ $data->name }}</div>
                     <div class="component-description">Kemampuan mengelola pembelajaran peserta didik</div>
-                  </di>
+                  </div>
                 </td>
                 <td class="p-6 text-center">
                   <div class="weight-badge">
                     <i class="fas fa-percentage"></i>
-                    {{ $data->weight }}
+                    {{ $data->weight }}%
                   </div>
                 </td>
                 <td class="p-6 text-center">
                   <div class="flex justify-center space-x-2">
                     <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
+                      <i class="fas fa-edit"></i> Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Pedagogik')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
+                    <form action="{{ route('criteria.destroy', $data->id) }}" method="POST" style="display:inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
+                        <i class="fas fa-trash"></i> Hapus
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -400,7 +404,7 @@
                     <a href="#" class="action-btn edit-btn">
                       <i class="fas fa-edit"></i>Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Administrasi Guru')">
+                    <button type="button" class="action-btn delete-btn">
                       <i class="fas fa-trash"></i>Hapus
                     </button>
                   </div>
@@ -432,7 +436,7 @@
                     <a href="#" class="action-btn edit-btn">
                       <i class="fas fa-edit"></i>Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Produktivitas dan Kreativitas')">
+                    <button type="button" class="action-btn delete-btn">
                       <i class="fas fa-trash"></i>Hapus
                     </button>
                   </div>
