@@ -225,7 +225,7 @@
       </div>
       @endif
 
-        <div class="relative -ml-4">
+        <div class="relative">
 
           <!-- Users Table -->
           <div class="section-header">
