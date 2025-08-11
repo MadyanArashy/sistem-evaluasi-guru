@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeacherController;
+use App\Models\Criteria;
+use App\Models\EvalComponent;
+use App\Models\Evaluation;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,7 +13,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return view('home');
+  $teachers = Teacher::limit(5)->get();
+  return view('home', compact('teachers'));
 })->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
@@ -18,10 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/tambah-guru', function () {
-    return view('buatguru');
-})->middleware(['auth', 'verified'])->name('buatguru');
-
+// Halaman-Halaman guru
 Route::middleware('auth')->group(function () {
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
@@ -29,12 +31,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
 });
 
-Route::get('/halaman-guru', function () {
-    return view('halamanguru');
-})->middleware(['auth', 'verified'])->name('halamanguru');
-
-Route::get('/data-guru', function () {
-    return view(view: 'dataguru');
-})->middleware(['auth', 'verified'])->name('dataguru');
+Route::get('/admin', function () {
+  $criterias = Criteria::all();
+  $teachers = Teacher::all();
+  $eval_components = EvalComponent::all();
+  $evaluations = Evaluation::all();
+  return view('admin', compact('criterias', 'teachers', 'eval_components', 'evaluations'));
+})->middleware(['auth', 'verified'])->name('admin');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/rashy.php';
+require __DIR__.'/kafka.php';
+require __DIR__.'/gufron.php';

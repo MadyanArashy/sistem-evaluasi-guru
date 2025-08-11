@@ -12,8 +12,8 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::latest();
-        return view('dataguru', compact('teachers'));
+        $teachers = Teacher::all();
+        return view('index_teacher', compact('teachers'));
     }
 
     /**
@@ -21,7 +21,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('buatguru');
+        return view('create_teacher');
     }
 
     /**
@@ -37,7 +37,7 @@ class TeacherController extends Controller
 
         Teacher::create($validated);
 
-        return redirect()->back()->with('','Guru berhasil ditambahkan!');
+        return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
     }
 
     /**
@@ -46,7 +46,7 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-        return view('halamanguru', compact('teacher'));
+        return view('view_teacher', compact('teacher'));
     }
 
     /**

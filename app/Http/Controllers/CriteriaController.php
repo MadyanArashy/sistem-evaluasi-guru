@@ -12,7 +12,7 @@ class CriteriaController extends Controller
      */
     public function index()
     {
-        //
+      $criterias = Criteria::all();
     }
 
     /**
@@ -28,7 +28,13 @@ class CriteriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+          "name" => "string|required",
+          "weight" => "integer|required",
+        ]);
+
+        Criteria::create($validated);
+        return redirect()->route('admin')->with('success', 'criteria successfully added');
     }
 
     /**
