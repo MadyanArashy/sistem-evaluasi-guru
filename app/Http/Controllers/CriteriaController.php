@@ -30,10 +30,11 @@ class CriteriaController extends Controller
     {
         $validated = $request->validate([
           "name" => "string|required",
-          "weight" => "number|required",
+          "weight" => "integer|required",
         ]);
 
         Criteria::create($validated);
+        return redirect()->route('admin')->with('success', 'criteria successfully added');
     }
 
     /**

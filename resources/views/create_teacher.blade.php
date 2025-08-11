@@ -1,44 +1,11 @@
 <x-app-layout>
-  <style>
-  .content-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(25px);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  margin: 32px;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-  }
-
-.content-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4, #10b981);
-  background-size: 400% 400%;
-  animation: gradientShift 3s ease infinite;
-}
-</style>
-  <div class="floating-elements">
-    <div class="floating-circle"></div>
-    <div class="floating-circle"></div>
-    <div class="floating-circle"></div>
-  </div>
-
   <div class="min-h-screen flex items-center justify-center px-4 relative z-10">
     <div class="content-card w-full max-w-2xl p-10 shadow-xl border border-white/20">
 
       <!-- Judul -->
       <div class="flex items-center justify-center mb-10 gap-3">
-        <i class="fas fa-user-tie text-white text-3xl"></i>
-        <h2 class="section-title text-white text-3xl">Form Tambah Guru</h2>
+        <i class="fas fa-user-tie text-indigo-700 text-3xl"></i>
+        <h2 class="section-title text-indigo-400 text-3xl m-0 leading-none">Form Tambah Guru</h2>
       </div>
 
       <!-- Form -->

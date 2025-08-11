@@ -40,3 +40,6 @@ Route::get('/admin', function () {
 })->middleware(['auth', 'verified'])->name('admin');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/rashy.php';
+require __DIR__.'/kafka.php';
+require __DIR__.'/gufron.php';
