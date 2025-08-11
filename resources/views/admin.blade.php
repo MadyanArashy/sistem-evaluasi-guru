@@ -22,7 +22,7 @@
   left: 0;
   width: 120px;
   height: 2px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   border-radius: 1px;
 }
 
@@ -66,7 +66,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
+ background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
 .pedagogik { background: linear-gradient(135deg, #3b82f6, #1e40af); }
@@ -75,7 +75,7 @@
 .sosial { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 
 .weight-badge {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -251,7 +251,7 @@
             <tbody>
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     1
                   </div>
                 </td>
@@ -284,7 +284,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     2
                   </div>
                 </td>
@@ -318,7 +318,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     3
                   </div>
                 </td>
@@ -352,7 +352,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     4
                   </div>
                 </td>
@@ -414,7 +414,7 @@
               <!-- Pedagogik Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     1
                   </div>
                 </td>
@@ -445,7 +445,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     2
                   </div>
                 </td>
@@ -477,7 +477,7 @@
               <!-- Kepribadian Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     3
                   </div>
                 </td>
@@ -509,7 +509,7 @@
               <!-- Professional Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     4
                   </div>
                 </td>
@@ -540,7 +540,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     5
                   </div>
                 </td>
@@ -572,7 +572,7 @@
               <!-- Social Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     6
                   </div>
                 </td>
@@ -603,7 +603,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     7
                   </div>
                 </td>
@@ -634,7 +634,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     8
                   </div>
                 </td>
