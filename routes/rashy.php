@@ -13,3 +13,7 @@ Route::get('/create-criteria', function () {
   return view('create_criteria');
 })->name('criteria.create');
 Route::post('/teacher', [CriteriaController::class, 'store'])->name('criteria.store');
+Route::get('/testing-arashy', function () {
+  $criterias = Criteria::all();
+  return view('testing-arashy', compact('criterias'));
+});

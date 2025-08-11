@@ -22,7 +22,7 @@
   align-items: center;
   margin-bottom: 32px;
   padding-bottom: 20px;
-  border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+  border-bottom: 2px solid rgba(37, 99, 235, 0.1);
   position: relative;
 }
 
@@ -33,7 +33,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: linear-gradient(90deg, #2563eb, #0ea5e9);
   border-radius: 1px;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .pagination-btn:hover {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+ background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   transform: translateY(-2px);
@@ -178,7 +178,7 @@
 }
 
 .pagination-btn.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+ background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);

@@ -22,7 +22,7 @@
   left: 0;
   width: 120px;
   height: 2px;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   border-radius: 1px;
 }
 
@@ -66,7 +66,7 @@
   left: 0;
   right: 0;
   height: 3px;
- background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
 }
 
 .pedagogik { background: linear-gradient(135deg, #3b82f6, #1e40af); }
@@ -75,7 +75,7 @@
 .sosial { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 
 .weight-badge {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -225,72 +225,6 @@
       </div>
       @endif
 
-        <div class="relative -ml-4">
-
-          <!-- Users Table -->
-          <div class="section-header">
-            <h3 class="section-title">
-              <i class="fas fa-users-cog text-blue-600"></i>
-              Data Users
-            </h3>
-            <a href="#" class="add-btn">
-              <i class="fas fa-plus"></i>
-              Tambah User
-            </a>
-          </div>
-
-          <div class="table-container overflow-auto lg:overflow-hidden">
-            <table class="min-w-full">
-              <thead class="table-header">
-                <tr>
-                  <th class="text-left">No</th>
-                  <th class="text-left">Nama</th>
-                  <th class="text-center">Role</th>
-                  <th class="text-center">Pembuatan Akun</th>
-                  <th class="text-center">Tindakan</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($users as $user)
-                <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    1
-                  </div>
-                </td>
-                <td class="flex items-center gap-2 p-6">
-                <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                  <i class="fas fa-user text-white"></i>
-                </div>
-                <div class="min-w-[150px]">
-                  <div class="component-name font-semibold">{{ $user->name }}</div>
-                  <div class="component-description text-gray-500">{{ $user->id }}</div>
-                </div>
-              </td>
-              <td class="p-6 text-center w-32">
-                <div class="weight-badge inline-flex items-center gap-1">
-                  <i class="fas fa-user-tag"></i>
-                  {{ $user->role }}
-                </div>
-              </td>
-                <td class="p-6 text-center">
-                  {{ $user->created_at->format('d M Y') }}
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
 
         <!-- Kriteria Table -->
         <div class="section-header">
@@ -315,10 +249,12 @@
               </tr>
             </thead>
             <tbody>
+              <?php $no = 1 ?>
+              @foreach($criterias as $data)
               <tr class="table-row">
                 <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    1
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    {{ $no++ }}
                   </div>
                 </td>
                 <td class="flex items-center gap-4 p-6">
@@ -326,14 +262,14 @@
                     <i class="fas fa-chalkboard-teacher text-white"></i>
                   </div>
                   <di class="min-w-60">
-                    <div class="component-name">Pedagogik</div>
+                    <div class="component-name">{{ $data->name }}</div>
                     <div class="component-description">Kemampuan mengelola pembelajaran peserta didik</div>
                   </di>
                 </td>
                 <td class="p-6 text-center">
                   <div class="weight-badge">
                     <i class="fas fa-percentage"></i>
-                    40%
+                    {{ $data->weight }}
                   </div>
                 </td>
                 <td class="p-6 text-center">
@@ -347,108 +283,7 @@
                   </div>
                 </td>
               </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    2
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center kepribadian">
-                      <i class="fas fa-user-check text-white"></i>
-                    </div>
-                    <div class="min-w-60">
-                      <div class="component-name">Kepribadian</div>
-                      <div class="component-description">Kepribadian yang mantap, stabil, dewasa, arif, dan berwibawa</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    30%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Kepribadian')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    3
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center professional">
-                      <i class="fas fa-briefcase text-white"></i>
-                    </div>
-                    <div>
-                      <div class="component-name">Profesional</div>
-                      <div class="component-description">Kemampuan penguasaan materi pembelajaran secara luas dan mendalam</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    20%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Profesional')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    4
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center sosial">
-                      <i class="fas fa-users text-white"></i>
-                    </div>
-                    <div>
-                      <div class="component-name">Sosial</div>
-                      <div class="component-description">Kemampuan pendidik berkomunikasi dan bergaul secara efektif</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    10%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Sosial')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
@@ -480,7 +315,7 @@
               <!-- Pedagogik Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     1
                   </div>
                 </td>
@@ -511,7 +346,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     2
                   </div>
                 </td>
@@ -543,7 +378,7 @@
               <!-- Kepribadian Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     3
                   </div>
                 </td>
@@ -575,7 +410,7 @@
               <!-- Professional Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     4
                   </div>
                 </td>
@@ -606,7 +441,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     5
                   </div>
                 </td>
@@ -638,7 +473,7 @@
               <!-- Social Components -->
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     6
                   </div>
                 </td>
@@ -669,7 +504,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     7
                   </div>
                 </td>
@@ -700,7 +535,7 @@
 
               <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     8
                   </div>
                 </td>
@@ -734,17 +569,17 @@
 
         <!-- Summary Cards -->
         <div class="grid md:grid-cols-2 gap-8 mt-12">
-          <div class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
+          <div class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200" id="criteriaSummary">
             <div class="flex items-center justify-between mb-6">
               <h4 class="text-xl font-bold text-gray-800">Total Kriteria</h4>
               <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
                 <i class="fas fa-list-check text-white text-lg"></i>
               </div>
             </div>
-            <div class="text-3xl font-bold text-blue-600 mb-2">4</div>
+            <div class="text-3xl font-bold text-blue-600 mb-2">{{ $criterias->count() }}</div>
             <p class="text-gray-600 text-sm">Kriteria evaluasi aktif</p>
             <div class="mt-4 text-xs text-gray-500">
-              Total bobot: <span class="font-semibold text-blue-600">100%</span>
+              Total bobot: <span class="font-semibold text-blue-600" id="criteriaWeight"></span>
             </div>
           </div>
 
@@ -782,14 +617,18 @@ function scrollToTable(tableId) {
 
 // Auto-calculate total percentages (you can extend this)
 function calculateTotalPercentage() {
-  const criteriaWeights = [40, 30, 20, 10];
+  const criteriaWeights = @json($criterias->pluck('weight'));
   const totalCriteria = criteriaWeights.reduce((a, b) => a + b, 0);
 
-  console.log(`Total kriteria bobot: ${totalCriteria}%`);
+  // Update the span text
+  document.getElementById('criteriaWeight').textContent = `${totalCriteria}%`;
 
-  // You can add validation logic here
+  // Log in console
+  console.log(`Total criteria weight = ${totalCriteria}%`);
+
+  // Validation warning
   if (totalCriteria !== 100) {
-    console.warn('Warning: Total bobot kriteria tidak sama dengan 100%');
+    console.warn('Warning: Total criteria weight does not equal 100%');
   }
 }
 
