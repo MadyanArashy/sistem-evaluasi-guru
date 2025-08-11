@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Criteria;
+use App\Models\EvalComponent;
 use Illuminate\Http\Request;
 
 class CriteriaController extends Controller
@@ -64,8 +65,27 @@ class CriteriaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Criteria $criteria)
-    {
-        //
-    }
+   public function destroy(string $id)
+  {
+      $criteria = Criteria::findOrFail($id);
+
+      // Check if there are related EvalComponent rows first
+      if (EvalComponent::where('criteria_id', $id)->exists()) {
+          return redirect()
+              ->route('admin')
+              ->with('fail', "Delete any EvalComponent with the '{$criteria->name}' ID before deleting.");
+      }
+
+      // Now safe to delete
+      if ($criteria->delete()) {
+          return redirect()
+              ->route('admin')
+              ->with('success', 'Criteria deleted.');
+      }
+
+      return redirect()
+          ->route('admin')
+          ->with('fail', 'Failed to delete criteria.');
+  }
+
 }
