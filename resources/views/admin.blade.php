@@ -225,6 +225,72 @@
       </div>
       @endif
 
+        <div class="relative -ml-4">
+
+          <!-- Users Table -->
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-users-cog text-blue-600"></i>
+              Data Users
+            </h3>
+            <a href="#" class="add-btn">
+              <i class="fas fa-plus"></i>
+              Tambah User
+            </a>
+          </div>
+
+          <div class="table-container overflow-auto lg:overflow-hidden">
+            <table class="min-w-full">
+              <thead class="table-header">
+                <tr>
+                  <th class="text-left">No</th>
+                  <th class="text-left">Nama</th>
+                  <th class="text-center">Role</th>
+                  <th class="text-center">Pembuatan Akun</th>
+                  <th class="text-center">Tindakan</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($users as $user)
+                <tr class="table-row">
+                <td class="p-6">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    1
+                  </div>
+                </td>
+                <td class="flex items-center gap-2 p-6">
+                <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+                <div class="min-w-[150px]">
+                  <div class="component-name font-semibold">{{ $user->name }}</div>
+                  <div class="component-description text-gray-500">{{ $user->id }}</div>
+                </div>
+              </td>
+              <td class="p-6 text-center w-32">
+                <div class="weight-badge inline-flex items-center gap-1">
+                  <i class="fas fa-user-tag"></i>
+                  {{ $user->role }}
+                </div>
+              </td>
+                <td class="p-6 text-center">
+                  {{ $user->created_at->format('d M Y') }}
+                </td>
+                <td class="p-6 text-center">
+                  <div class="flex justify-center space-x-2">
+                    <a href="#" class="action-btn edit-btn">
+                      <i class="fas fa-edit"></i>Edit
+                    </a>
+                    <button type="button" class="action-btn delete-btn">
+                      <i class="fas fa-trash"></i>Hapus
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
 
         <!-- Kriteria Table -->
         <div class="section-header">
