@@ -74,7 +74,7 @@
       </div>
 
       <!-- Page Content -->
-      <main :class="{ 'lg:ml-[250px]': sidebarOpen }" class="transition-all duration-300 mt-[70px] relative min-h-screen z-30 gradient-bg">
+      <main :class="{ 'lg:ml-[250px]': sidebarOpen }" class="transition-all duration-300 mt-[70px] relative min-h-screen z-30 gradient-bg md:px-8">
         <div class="floating-elements">
           <div class="floating-circle"></div>
           <div class="floating-circle"></div>

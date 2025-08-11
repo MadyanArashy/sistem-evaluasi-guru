@@ -1,5 +1,5 @@
 <x-app-layout>
-  <div class="container mx-auto px-2 py-12 relative z-10">
+  <div class="mx-auto px-4 py-12 relative z-10">
     <!-- Hero Section -->
     <div class="text-center mb-16">
       <h1 class="text-5xl font-bold text-white mb-4">
