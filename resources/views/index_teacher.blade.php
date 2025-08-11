@@ -170,7 +170,7 @@
 }
 
 .pagination-btn:hover {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+ background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   transform: translateY(-2px);
@@ -178,7 +178,7 @@
 }
 
 .pagination-btn.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+ background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
