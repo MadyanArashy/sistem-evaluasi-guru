@@ -219,15 +219,7 @@
 
         <!-- Success Message -->
         @if(session('success'))
-          <div class="success-alert">
-            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-check text-white text-sm"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-green-800">Berhasil!</h4>
-              <p class="text-green-700">{{ session('success') }}</p>
-            </div>
-          </div>
+          @include('partials.success')
         @endif
 
         <!-- Search and Filter Section -->
@@ -314,7 +306,7 @@
                       <a href="{{ route('teacher.create', 1) }}" class="action-btn edit-btn">
                         <i class="fas fa-edit mr-1"></i>Edit
                       </a>
-                      <form action="{{ route('teacher.create', 1) }}" method="POST" class="inline-block"
+                      <form action="{{ route('teacher.destroy', $data->id) }}" method="POST"
                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
                         @csrf
                         @method('DELETE')

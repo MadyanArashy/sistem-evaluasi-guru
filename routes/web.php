@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
+    Route::delete('/teacher/{id}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
 });
