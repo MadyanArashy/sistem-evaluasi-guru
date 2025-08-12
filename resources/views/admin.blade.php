@@ -207,7 +207,7 @@
               <i class="fas fa-users-cog text-blue-600"></i>
               Data Users
             </h3>
-            <a href="#" class="add-btn">
+            <a href="{{ route('user.create') }}" class="add-btn">
               <i class="fas fa-plus"></i>
               Tambah User
             </a>
