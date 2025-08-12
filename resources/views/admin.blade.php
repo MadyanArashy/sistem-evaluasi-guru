@@ -254,7 +254,7 @@
                 @foreach ($users as $user)
                 <tr class="table-row">
                 <td class="p-6">
-                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                     1
                   </div>
                 </td>
@@ -291,7 +291,6 @@
             </tbody>
           </table>
         </div>
-
         <!-- Kriteria Table -->
         <div class="section-header">
           <h3 class="section-title">
@@ -315,140 +314,45 @@
               </tr>
             </thead>
             <tbody>
+              <?php $no = 1 ?>
+              @foreach($criterias as $data)
               <tr class="table-row">
                 <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    1
+                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    {{ $loop->iteration }}
                   </div>
                 </td>
                 <td class="flex items-center gap-4 p-6">
                   <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center pedagogik">
                     <i class="fas fa-chalkboard-teacher text-white"></i>
                   </div>
-                  <di class="min-w-60">
-                    <div class="component-name">Pedagogik</div>
+                  <div class="min-w-60">
+                    <div class="component-name">{{ $data->name }}</div>
                     <div class="component-description">Kemampuan mengelola pembelajaran peserta didik</div>
-                  </di>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    40%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Pedagogik')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    2
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center kepribadian">
-                      <i class="fas fa-user-check text-white"></i>
-                    </div>
-                    <div class="min-w-60">
-                      <div class="component-name">Kepribadian</div>
-                      <div class="component-description">Kepribadian yang mantap, stabil, dewasa, arif, dan berwibawa</div>
-                    </div>
                   </div>
                 </td>
                 <td class="p-6 text-center">
                   <div class="weight-badge">
                     <i class="fas fa-percentage"></i>
-                    30%
+                    {{ $data->weight }}%
                   </div>
                 </td>
                 <td class="p-6 text-center">
                   <div class="flex justify-center space-x-2">
                     <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
+                      <i class="fas fa-edit"></i> Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Kepribadian')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
+                    <form action="{{ route('criteria.destroy', $data->id) }}" method="POST" style="display:inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
+                        <i class="fas fa-trash"></i> Hapus
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    3
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center professional">
-                      <i class="fas fa-briefcase text-white"></i>
-                    </div>
-                    <div>
-                      <div class="component-name">Profesional</div>
-                      <div class="component-description">Kemampuan penguasaan materi pembelajaran secara luas dan mendalam</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    20%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Profesional')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    4
-                  </div>
-                </td>
-                <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center sosial">
-                      <i class="fas fa-users text-white"></i>
-                    </div>
-                    <div>
-                      <div class="component-name">Sosial</div>
-                      <div class="component-description">Kemampuan pendidik berkomunikasi dan bergaul secara efektif</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    10%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Sosial')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
@@ -465,7 +369,7 @@
           </a>
         </div>
 
-        <div class=" overflow-auto lg:overflow-hidden">
+        <div class="table-container overflow-auto lg:overflow-hidden">
           <table class="min-w-full">
             <thead class="table-header">
               <tr>
@@ -744,7 +648,7 @@
             <div class="text-3xl font-bold text-blue-600 mb-2">4</div>
             <p class="text-gray-600 text-sm">Kriteria evaluasi aktif</p>
             <div class="mt-4 text-xs text-gray-500">
-              Total bobot: <span class="font-semibold text-blue-600">100%</span>
+              Total bobot: <span class="font-semibold text-blue-600" id="criteriaWeight"></span>
             </div>
           </div>
 
@@ -782,14 +686,18 @@ function scrollToTable(tableId) {
 
 // Auto-calculate total percentages (you can extend this)
 function calculateTotalPercentage() {
-  const criteriaWeights = [40, 30, 20, 10];
+  const criteriaWeights = @json($criterias->pluck('weight'));
   const totalCriteria = criteriaWeights.reduce((a, b) => a + b, 0);
 
-  console.log(`Total kriteria bobot: ${totalCriteria}%`);
+  // Update the span text
+  document.getElementById('criteriaWeight').textContent = `${totalCriteria}%`;
 
-  // You can add validation logic here
+  // Log in console
+  console.log(`Total criteria weight = ${totalCriteria}%`);
+
+  // Validation warning
   if (totalCriteria !== 100) {
-    console.warn('Warning: Total bobot kriteria tidak sama dengan 100%');
+    console.warn('Warning: Total criteria weight does not equal 100%');
   }
 }
 
