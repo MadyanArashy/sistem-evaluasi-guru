@@ -8,6 +8,9 @@ class Criteria extends Model
 {
     protected $fillable = [
         "name",
-        "weight"
+        "weight",
+        "description",
+        "style",
+        "icon",
     ];
 }

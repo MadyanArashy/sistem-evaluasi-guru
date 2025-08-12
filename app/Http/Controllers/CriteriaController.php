@@ -30,12 +30,15 @@ class CriteriaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-          "name" => "string|required",
           "weight" => "integer|required",
+          "name" => "string|required",
+          "description" => "string|required",
+          "style" => "string|required",
+          "icon" => "string|required",
         ]);
 
         Criteria::create($validated);
-        return redirect()->route('admin')->with('success', 'criteria successfully added');
+        return redirect()->route('admin')->with('success', "criteria $request->name successfully added");
     }
 
     /**

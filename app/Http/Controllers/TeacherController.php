@@ -68,8 +68,10 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Teacher $teacher)
+    public function destroy(string $id)
     {
-        //
+       $teacher = Teacher::findOrFail($id);
+       $teacher->deleteOrFail();
+       return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');
     }
 }

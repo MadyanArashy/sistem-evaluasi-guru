@@ -14,3 +14,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/criteria', [CriteriaController::class, 'store'])->name('criteria.store');
   Route::delete('/criteria/{id}', [CriteriaController::class, 'destroy'])->name('criteria.destroy');
 });
+
+Route::get('testing-arashy', function () {
+  return view('testing-arashy');
+});
