@@ -5,7 +5,7 @@
       <!-- Judul -->
       <div class="flex flex-row items-center justify-center mb-10 gap-3">
         <i class="fas fa-user-tie text-indigo-600 text-3xl"></i>
-        <h2 class="section-title text-white text-3xl m-0 leading-none">Form Tambah Guru</h2>
+        <h2 class="section-title text-white text-3xl m-0 leading-none">Form Tambah Kriteria</h2>
       </div>
 
       <!-- Form -->
@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        <!-- Input Mata Pelajaran -->
+        <!-- Input Bobot Nilai -->
         <div>
           <label for="weight" class="block text-sm font-medium text-indigo-700 mb-2">Bobot nilai</label>
           <div class="relative">

@@ -10,5 +10,12 @@ class EvalComponent extends Model
         "name",
         "criteria_id",
         "weight",
+        "description",
     ];
+
+    public function criteria()
+  {
+    return $this->belongsTo(Criteria::class, 'criteria_id');
+  }
+
 }
