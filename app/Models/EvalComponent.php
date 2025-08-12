@@ -10,5 +10,6 @@ class EvalComponent extends Model
         "name",
         "criteria_id",
         "weight",
+        "description",
     ];
 }
