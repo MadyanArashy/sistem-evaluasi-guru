@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Criteria;
 use App\Models\EvalComponent;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class EvalComponentController extends Controller
      */
     public function index()
     {
-        //
+      //
     }
 
     /**
@@ -20,7 +21,8 @@ class EvalComponentController extends Controller
      */
     public function create()
     {
-        //
+      $criterias = Criteria::all();
+      return view('create_evalcomponent', compact('criterias'));
     }
 
     /**
@@ -28,7 +30,16 @@ class EvalComponentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $validated = $request->validate([
+        "criteria_id" => "integer|required|exists:criterias,id",
+        "name" => "string|required",
+        "weight" => "integer|required",
+        "description" => "string|required",
+      ]);
+
+      EvalComponent::create($validated);
+
+      return redirect()->route('admin')->with('success', 'Berhasil tambah eval komponen');
     }
 
     /**

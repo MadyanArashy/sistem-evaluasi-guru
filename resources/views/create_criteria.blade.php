@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        <!-- Input Mata Pelajaran -->
+        <!-- Input Bobot Nilai -->
         <div>
           <label for="weight" class="block text-sm font-medium text-indigo-700 mb-2">Bobot nilai</label>
           <div class="relative">

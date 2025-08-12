@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CriteriaController;
+use App\Http\Controllers\EvalComponentController;
 use App\Models\Criteria;
 use App\Models\EvalComponent;
 use App\Models\Evaluation;
@@ -16,5 +18,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('testing-arashy', function () {
-  return view('testing-arashy');
+  $criterias = Criteria::all();
+  return view('testing-arashy', compact('criterias'));
+});
+
+Route::middleware('auth')->group(function() {
+  Route::get('create-eval-component',[EvalComponentController::class, 'create'])->name('component.create');
+  Route::post('create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
 });
