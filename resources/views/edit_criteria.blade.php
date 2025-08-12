@@ -5,7 +5,7 @@
       <!-- Judul -->
       <div class="flex flex-row items-center justify-center mb-10 gap-3">
         <i class="fas fa-user-tie text-indigo-600 text-3xl"></i>
-        <h2 class="section-title text-white text-3xl m-0 leading-none">Form Pembuatan Kriteria</h2>
+        <h2 class="section-title text-white text-3xl m-0 leading-none">Form Edit Kriteria</h2>
       </div>
 
       <!-- Form -->
