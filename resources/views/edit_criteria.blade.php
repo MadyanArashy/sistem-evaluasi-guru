@@ -9,8 +9,9 @@
       </div>
 
       <!-- Form -->
-      <form action="{{ route('criteria.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+      <form action="{{ route('criteria.update', $criteria->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
+        @method('PUT')
         <!-- Pilih Icon dan Warna -->
         @include('partials.color_icon')
 
@@ -20,7 +21,7 @@
           <div class="relative">
             <x-text-input type="text" id="name" placeholder="Contoh: pedagogik, profesional"
               class="w-full pl-10 pr-4 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              name="name"/>
+              name="name" value="{{ old('name', $criteria->name) }}"/>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <i class="fa-solid fa-medal text-indigo-400"></i>
             </div>
@@ -33,7 +34,7 @@
           <div class="relative">
             <x-text-input type="text" id="description" placeholder="Contoh: pedagogik, profesional"
               class="w-full pl-10 pr-4 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              name="description"/>
+              name="description" value="{{ old('description', $criteria->description) }}"/>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <i class="fa-solid fa-book-bookmark text-indigo-400"></i>
             </div>
@@ -45,12 +46,17 @@
           <label for="weight" class="block text-sm font-medium text-indigo-700 mb-2">Bobot nilai</label>
           <div class="relative">
             <x-text-input type="number" id="weight" name="weight" placeholder="Bobot persen nilai" min="0"
-              class="w-full pl-10 pr-4 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              class="w-full pl-10 pr-4 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+              value="{{ old('weight', $criteria->weight) }}"/>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <i class="fa-solid fa-percent text-indigo-400"></i>
             </div>
           </div>
         </div>
+
+        <!-- Hidden fields untuk style dan icon -->
+        <input type="hidden" name="style" id="selected-style" value="{{ old('style', $criteria->style) }}">
+        <input type="hidden" name="icon" id="selected-icon" value="{{ old('icon', $criteria->icon) }}">
 
         <!-- Tombol Simpan -->
         <button type="submit" class="detail-btn w-full py-3 text-lg">

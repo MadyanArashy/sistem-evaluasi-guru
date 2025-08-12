@@ -58,18 +58,30 @@ class CriteriaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Criteria $criteria)
-    {
-        //
-    }
+  public function edit(Criteria $criteria)
+{
+    return view('edit_criteria', compact('criteria'));
+}
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Criteria $criteria)
-    {
-        //
-    }
+   public function update(Request $request, Criteria $criteria)
+{
+    $validated = $request->validate([
+        "weight" => "integer|required",
+        "name" => "string|required",
+        "description" => "string|required",
+        "style" => "string|required",
+        "icon" => "string|required",
+    ]);
+
+    $criteria->update($validated);
+
+    return redirect()->route('admin')->with('success', "Kriteria $criteria->name berhasil diupdate");
+}
+
 
     /**
      * Remove the specified resource from storage.
