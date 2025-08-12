@@ -323,12 +323,12 @@
                   </div>
                 </td>
                 <td class="flex items-center gap-4 p-6">
-                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center pedagogik">
-                    <i class="fas fa-chalkboard-teacher text-white"></i>
+                  <div class="w-12 h-12 p-4 bg-gradient-to-br text-white rounded-xl flex items-center justify-center" style="background:{{ $data->style }}">
+                    <i class="{{ $data->icon }}"></i>
                   </div>
                   <div class="min-w-60">
                     <div class="component-name">{{ $data->name }}</div>
-                    <div class="component-description">Kemampuan mengelola pembelajaran peserta didik</div>
+                    <div class="component-description">{{ $data->description }}</div>
                   </div>
                 </td>
                 <td class="p-6 text-center">

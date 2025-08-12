@@ -11,8 +11,10 @@
       <!-- Form -->
       <form action="{{ route('criteria.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
+        <!-- Pilih Icon dan Warna -->
+        @include('partials.color_icon')
 
-        <!-- Input Nama Guru -->
+        <!-- Input Nama Kriteria -->
         <div>
           <label for="name" class="block text-sm font-medium text-indigo-700 mb-2">Nama Kriteria</label>
           <div class="relative">
@@ -21,6 +23,19 @@
               name="name"/>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <i class="fa-solid fa-medal text-indigo-400"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Deskripsi Kriteria -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-indigo-700 mb-2">Deskripsi</label>
+          <div class="relative">
+            <x-text-input type="text" id="description" placeholder="Contoh: pedagogik, profesional"
+              class="w-full pl-10 pr-4 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              name="description"/>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <i class="fa-solid fa-book-bookmark text-indigo-400"></i>
             </div>
           </div>
         </div>
