@@ -24,4 +24,5 @@ Route::get('testing-arashy', function () {
 
 Route::middleware('auth')->group(function() {
   Route::get('create-eval-component',[EvalComponentController::class, 'create'])->name('component.create');
+  Route::post('create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
 });

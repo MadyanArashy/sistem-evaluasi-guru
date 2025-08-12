@@ -356,23 +356,25 @@
             </thead>
             <tbody>
               <!-- Pedagogik Components -->
+              <?php $no = 1 ?>
+              @foreach($components as $data)
               <tr class="table-row">
                 <td class="p-6">
                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    1
+                    {{ $no++ }}
                   </div>
                 </td>
                 <td class="p-6">
-                  <div class="criteria-badge">Pedagogik</div>
+                  <div class="criteria-badge">{{ $data->criteria->name }}</div>
                 </td>
                 <td class="p-6 min-w-60">
-                  <div class="component-name">Bahan Ajar</div>
-                  <div class="component-description">Kualitas dan kelengkapan bahan pembelajaran</div>
+                  <div class="component-name">{{ $data->name }}</div>
+                  <div class="component-description">{{ $data->description }}</div>
                 </td>
                 <td class="p-6 text-center">
-                  <div class="weight-badge">
+                  <div class="weight-badge" style="background:{{ $data->criteria->style }}">
                     <i class="fas fa-percentage"></i>
-                    30%
+                    {{ $data->weight }}%
                   </div>
                 </td>
                 <td class="p-6 text-center">
@@ -380,232 +382,13 @@
                     <a href="#" class="action-btn edit-btn">
                       <i class="fas fa-edit"></i>Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Bahan Ajar')">
+                    <button type="button" class="action-btn delete-btn">
                       <i class="fas fa-trash"></i>Hapus
                     </button>
                   </div>
                 </td>
               </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    2
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge">Pedagogik</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Ketepatan Waktu</div>
-                  <div class="component-description">Kehadiran dan ketepatan waktu dalam mengajar</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    30%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Ketepatan Waktu')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Kepribadian Components -->
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    3
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1)); border-color: rgba(16, 185, 129, 0.2); color: #047857;">Kepribadian</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Mengumpulkan Administrasi Guru</div>
-                  <div class="component-description">Kelengkapan dan ketepatan administrasi pembelajaran</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    40%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Administrasi Guru')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Professional Components -->
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    4
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1)); border-color: rgba(245, 158, 11, 0.2); color: #d97706;">Profesional</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Produktivitas dan Kreativitas</div>
-                  <div class="component-description">Inovasi dalam metode pembelajaran dan hasil karya</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    35%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Produktivitas dan Kreativitas')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    5
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1)); border-color: rgba(245, 158, 11, 0.2); color: #d97706;">Profesional</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Pengembangan Diri</div>
-                  <div class="component-description">Partisipasi dalam pelatihan dan pengembangan profesional</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    25%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Pengembangan Diri')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Social Components -->
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    6
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1)); border-color: rgba(139, 92, 246, 0.2); color: #7c3aed;">Sosial</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Komunikasi dengan Siswa</div>
-                  <div class="component-description">Kemampuan berkomunikasi efektif dengan peserta didik</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    50%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Komunikasi dengan Siswa')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    7
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1)); border-color: rgba(139, 92, 246, 0.2); color: #7c3aed;">Sosial</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Kerjasama Tim</div>
-                  <div class="component-description">Kolaborasi dengan sesama guru dan staff sekolah</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    30%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Kerjasama Tim')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    8
-                  </div>
-                </td>
-                <td class="p-6">
-                  <div class="criteria-badge">Pedagogik</div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">Metode Pembelajaran</div>
-                  <div class="component-description">Variasi dan efektivitas metode pembelajaran yang digunakan</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge">
-                    <i class="fas fa-percentage"></i>
-                    40%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn" onclick="confirmDelete('Metode Pembelajaran')">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
+            @endforeach
             </tbody>
           </table>
         </div>

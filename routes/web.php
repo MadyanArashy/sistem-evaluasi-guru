@@ -36,10 +36,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin', function () {
   $criterias = Criteria::all();
   $teachers = Teacher::all();
-  $eval_components = EvalComponent::all();
+  $components = EvalComponent::all();
   $evaluations = Evaluation::all();
   $users = User::all();
-  return view('admin', compact('criterias', 'teachers', 'eval_components', 'evaluations', 'users'));
+  return view('admin', compact('criterias', 'teachers', 'components', 'evaluations', 'users'));
 })->middleware(['auth', 'verified'])->name('admin');
 
 require __DIR__.'/auth.php';
