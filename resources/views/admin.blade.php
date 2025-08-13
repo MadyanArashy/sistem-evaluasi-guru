@@ -155,7 +155,6 @@
 }
 
 .criteria-badge {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
   border: 1px solid rgba(99, 102, 241, 0.2);
   color: #4f46e5;
   padding: 6px 12px;
@@ -365,7 +364,22 @@
                   </div>
                 </td>
                 <td class="p-6">
-                  <div class="criteria-badge">{{ $data->criteria->name }}</div>
+                  @php
+                    // Ambil warna pertama dari style
+                    preg_match_all('/#([0-9a-fA-F]{6})/', $data->criteria->style, $matches);
+
+                    $primaryColor = $matches[0][0] ?? '#000000'; // warna pertama
+                    $secondaryColor = $matches[0][1] ?? '#000000'; // warna kedua
+
+                    // Buat background rgba dari hex (opacity 0.2)
+                    list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
+                    $bgColor = "rgba($r, $g, $b, 0.1)";
+                  @endphp
+
+                <div class="criteria-badge px-3 py-1 rounded-lg font-semibold"
+                    style="color: {{ $secondaryColor }}; background-color: {{ $bgColor }};">
+                  {{ $data->criteria->name }}
+                </div>
                 </td>
                 <td class="p-6 min-w-60">
                   <div class="component-name">{{ $data->name }}</div>
