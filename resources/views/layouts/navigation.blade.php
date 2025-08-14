@@ -13,19 +13,21 @@
     <h4 class="text-center mb-4 font-bold text-lg">SMK PESAT</h4>
     <div class="px-6 mb-4">
       <div class="flex items-center">
-        <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="rounded-full mr-3 w-10 h-10" />
+        <img src="https://ui-avatars.com/api/?name={{ substr(auth()->user()->name, 0, 1) }}&background=random" class="rounded-full mr-3 w-10 h-10" />
         <div>
           <small class="block">Welcome back,</small>
-          <strong>Administrator</strong>
+          <strong class="capitalize">{{ auth()->user()->name }}</strong>
         </div>
       </div>
     </div>
     <a href="{{ route('home') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
     </a>
+   @if(auth()->check() && auth()->user()->role === 'admin')
     <a href="{{ route('admin') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fa-solid fa-user-gear"></i> Admin
     </a>
+  @endif
     <a href="{{ route('teacher.index' ) }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-users mr-2"></i> Data Guru
     </a>

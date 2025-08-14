@@ -40,7 +40,7 @@ Route::get('/admin', function () {
   $evaluations = Evaluation::all();
   $users = User::all();
   return view('admin', compact('criterias', 'teachers', 'components', 'evaluations', 'users'));
-})->middleware(['auth', 'verified'])->name('admin');
+})->middleware(['auth', 'verified', 'admin.only'])->name('admin');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/rashy.php';
