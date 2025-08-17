@@ -28,7 +28,10 @@ Route::middleware('auth')->group(function() {
   Route::delete('/eval-component/{id}',[EvalComponentController::class, 'destroy'])->name('component.destroy');
 });
 
-Route::get('/evaluate/{id}', function ($id) {
-  $teacher = Teacher::findOrFail($id);
-  return view('create_evaluation', compact('teacher'));
+Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
+  Route::get('/evaluate/{id}', [EvaluationController::class, 'create'])->name('evaluation.create');
+  Route::post('/evaluate', [EvaluationController::class, 'store'])->name('evaluation.store');
+  Route::post('/evaluate/all', [EvaluationController::class, 'bulkStore'])
+    ->name('evaluation.bulkStore');
+
 });

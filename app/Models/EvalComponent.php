@@ -12,6 +12,7 @@ class EvalComponent extends Model
         "weight",
         "description",
     ];
+    public $timestamps = true;
 
     public function criteria()
   {

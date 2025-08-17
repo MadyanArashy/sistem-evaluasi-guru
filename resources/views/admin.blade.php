@@ -69,40 +69,6 @@
  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
-.pedagogik { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-.kepribadian { background: linear-gradient(135deg, #10b981, #047857); }
-.professional { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.sosial { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
-.weight-badge {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.weight-badge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.weight-badge:hover::before {
-  left: 100%;
-}
 
 .component-name {
   font-weight: 600;

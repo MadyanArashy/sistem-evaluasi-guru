@@ -1,6 +1,5 @@
 @php
-  use App\Models\Criteria;
-  use App\Models\Evaluation;
+  use App\Models\Evaluations;
 @endphp
 <x-app-layout>
   <style>
@@ -100,57 +99,6 @@
         @include('partials.success')
       @endif
 
-      <!-- Evaluation Summary Cards -->
-      {{-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon pedagogik">
-              <i class="fa-solid fa-chalkboard-teacher text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Pedagogik</p>
-              <p class="text-2xl font-bold text-gray-800">4.2</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon profesional">
-              <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Profesional</p>
-              <p class="text-2xl font-bold text-gray-800">4.5</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon kepribadian">
-              <i class="fa-solid fa-user-check text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Kepribadian</p>
-              <p class="text-2xl font-bold text-gray-800">4.8</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon sosial">
-              <i class="fa-solid fa-users text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Sosial</p>
-              <p class="text-2xl font-bold text-gray-800">4.3</p>
-            </div>
-          </div>
-        </div>
-      </div> --}}
-
       <!-- Evaluation Components Table -->
       <div class="table-container overflow-auto xl:overflow-hidden">
         <table class="min-w-full" id="guruTable">
@@ -158,43 +106,28 @@
             <tr>
               <th class="text-left">No</th>
               <th class="text-left">Komponen</th>
-              <th class="text-center">Skor</th>
-              <th class="text-center">Kategori</th>
-              <th class="text-center">All</th>
+              <th class="text-center">Bobot</th>
+              <th class="text-center">Skor (1-5)</th>
             </tr>
           </thead>
           <tbody>
             @php
             $groupedComponents = $components
-                // Sort all components by criteria_id first
                 ->sortBy('criteria_id')
-
-                // Group them by criteria_id
                 ->groupBy('criteria_id')
-
-                // Sort the groups by the criteria_id key
                 ->sortKeys()
-
-                // Sort inside each group too
-                ->map(function ($group) {
-                    return $group->sortBy('criteria_id');
-                });
+                ->map(fn ($group) => $group->sortBy('criteria_id'));
             @endphp
 
             @foreach($groupedComponents as $criteriaId => $componentsGroup)
               @php
                 $criteria = $componentsGroup->first()->criteria;
-
-                // Extract first and second color from style
                 preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
-
                 $primaryColor = $matches[0][0] ?? '#000000';
                 $secondaryColor = $matches[0][1] ?? '#000000';
-
-                // Create bg color from primaryColor and apply 0.1 opacity
-                list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
+                [$r, $g, $b] = sscanf($primaryColor, "#%02x%02x%02x");
                 $bgColor = "rgba($r, $g, $b, 0.1)";
-                $no = 1
+                $no = 1;
               @endphp
 
               <!-- Criteria Row -->
@@ -209,9 +142,6 @@
 
               <!-- Components under this criteria -->
               @foreach($componentsGroup as $data)
-              @php
-                $criteria = Criteria::find($data->criteria_id);
-              @endphp
                 <tr class="table-row">
                   <td class="p-6">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
@@ -224,27 +154,38 @@
                     <p class="component-description text-gray-500 text-sm">{{ $data->description }}</p>
                   </td>
                   <td class="p-6 text-center">
-                    <div class="score-badge">
-                      <i class="fas fa-star mr-1"></i>
-                      {{ Evaluation::where('component_id', $data->id)->latest()->first()?->score ?? '-' }}/5.0
-                    </div>
+                    <div class="category-display inline-block">{{ $data->weight }}</div>
                   </td>
                   <td class="p-6 text-center">
-                    <div class="weight-badge px-3 py-1 rounded-lg font-semibold text-white" style="background: {{ $criteria->style }}">
-                      <i class="fas fa-percentage"></i>
-                      {{ $data->weight }}%
-                  </div>
+                    <form action="{{ route('evaluation.store') }}" method="POST" class="evaluation-form">
+                      @csrf
+                      <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
+                      <input type="hidden" name="component_id" value="{{ $data->id }}">
+                      <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                      <input type="text"
+                      class=
+                      "evaluation-input
+                      focus:border-indigo-500 shadow-sm w-12 py-2 border border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      data-teacher="{{ $teacher->id }}"
+                      data-component="{{ $data->id }}"
+                      data-user="{{ auth()->user()->id }}"
+                      name="score"
+                      required
+                      >
+                    </form>
                   </td>
-                  @if($loop->first)
-                    <td class="p-6 text-center entire-column" rowspan="{{ count($componentsGroup) }}">
-                      <div class="all-score inline-block">{{ $criteria->weight }}</div>
-                    </td>
-                  @endif
                 </tr>
               @endforeach
             @endforeach
           </tbody>
         </table>
+      </div>
+
+      <!-- Add Submit All button -->
+      <div class="flex justify-center mt-6">
+        <button id="submitAll" class="action-btn gradient-element text-white px-6 py-3 rounded-lg shadow-md">
+          <i class="fa-solid fa-paper-plane mr-2"></i> Submit Semua
+        </button>
       </div>
 
       <!-- Overall Score Section -->
@@ -277,4 +218,65 @@
       </div>
     </div>
   </div>
+  <!-- JS to handle submit all -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll(".evaluation-input");
+    const submitBtn = document.getElementById("submitAll");
+
+    function checkInputs() {
+      let allFilled = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+      });
+      submitBtn.disabled = !allFilled;
+    }
+
+    // cek pertama kali
+    checkInputs();
+
+    // cek setiap kali input berubah
+    inputs.forEach(input => {
+      input.addEventListener("input", checkInputs);
+    });
+  });
+  document.getElementById("submitAll").addEventListener("click", function () {
+    let evaluations = collectEvaluations(); // fungsi kamu untuk ambil semua input
+
+    fetch("/evaluate/all", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ evaluations })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Sukses:", data);
+      alert(data.message);
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Terjadi kesalahan");
+    });
+  });
+
+  function collectEvaluations() {
+    // contoh ambil semua input dengan class tertentu
+    let rows = document.querySelectorAll(".evaluation-input");
+    let data = [];
+    rows.forEach(row => {
+      data.push({
+        teacher_id: row.dataset.teacher,
+        component_id: row.dataset.component,
+        user_id: row.dataset.user,
+        score: row.value
+      });
+    });
+    return data;
+  }
+</script>
 </x-app-layout>
