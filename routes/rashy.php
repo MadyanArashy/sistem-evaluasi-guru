@@ -27,3 +27,8 @@ Route::middleware('auth')->group(function() {
   Route::post('/create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
   Route::delete('/eval-component/{id}',[EvalComponentController::class, 'destroy'])->name('component.destroy');
 });
+
+Route::get('/evaluate/{id}', function ($id) {
+  $teacher = Teacher::findOrFail($id);
+  return view('create_evaluation', compact('teacher'));
+});

@@ -1,3 +1,6 @@
+@php
+  use App\Models\Criteria;
+@endphp
 <x-app-layout>
   <style>
     .gradient-text {
@@ -17,10 +20,10 @@
 
     .score-display {
       background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-      padding: 12px 20px;
+      padding: 8px 16px;
       border-radius: 16px;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #1f2937;
       border: 2px solid transparent;
       background-clip: padding-box;
@@ -36,9 +39,9 @@
       background: linear-gradient(135deg, #6366f1, #4f46e5);
       color: white;
       padding: 8px 16px;
-      border-radius: 12px;
+      border-radius: 16px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 1rem;
       text-align: center;
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
@@ -46,10 +49,10 @@
     .all-score {
       background: linear-gradient(135deg, #2563eb, #0ea5e9);
       color: white;
-      padding: 12px 20px;
+      padding: 8px 16px;
       border-radius: 16px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1rem;
       text-align: center;
       box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
       position: relative;
@@ -75,17 +78,22 @@
   <div class="mx-auto px-2 py-12 relative z-10">
     <div class="content-card">
       <!-- Teacher Header -->
-      <div class="flex flex-row items-center mb-8 space-x-8">
-        <div class="w-24 h-24 rounded-full gradient-element flex items-center justify-center shadow-lg border-4 border-yellow-300">
-          <i class="fa-solid fa-user text-gray-50 text-5xl"></i>
+      <div class="flex flex-col md:flex-row md:justify-between">
+        <div class="flex items-center mb-8 space-x-8">
+          <div class="w-24 h-24 rounded-full gradient-element flex items-center justify-center shadow-lg border-4 border-yellow-300">
+            <i class="fa-solid fa-user text-gray-50 text-5xl"></i>
+          </div>
+          <div>
+            <h3 class="text-4xl font-bold gradient-text">
+              {{ $teacher->name }} {{ $teacher->degree }}
+            </h3>
+            <p class="text-xl">
+              {{ $teacher->subject }}
+            </p>
+          </div>
         </div>
         <div>
-          <h3 class="text-4xl font-bold gradient-text">
-            {{ $teacher->name }} {{ $teacher->degree }}
-          </h3>
-          <p class="text-xl">
-            {{ $teacher->subject }}
-          </p>
+
         </div>
       </div>
 
@@ -146,7 +154,7 @@
       </div>
 
       <!-- Evaluation Components Table -->
-      <div class="table-container overflow-auto lg:overflow-hidden">
+      <div class="table-container overflow-auto xl:overflow-hidden">
         <table class="min-w-full" id="guruTable">
           <thead class="table-header">
             <tr>
@@ -158,160 +166,79 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Pedagogik Section -->
-            <?php $no = 1 ?>
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Hasil Supervisi Pra Mengajar</h4>
-                  </div>
-                  <p class="text-sm text-gray-600">Kelengkapan modul ajar, bahan ajar, instrumen penilaian</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-good inline-block">4.2</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">60</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+            @php
+            $groupedComponents = $components
+                // Sort all components by criteria_id first
+                ->sortBy('criteria_id')
 
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Ketepatan Waktu</h4>
-                  </div>
-                  <p class="text-sm text-gray-600">Ketepatan waktu mengumpulkan administrasi guru</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-excellent inline-block">4.8</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">40</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+                // Group them by criteria_id
+                ->groupBy('criteria_id')
 
-            <!-- Profesional Section -->
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Internalisasi dan Pemahaman</h4>
-                  </div>
-                  <p class="text-sm text-gray-600">Visi, Value, Motto, Identitas dan School Branding. Dinilai dari wawancara dan pengamatan harian.</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-excellent inline-block">4.5</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">100</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+                // Sort the groups by the criteria_id key
+                ->sortKeys()
 
-            <!-- Kepribadian Section -->
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Tingkat Kehadiran</h4>
-                  </div>
-                  <p class="text-sm text-gray-600">Kehadiran guru dan hari masuk</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-excellent inline-block">4.9</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">60</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+                // Sort inside each group too
+                ->map(function ($group) {
+                    return $group->sortBy('criteria_id');
+                });
+            @endphp
 
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Tingkat Keterlambatan</h4>
-                  </div>
-                  <p class="text-sm text-gray-600">Ketepatan waktu saat datang ke sekolah</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-good inline-block">4.7</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">40</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+            @foreach($groupedComponents as $criteriaId => $componentsGroup)
+              @php
+                $criteria = $componentsGroup->first()->criteria;
 
-            <!-- Sosial Section -->
-            <tr class="table-row">
-              <td class="p-6">
-                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                  {{ $no++ }}
-                </div>
-              </td>
-              <td class="p-6">
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-3">
-                    <h4 class="font-semibold text-gray-800">Hubungan Sosial</h4>
+                // Ambil warna pertama dan kedua dari style
+                preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
+
+                $primaryColor = $matches[0][0] ?? '#000000';
+                $secondaryColor = $matches[0][1] ?? '#000000';
+
+                // Buat background rgba dari hex (opacity 0.2)
+                list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
+                $bgColor = "rgba($r, $g, $b, 0.1)";
+                $no = 1
+              @endphp
+
+              <!-- Criteria Row -->
+              <tr class="bg-gray-100">
+                <td colspan="5" class="font-bold">
+                  <div class="py-2 px-3 font-semibold text-center"
+                    style="color: {{ $secondaryColor }}; background-color: {{ $bgColor }};">
+                    {{ $criteria->name }}
                   </div>
-                  <p class="text-sm text-gray-600">Hubungan antara guru dan komunitas sekolah</p>
-                </div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="score-display score-good inline-block">4.3</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="category-display inline-block">100</div>
-              </td>
-              <td class="p-6 text-center">
-                <div class="all-score inline-block">25</div>
-              </td>
-            </tr>
+                </td>
+              </tr>
+
+              <!-- Components under this criteria -->
+              @foreach($componentsGroup as $data)
+                <tr class="table-row">
+                  <td class="p-6">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+                      style="background: {{ $primaryColor }};">
+                      {{ $no++ }}
+                    </div>
+                  </td>
+                  <td class="p-6">
+                    <h4 class="component-name">{{ $data->name }}</h4>
+                    <p class="component-description text-gray-500 text-sm">{{ $data->description }}</p>
+                  </td>
+                  <td class="p-6 text-center">
+                    <div class="score-badge">
+                      <i class="fas fa-star mr-1"></i>
+                      4.5/5.0
+                    </div>
+                  </td>
+                  <td class="p-6 text-center">
+                    <div class="category-display inline-block">{{ $data->weight }}</div>
+                  </td>
+                  @if($loop->first)
+                    <td class="p-6 text-center entire-column" rowspan="{{ count($componentsGroup) }}">
+                      <div class="all-score inline-block">{{ Criteria::find($data->criteria_id)->weight }}</div>
+                    </td>
+                  @endif
+                </tr>
+              @endforeach
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -335,11 +262,11 @@
 
       <!-- Action Buttons -->
       <div class="flex justify-center space-x-4 mt-8">
-        <button class="add-btn">
+        <button class="add-btn action-btn">
           <i class="fa-solid fa-edit mr-2"></i>
           Edit Evaluasi
         </button>
-        <button class="more-btn">
+        <button class="more-btn action-btn">
           <i class="fa-solid fa-print mr-2"></i>
           Cetak Laporan
         </button>

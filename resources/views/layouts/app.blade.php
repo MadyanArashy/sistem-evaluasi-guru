@@ -30,9 +30,9 @@
     </head>
     <body
     x-data="{
-      sidebarOpen: window.innerWidth >= 1024,
+      sidebarOpen: window.innerWidth >= 1280,
       init() {
-        const mediaQuery = window.matchMedia('(min-width: 1024px)');
+        const mediaQuery = window.matchMedia('(min-width: 1280px)');
         this.sidebarOpen = mediaQuery.matches;
 
         mediaQuery.addEventListener('change', (e) => {
@@ -47,7 +47,7 @@
       <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur border-b border-gray-200 z-[1000]">
         <div class="flex items-center justify-between px-6 py-4">
           <!-- Hamburger -->
-          <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-700 mr-2">
+          <button @click="sidebarOpen = !sidebarOpen" class="xl:hidden text-gray-700 mr-2">
             <i class="fas fa-bars text-xl"></i>
           </button>
 

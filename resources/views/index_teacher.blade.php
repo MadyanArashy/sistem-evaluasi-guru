@@ -241,7 +241,7 @@
         </div>
 
         <!-- Teachers Table -->
-        <div class="table-container overflow-auto lg:overflow-hidden">
+        <div class="table-container overflow-auto xl:overflow-hidden">
           <table class="min-w-full" id="guruTable">
             <thead class="table-header">
               <tr>

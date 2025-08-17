@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Criteria;
 use App\Models\Teacher;
+use App\Models\EvalComponent;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -46,8 +48,9 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-
-        return view('view_teacher', compact('teacher'));
+        $components = EvalComponent::all();
+        $criterias = Criteria::all();
+        return view('view_teacher', compact('teacher', 'components', 'criterias'));
     }
 
     /**

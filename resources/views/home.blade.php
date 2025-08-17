@@ -51,14 +51,14 @@
     </div>
 
     <!-- Teachers Table -->
-    <div class="table-container overflow-auto lg:overflow-hidden">
+    <div class="table-container overflow-auto xl:overflow-hidden">
       <div class="p-8">
         <h2 class="section-title">
           <i class="fas fa-graduation-cap mr-3"></i>
           Daftar Guru SMK Informatika Pesat
         </h2>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto xl:overflow-hidden">
           <table class="w-full">
             <thead class="table-header">
               <tr>
