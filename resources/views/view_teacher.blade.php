@@ -100,58 +100,6 @@
         @include('partials.success')
       @endif
 
-      <!-- Evaluation Summary Cards -->
-      {{-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon pedagogik">
-              <i class="fa-solid fa-chalkboard-teacher text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Pedagogik</p>
-              <p class="text-2xl font-bold text-gray-800">4.2</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon profesional">
-              <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Profesional</p>
-              <p class="text-2xl font-bold text-gray-800">4.5</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon kepribadian">
-              <i class="fa-solid fa-user-check text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Kepribadian</p>
-              <p class="text-2xl font-bold text-gray-800">4.8</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-card p-6">
-          <div class="flex items-center space-x-4">
-            <div class="stat-icon sosial">
-              <i class="fa-solid fa-users text-white text-xl"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 font-medium">Sosial</p>
-              <p class="text-2xl font-bold text-gray-800">4.3</p>
-            </div>
-          </div>
-        </div>
-      </div> --}}
-
-      <!-- Evaluation Components Table -->
       <div class="table-container overflow-auto xl:overflow-hidden">
         <table class="min-w-full" id="guruTable">
           <thead class="table-header">
@@ -226,14 +174,16 @@
                   <td class="p-6 text-center">
                     <div class="score-badge">
                       <i class="fas fa-star mr-1"></i>
-                      {{ Evaluation::where('component_id', $data->id)->latest()->first()?->score ?? '-' }}/5.0
+                      <span class="evalScore">
+                        {{ number_format(Evaluation::where('component_id', $data->id)->where('teacher_id', $teacher->id)
+                        ->latest()->first()?->score / 10, 1) ?? '-' }}</span>/5.0
                     </div>
                   </td>
                   <td class="p-6 text-center">
                     <div class="weight-badge px-3 py-1 rounded-lg font-semibold text-white" style="background: {{ $criteria->style }}">
                       <i class="fas fa-percentage"></i>
-                      {{ $data->weight }}%
-                  </div>
+                      <span class="evalWeight">{{ $data->weight }}</span>%
+                    </div>
                   </td>
                   @if($loop->first)
                     <td class="p-6 text-center entire-column" rowspan="{{ count($componentsGroup) }}">
@@ -254,7 +204,7 @@
           <div class="flex justify-center items-center space-x-8">
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Total Skor</p>
-              <div class="text-4xl font-bold text-blue-600">4.5</div>
+              <div class="text-4xl font-bold text-blue-600" id="overallScore">0.00</div>
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
@@ -277,4 +227,33 @@
       </div>
     </div>
   </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const scores = document.querySelectorAll(".evalScore");
+    const weights = document.querySelectorAll(".evalWeight");
+    let weightedSum = 0;
+    let totalWeight = 0;
+
+    scores.forEach((score, i) => {
+      if (weights[i]) {
+        const scoreVal = parseFloat(score.textContent) || 0;
+        const weightVal = parseFloat(weights[i].textContent) || 0;
+
+        weightedSum += scoreVal * weightVal;
+        totalWeight += weightVal;
+      }
+    });
+
+    // normalize to 100 (optional)
+    const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : 0;
+
+    console.log("Weighted total:", weightedSum);
+    console.log("Final normalized score:", finalScore);
+
+    document.getElementById("overallScore").textContent = finalScore;
+  });
+
+
+</script>
+
 </x-app-layout>
