@@ -1,6 +1,5 @@
 @php
-  use App\Models\Criteria;
-  use App\Models\Evaluation;
+  use App\Models\Evaluations;
 @endphp
 <x-app-layout>
   <style>
@@ -30,45 +29,6 @@
     .score-good { border-color: #3b82f6; color: #1e40af; background: linear-gradient(135deg, #dbeafe, #93c5fd); }
     .score-fair { border-color: #f59e0b; color: #92400e; background: linear-gradient(135deg, #fef3c7, #fcd34d); }
     .score-poor { border-color: #ef4444; color: #991b1b; background: linear-gradient(135deg, #fee2e2, #fca5a5); }
-
-    .category-display {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 16px;
-      font-weight: 600;
-      font-size: 1rem;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-
-    .all-score {
-      background: linear-gradient(135deg, #2563eb, #0ea5e9);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .all-score::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .all-score:hover::before {
-      left: 100%;
-    }
   </style>
 
   <div class="mx-auto px-2 py-12 relative z-10">
@@ -89,8 +49,8 @@
           </div>
         </div>
         <div>
-          <a href="{{ route('evaluation.create', ["id" => $teacher->id]) }}" class="action-btn detail-btn text-lg">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i></i>Evaluasi Baru
+          <a href="{{ route('teacher.show', ["id" => $teacher->id]) }}" class="action-btn detail-btn text-lg">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i></i>Lihat Guru
           </a>
         </div>
       </div>
@@ -100,49 +60,35 @@
         @include('partials.success')
       @endif
 
+      <!-- Evaluation Components Table -->
       <div class="table-container overflow-auto xl:overflow-hidden">
         <table class="min-w-full" id="guruTable">
           <thead class="table-header">
             <tr>
               <th class="text-left">No</th>
               <th class="text-left">Komponen</th>
-              <th class="text-center">Skor</th>
-              <th class="text-center">Kategori</th>
-              <th class="text-center">All</th>
+              <th class="text-center">Bobot</th>
+              <th class="text-center">Skor (1-5)</th>
             </tr>
           </thead>
           <tbody>
             @php
             $groupedComponents = $components
-                // Sort all components by criteria_id first
                 ->sortBy('criteria_id')
-
-                // Group them by criteria_id
                 ->groupBy('criteria_id')
-
-                // Sort the groups by the criteria_id key
                 ->sortKeys()
-
-                // Sort inside each group too
-                ->map(function ($group) {
-                    return $group->sortBy('criteria_id');
-                });
+                ->map(fn ($group) => $group->sortBy('criteria_id'));
             @endphp
 
             @foreach($groupedComponents as $criteriaId => $componentsGroup)
               @php
                 $criteria = $componentsGroup->first()->criteria;
-
-                // Extract first and second color from style
                 preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
-
                 $primaryColor = $matches[0][0] ?? '#000000';
                 $secondaryColor = $matches[0][1] ?? '#000000';
-
-                // Create bg color from primaryColor and apply 0.1 opacity
-                list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
+                [$r, $g, $b] = sscanf($primaryColor, "#%02x%02x%02x");
                 $bgColor = "rgba($r, $g, $b, 0.1)";
-                $no = 1
+                $no = 1;
               @endphp
 
               <!-- Criteria Row -->
@@ -157,9 +103,6 @@
 
               <!-- Components under this criteria -->
               @foreach($componentsGroup as $data)
-              @php
-                $criteria = Criteria::find($data->criteria_id);
-              @endphp
                 <tr class="table-row">
                   <td class="p-6">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
@@ -172,29 +115,42 @@
                     <p class="component-description text-gray-500 text-sm">{{ $data->description }}</p>
                   </td>
                   <td class="p-6 text-center">
-                    <div class="score-badge">
-                      <i class="fas fa-star mr-1"></i>
-                      <span class="evalScore">
-                        {{ number_format(Evaluation::where('component_id', $data->id)->where('teacher_id', $teacher->id)
-                        ->latest()->first()?->score / 10, 1) ?? '-' }}</span>/5.0
-                    </div>
-                  </td>
-                  <td class="p-6 text-center">
                     <div class="weight-badge px-3 py-1 rounded-lg font-semibold text-white" style="background: {{ $criteria->style }}">
                       <i class="fas fa-percentage"></i>
                       <span class="evalWeight">{{ $data->weight }}</span>%
                     </div>
                   </td>
-                  @if($loop->first)
-                    <td class="p-6 text-center entire-column" rowspan="{{ count($componentsGroup) }}">
-                      <div class="all-score inline-block">{{ $criteria->weight }}</div>
-                    </td>
-                  @endif
+                  <td class="p-6 text-center">
+                    <form action="{{ route('evaluation.store') }}" method="POST" class="evaluation-form">
+                      @csrf
+                      <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
+                      <input type="hidden" name="component_id" value="{{ $data->id }}">
+                      <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                      <input type="number"
+                        step="0.1"
+                        min="1"
+                        max="5"
+                        class="evaluation-input border rounded p-2"
+                        data-teacher="{{ $teacher->id }}"
+                        data-component="{{ $data->id }}"
+                        data-user="{{ auth()->user()->id }}"
+                        name="score"
+                        required
+                      >
+                    </form>
+                  </td>
                 </tr>
               @endforeach
             @endforeach
           </tbody>
         </table>
+      </div>
+
+      <!-- Add Submit All button -->
+      <div class="flex justify-center mt-6">
+        <button id="submitAll" class="action-btn gradient-element text-white px-6 py-3 rounded-lg shadow-md">
+          <i class="fa-solid fa-paper-plane mr-2"></i> Submit Semua
+        </button>
       </div>
 
       <!-- Overall Score Section -->
@@ -227,33 +183,116 @@
       </div>
     </div>
   </div>
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const scores = document.querySelectorAll(".evalScore");
+  <!-- JS to handle submit all -->
+<script>
+   function calculateScore() {
+    const scores = document.querySelectorAll(".evaluation-input");
     const weights = document.querySelectorAll(".evalWeight");
     let weightedSum = 0;
     let totalWeight = 0;
 
     scores.forEach((score, i) => {
       if (weights[i]) {
-        const scoreVal = parseFloat(score.textContent) || 0;
-        const weightVal = parseFloat(weights[i].textContent) || 0;
+        const scoreVal = parseFloat(score.value || score.textContent) || 0;
+        const weightVal = parseFloat(weights[i].value || weights[i].textContent) || 0;
 
         weightedSum += scoreVal * weightVal;
         totalWeight += weightVal;
       }
     });
 
-    // normalize to 100 (optional)
+    // normalize to 100
     const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : 0;
 
     console.log("Weighted total:", weightedSum);
     console.log("Final normalized score:", finalScore);
 
     document.getElementById("overallScore").textContent = finalScore;
+  }
+
+    // 🔹 run when any evaluation input is typed
+    document.addEventListener("keyup", function(e) {
+      if (e.target.classList.contains("evaluation-input")) {
+        calculateScore();
+      }
+    });
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll(".evaluation-input");
+    const submitBtn = document.getElementById("submitAll");
+
+    // 🔹 Fungsi cek input kosong
+    function checkInputs() {
+      let allFilled = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+          // ubah ke warna default (indigo)
+          input.classList.remove('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+          input.classList.add('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+        } else {
+          // ubah ke warna hijau kalau sudah terisi
+          input.classList.remove('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+          input.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+        }
+      });
+      submitBtn.disabled = !allFilled;
+    }
+
+    // cek pertama kali (saat halaman load)
+    checkInputs();
+
+    // cek setiap kali ada perubahan input
+    inputs.forEach(input => {
+      input.addEventListener("input", checkInputs);
+    });
+
+    // 🔹 Tombol submitAll
+    submitBtn.addEventListener("click", () => {
+      let evaluations = collectEvaluations();
+
+      // Validasi lagi sebelum kirim
+      let hasEmpty = evaluations.some(e => e.score === "" || isNaN(e.score));
+      if (hasEmpty) {
+        alert("Harap isi semua nilai terlebih dahulu sebelum mengirim.");
+        return;
+      }
+
+      fetch("/evaluate/all", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ evaluations })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Sukses:", data);
+        alert(data.message);
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("Terjadi kesalahan");
+      });
+    });
+
+    // 🔹 Kumpulkan data input
+    function collectEvaluations() {
+      let rows = document.querySelectorAll(".evaluation-input");
+      let data = [];
+      rows.forEach(row => {
+        data.push({
+          teacher_id: row.dataset.teacher,
+          component_id: row.dataset.component,
+          user_id: row.dataset.user,
+          score: row.value * 10
+        });
+      });
+      return data;
+    }
   });
-
-
 </script>
 
 </x-app-layout>

@@ -69,79 +69,6 @@
  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
-.pedagogik { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-.kepribadian { background: linear-gradient(135deg, #10b981, #047857); }
-.professional { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.sosial { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
-.weight-badge {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.weight-badge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.weight-badge:hover::before {
-  left: 100%;
-}
-
-.action-btn {
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  margin: 0 4px;
-  position: relative;
-  overflow: hidden;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.edit-btn {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-}
-
-.edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
-}
-
-.delete-btn {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-}
-
-.delete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-}
 
 .component-name {
   font-weight: 600;
@@ -212,8 +139,8 @@
             </a>
           </div>
 
-          <div class="table-container overflow-auto lg:overflow-hidden">
-            <table class="min-w-full">
+          <div class="table-container overflow-auto xl:overflow-hidden">
+            <table class="min-w-full" id="users">
               <thead class="table-header">
                 <tr>
                   <th class="text-left">No</th>
@@ -224,7 +151,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($users as $user)
+                @foreach ($users as $data)
                 <tr class="table-row">
                 <td class="p-6">
                   <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
@@ -236,27 +163,32 @@
                   <i class="fas fa-user text-white"></i>
                 </div>
                 <div class="min-w-[150px]">
-                  <div class="component-name font-semibold">{{ $user->name }}</div>
-                  <div class="component-description text-gray-500">{{ $user->id }}</div>
+                  <div class="component-name font-semibold">{{ $data->name }}</div>
+                  <div class="component-description text-gray-500">{{ $data->id }}</div>
                 </div>
               </td>
               <td class="p-6 text-center w-32">
                 <div class="weight-badge inline-flex items-center gap-1">
                   <i class="fas fa-user-tag"></i>
-                  {{ $user->role }}
+                  {{ $data->role }}
                 </div>
               </td>
                 <td class="p-6 text-center">
-                  {{ $user->created_at->format('d M Y') }}
+                  {{ $data->created_at->format('d M Y') }}
                 </td>
                 <td class="p-6 text-center">
                   <div class="flex justify-center space-x-2">
                     <a href="#" class="action-btn edit-btn">
                       <i class="fas fa-edit"></i>Edit
                     </a>
-                    <button type="button" class="action-btn delete-btn">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
+                    <form action="{{ route('user.destroy', $data->id) }}" method="POST" style="display:inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="action-btn delete-btn"
+                        onclick="return confirm('Are you sure you want to delete this user?')">
+                        <i class="fas fa-trash"></i> Hapus
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -276,8 +208,8 @@
           </a>
         </div>
 
-        <div class="table-container overflow-auto lg:overflow-hidden">
-          <table class="min-w-full">
+        <div class="table-container overflow-auto xl:overflow-hidden">
+          <table class="min-w-full" id="criterias">
             <thead class="table-header">
               <tr>
                 <th class="text-left">No</th>
@@ -342,8 +274,8 @@
           </a>
         </div>
 
-        <div class="table-container overflow-auto lg:overflow-hidden">
-          <table class="min-w-full">
+        <div class="table-container overflow-auto xl:overflow-hidden">
+          <table class="min-w-full" id="components">
             <thead class="table-header">
               <tr>
                 <th class="text-left">No</th>
@@ -354,61 +286,90 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Pedagogik Components -->
-              <?php $no = 1 ?>
-              @foreach($components as $data)
-              <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    {{ $no++ }}
-                  </div>
-                </td>
-                <td class="p-6">
-                  @php
-                    // Ambil warna pertama dari style
-                    preg_match_all('/#([0-9a-fA-F]{6})/', $data->criteria->style, $matches);
+              @php
+                // Group by criteria_id
+                $groupedComponents = $components
+                // Sort all components by criteria_id first
+                ->sortBy('criteria_id')
 
-                    $primaryColor = $matches[0][0] ?? '#000000'; // warna pertama
-                    $secondaryColor = $matches[0][1] ?? '#000000'; // warna kedua
+                // Group them by criteria_id
+                ->groupBy('criteria_id')
 
-                    // Buat background rgba dari hex (opacity 0.2)
-                    list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
-                    $bgColor = "rgba($r, $g, $b, 0.1)";
-                  @endphp
+                // Sort the groups by the criteria_id key
+                ->sortKeys()
 
-                <div class="criteria-badge px-3 py-1 rounded-lg font-semibold"
-                    style="color: {{ $secondaryColor }}; background-color: {{ $bgColor }};">
-                  {{ $data->criteria->name }}
-                </div>
-                </td>
-                <td class="p-6 min-w-60">
-                  <div class="component-name">{{ $data->name }}</div>
-                  <div class="component-description">{{ $data->description }}</div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="weight-badge" style="background:{{ $data->criteria->style }}">
-                    <i class="fas fa-percentage"></i>
-                    {{ $data->weight }}%
-                  </div>
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <button type="button" class="action-btn delete-btn">
-                      <i class="fas fa-trash"></i>Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            @endforeach
+                // Sort inside each group too
+                ->map(function ($group) {
+                    return $group->sortBy('criteria_id');
+                });
+
+
+              $no = 1;
+              @endphp
+
+              @foreach($groupedComponents as $criteriaId => $componentsGroup)
+                @php
+                  $criteria = $componentsGroup->first()->criteria;
+
+                  // Extract colors from style
+                  preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
+                  $primaryColor = $matches[0][0] ?? '#000000';
+                  $secondaryColor = $matches[0][1] ?? '#000000';
+
+                  // Background RGBA with 0.1 opacity
+                  list($r, $g, $b) = sscanf($primaryColor, "#%02x%02x%02x");
+                  $bgColor = "rgba($r, $g, $b, 0.1)";
+                @endphp
+
+                  @foreach($componentsGroup as $data)
+                    <tr class="table-row">
+                      <td class="p-6">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+                          style="background: {{ $primaryColor }};">
+                          {{ $no++ }}
+                        </div>
+                      </td>
+                      <td class="p-6">
+                        <div class="criteria-badge px-3 py-1 rounded-lg font-semibold text-xs"
+                          style="color: {{ $secondaryColor }}; background-color: {{ $bgColor }};">
+                          {{ strtoupper($criteria->name) }}
+                        </div>
+                      </td>
+                      <td class="p-6 min-w-60">
+                        <div class="component-name font-semibold">{{ $data->name }}</div>
+                        <div class="component-description text-sm text-gray-500">{{ $data->description }}</div>
+                      </td>
+                      <td class="p-6 text-center">
+                        <div class="weight-badge px-3 py-1 rounded-lg font-semibold text-white"
+                          style="background: {{ $criteria->style }};">
+                          <i class="fas fa-percentage"></i>
+                          {{ $data->weight }}%
+                        </div>
+                      </td>
+                      <td class="p-6 text-center">
+                        <div class="flex justify-center space-x-2">
+                          <a href="#" class="action-btn edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                          </a>
+                          <form action="{{ route('component.destroy', $data->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="action-btn delete-btn"
+                              onclick="return confirm('Are you sure you want to delete this component?')">
+                              <i class="fas fa-trash"></i> Hapus
+                            </button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  @endforeach
+                @endforeach
             </tbody>
           </table>
         </div>
 
         <!-- Summary Cards -->
-        <div class="grid md:grid-cols-2 gap-8 mt-12">
+        <div class="grid md:grid-cols-2 gap-8 mt-12" id="summary">
           <div class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
             <div class="flex items-center justify-between mb-6">
               <h4 class="text-xl font-bold text-gray-800">Total Kriteria</h4>
@@ -416,7 +377,7 @@
                 <i class="fas fa-list-check text-white text-lg"></i>
               </div>
             </div>
-            <div class="text-3xl font-bold text-blue-600 mb-2">4</div>
+            <div class="text-3xl font-bold text-blue-600 mb-2">{{ $criterias->count() }}</div>
             <p class="text-gray-600 text-sm">Kriteria evaluasi aktif</p>
             <div class="mt-4 text-xs text-gray-500">
               Total bobot: <span class="font-semibold text-blue-600" id="criteriaWeight"></span>
@@ -430,13 +391,23 @@
                 <i class="fas fa-puzzle-piece text-white text-lg"></i>
               </div>
             </div>
-            <div class="text-3xl font-bold text-purple-600 mb-2">8</div>
+            <div class="text-3xl font-bold text-purple-600 mb-2">{{ $components->count() }}</div>
             <p class="text-gray-600 text-sm">Komponen evaluasi terdefinisi</p>
             <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
-              <div class="text-gray-500">Pedagogik: <span class="font-semibold text-blue-600">3 komponen</span></div>
-              <div class="text-gray-500">Kepribadian: <span class="font-semibold text-green-600">1 komponen</span></div>
-              <div class="text-gray-500">Profesional: <span class="font-semibold text-orange-600">2 komponen</span></div>
-              <div class="text-gray-500">Sosial: <span class="font-semibold text-purple-600">2 komponen</span></div>
+              @foreach($criterias as $criteria)
+              @php
+                preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
+                $secondaryColor = $matches[0][1] ?? '#000000';
+              @endphp
+                <div>
+                  {{ $criteria->name }}:
+                  <span id="criteria-count-{{ $criteria->id }}"
+                        class="font-semibold"
+                        style="color: {{ $secondaryColor }}">
+                    0 komponen
+                  </span>
+                </div>
+              @endforeach
             </div>
           </div>
         </div>
@@ -447,7 +418,6 @@
 
 <!-- Enhanced JavaScript -->
 <script>
-// Add smooth scrolling between tables
 function scrollToTable(tableId) {
   document.getElementById(tableId).scrollIntoView({
     behavior: 'smooth',
@@ -455,24 +425,43 @@ function scrollToTable(tableId) {
   });
 }
 
-// Auto-calculate total percentages (you can extend this)
 function calculateTotalPercentage() {
   const criteriaWeights = @json($criterias->pluck('weight'));
   const totalCriteria = criteriaWeights.reduce((a, b) => a + b, 0);
 
-  // Update the span text
   document.getElementById('criteriaWeight').textContent = `${totalCriteria}%`;
 
-  // Log in console
-  console.log(`Total criteria weight = ${totalCriteria}%`);
-
-  // Validation warning
   if (totalCriteria !== 100) {
     console.warn('Warning: Total criteria weight does not equal 100%');
   }
 }
 
-// Initialize calculations
+// === Hitung jumlah komponen per kriteria ===
+function calculateComponentsPerCriteria() {
+  // Ambil data dari Laravel
+  const components = @json($components);
+
+  // Hitung per criteria_id
+  const counts = {};
+  components.forEach(c => {
+    if (!counts[c.criteria_id]) {
+      counts[c.criteria_id] = 0;
+    }
+    counts[c.criteria_id]++;
+  });
+
+  // Tampilkan ke UI kalau mau
+  Object.keys(counts).forEach(criteriaId => {
+    const el = document.getElementById(`criteria-count-${criteriaId}`);
+    if (el) {
+      el.textContent = `${counts[criteriaId]} komponen`;
+    }
+  });
+}
+
+// Jalankan fungsi
 calculateTotalPercentage();
+calculateComponentsPerCriteria();
 </script>
+
 </x-app-layout>

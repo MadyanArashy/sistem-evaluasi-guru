@@ -39,7 +39,7 @@ class EvalComponentController extends Controller
 
       EvalComponent::create($validated);
 
-      return redirect()->route('admin')->with('success', 'Berhasil tambah eval komponen');
+      return redirect()->to(route('admin').'#components')->with('success', 'Berhasil tambah eval komponen');
     }
 
     /**
@@ -69,8 +69,11 @@ class EvalComponentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EvalComponent $evalComponent)
+    public function destroy(string $id)
     {
-        //
+      $evalcomponent = EvalComponent::findOrFail($id);
+      $evalcomponent->deleteOrFail();
+
+      return redirect()->to(route('admin').'#components')->with('success', 'Successfully deleted evaluation component!');
     }
 }

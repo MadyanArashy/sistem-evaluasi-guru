@@ -241,7 +241,7 @@
         </div>
 
         <!-- Teachers Table -->
-        <div class="table-container overflow-auto lg:overflow-hidden">
+        <div class="table-container overflow-auto xl:overflow-hidden">
           <table class="min-w-full" id="guruTable">
             <thead class="table-header">
               <tr>
@@ -294,8 +294,10 @@
                   </td>
                   <td class="p-6 text-center">
                     <div class="score-badge">
-                      <i class="fas fa-star"></i>
-                      4.5/5.0
+                      <i class="fas fa-star mr-1"></i>
+                      <span class="evalScore">
+                        {{ $scores[$data->id] ?? '0.00' }}
+                      </span>
                     </div>
                   </td>
                   <td class="p-6 text-center">

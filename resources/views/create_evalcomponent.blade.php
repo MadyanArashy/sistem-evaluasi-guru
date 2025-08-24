@@ -4,8 +4,8 @@
 
       <!-- Judul -->
       <div class="flex items-center justify-center mb-10 gap-3">
-        <i class="fas fa-user-tie text-indigo-700 text-3xl"></i>
-        <h2 class="section-title text-indigo-400 text-3xl m-0 leading-none">Form Tambah Guru</h2>
+        <i class="fa-solid fa-table-cells text-indigo-700 text-3xl"></i>
+        <h2 class="section-title text-indigo-400 text-3xl m-0 leading-none">Form Tambah Komponen</h2>
       </div>
 
       <!-- Form -->
@@ -18,12 +18,17 @@
           <div class="relative">
             <select id="criteriaSelect" name="criteria_id"
               class="border-indigo-400 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm cursor-pointer w-full pl-10 pr-4 py-2 border focus:outline-none focus:ring-2">
-              @foreach($criterias as $data)
-                <option value="{{ $data->id }}">{{ $data->name }}</option>
-              @endforeach
+             @foreach($criterias as $data)
+              <option value="{{ $data->id }}"
+                data-textcolor="{{ trim(explode(',', str_replace(')', '', $data->style))[1]) }}">
+                {{ $data->name }}
+              </option>
+
+            @endforeach
+
             </select>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <i class="fa-solid fa-key text-indigo-400"></i>
+              <i class="fa-solid fa-key text-white" id="criteriaIcon"></i>
             </div>
           </div>
         </div>
@@ -72,4 +77,22 @@
       </form>
     </div>
   </div>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('criteriaSelect');
+    const icon = document.getElementById('criteriaIcon');
+
+    function applySelectedTextColor() {
+      const selectedOption = select.options[select.selectedIndex];
+      const textColor = selectedOption.dataset.textcolor;
+      select.style.color = textColor;
+      icon.style.color = textColor;
+    }
+
+    applySelectedTextColor();
+    select.addEventListener('change', applySelectedTextColor);
+  });
+
+
+  </script>
 </x-app-layout>

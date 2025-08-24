@@ -23,6 +23,15 @@ Route::get('testing-arashy', function () {
 });
 
 Route::middleware('auth')->group(function() {
-  Route::get('create-eval-component',[EvalComponentController::class, 'create'])->name('component.create');
-  Route::post('create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
+  Route::get('/create-eval-component',[EvalComponentController::class, 'create'])->name('component.create');
+  Route::post('/create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
+  Route::delete('/eval-component/{id}',[EvalComponentController::class, 'destroy'])->name('component.destroy');
+});
+
+Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
+  Route::get('/evaluate/{id}', [EvaluationController::class, 'create'])->name('evaluation.create');
+  Route::post('/evaluate', [EvaluationController::class, 'store'])->name('evaluation.store');
+  Route::post('/evaluate/all', [EvaluationController::class, 'bulkStore'])
+    ->name('evaluation.bulkStore');
+
 });
