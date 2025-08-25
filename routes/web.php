@@ -17,6 +17,8 @@ Route::get('/home', function () {
   $teachers = Teacher::limit(5)->get();
   if (EvalComponent::count() > 0){
     $evaluationCount = Evaluation::count() / EvalComponent::count();
+  } else {
+    $evaluationCount = 0;
   }
   $scores = [];
 
