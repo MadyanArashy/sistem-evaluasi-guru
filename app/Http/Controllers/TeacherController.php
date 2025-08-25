@@ -86,7 +86,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
-        //
+        return view('edit_teacher', compact('teacher'));
     }
 
     /**
@@ -94,7 +94,15 @@ class TeacherController extends Controller
      */
     public function update(Request $request, Teacher $teacher)
     {
-        //
+        $validated = $request->validate([
+            "name" => "required|string",
+            "degree" => "required|string",
+            "subject" => "required|string",
+        ]);
+
+        $teacher->update($validated);
+
+        return redirect()->route('teacher.index')->with('success', 'Guru berhasil diperbarui!');
     }
 
     /**
