@@ -15,7 +15,9 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
   $teachers = Teacher::limit(5)->get();
-  $evaluationCount = Evaluation::count() / EvalComponent::count();
+  if (EvalComponent::count() > 0){
+    $evaluationCount = Evaluation::count() / EvalComponent::count();
+  }
   $scores = [];
 
     foreach ($teachers as $teacher) {
@@ -40,7 +42,7 @@ Route::get('/home', function () {
       $finalScore = $totalWeight > 0 ? round($weightedSum / $totalWeight, 2) : 0;
       $scores[$teacher->id] = $finalScore;
     }
-  return view('home', compact('teachers', 'evaluationCount'));
+  return view('home', compact('teachers', 'evaluationCount', 'scores'));
 })->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
