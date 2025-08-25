@@ -11,7 +11,8 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid md:grid-cols-3 gap-8 mb-16">
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+
       <div class="stat-card p-8">
         <div class="flex items-center justify-between">
           <div>
@@ -27,8 +28,8 @@
       <div class="stat-card p-8">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-white/70 text-sm font-medium mb-2">Data Nilai</p>
-            <h2 class="text-4xl font-bold text-white">128</h2>
+            <p class="text-white/70 text-sm font-medium mb-2">Banyak Evaluasi</p>
+            <h2 class="text-4xl font-bold text-white">{{ $evaluationCount }}</h2>
           </div>
           <div class="stat-icon">
             <i class="fas fa-chart-line text-white text-2xl"></i>
@@ -36,18 +37,6 @@
         </div>
       </div>
 
-      <div class="stat-card p-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-white/70 text-sm font-medium mb-2">Laporan Bulanan</p>
-            <h2 class="text-4xl font-bold text-white">12</h2>
-            <p class="text-white/60 text-xs mt-1">✓ Target tercapai</p>
-          </div>
-          <div class="stat-icon">
-            <i class="fas fa-file-chart-column text-white text-2xl"></i>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Teachers Table -->
@@ -62,19 +51,19 @@
           <table class="w-full">
             <thead class="table-header">
               <tr>
-                <th class="px-6 py-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Profil Guru
                 </th>
-                <th class="px-6 py-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Kualifikasi
                 </th>
-                <th class="px-6 py-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Bidang Keahlian
                 </th>
-                <th class="px-6 py-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
+                <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Performa
                 </th>
-                <th class="px-6 py-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
+                <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Aksi
                 </th>
               </tr>
@@ -82,7 +71,7 @@
             <tbody>
               @foreach ($teachers as $data)
               <tr class="table-row">
-                <td class="px-6 py-6">
+                <td class="p-6">
                   <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                       {{ substr($data->name, 0, 1) }}
@@ -93,13 +82,13 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-6">
+                <td class="p-6">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
                     <i class="fas fa-medal mr-1"></i>
                     {{ $data->degree }}
                   </span>
                 </td>
-                <td class="px-6 py-6">
+                <td class="p-6">
                   <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
                       <i class="fas fa-laptop-code text-white text-sm"></i>
@@ -110,13 +99,15 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-6 text-center">
-                  <div class="score-badge">
-                    <i class="fas fa-star mr-1"></i>
-                    4.5/5.0
-                  </div>
-                </td>
-                <td class="px-6 py-6 text-center">
+                <td class="p-6 text-center">
+                    <div class="score-badge">
+                      <i class="fas fa-star mr-1"></i>
+                      <span class="evalScore">
+                        {{ $scores[$data->id] ?? '0.00' }}
+                      </span>
+                    </div>
+                  </td>
+                <td class="p-6 text-center">
                   <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="detail-btn w-40">
                     <i class="fas fa-eye mr-2"></i>
                     Lihat Detail
