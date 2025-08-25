@@ -305,7 +305,7 @@
                       <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
                         <i class="fas fa-eye mr-1"></i>Detail
                       </a>
-                      <a href="{{ route('teacher.create', 1) }}" class="action-btn edit-btn">
+                      <a href="{{ route('teacher.edit', $data->id) }}" class="action-btn edit-btn">
                         <i class="fas fa-edit mr-1"></i>Edit
                       </a>
                       <form action="{{ route('teacher.destroy', $data->id) }}" method="POST"
