@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/create-criteria', [CriteriaController::class, 'create'])->name('criteria.create');
   Route::post('/criteria', [CriteriaController::class, 'store'])->name('criteria.store');
   Route::delete('/criteria/{id}', [CriteriaController::class, 'destroy'])->name('criteria.destroy');
+  Route::delete('/criteria/{id}', [CriteriaController::class, 'edit'])->name('criteria.edit');
 });
 
 Route::middleware('auth')->group(function() {
