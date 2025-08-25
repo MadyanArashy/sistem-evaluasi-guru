@@ -244,7 +244,7 @@
                 </td>
                 <td class="p-6 text-center">
                   <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
+                    <a href="{{ route('criteria.edit', ['id' => $data->id]) }}" class="action-btn edit-btn">
                       <i class="fas fa-edit"></i> Edit
                     </a>
                     <form action="{{ route('criteria.destroy', $data->id) }}" method="POST" style="display:inline;">
@@ -348,7 +348,7 @@
                       </td>
                       <td class="p-6 text-center">
                         <div class="flex justify-center space-x-2">
-                          <a href="#" class="action-btn edit-btn">
+                          <a href="" class="action-btn edit-btn">
                             <i class="fas fa-edit"></i> Edit
                           </a>
                           <form action="{{ route('component.destroy', $data->id) }}" method="POST" style="display:inline;">
