@@ -25,16 +25,16 @@ class TeacherController extends Controller
           $totalWeight = 0;
 
           foreach ($components as $component) {
-              $score = Evaluation::where('component_id', $component->id)
-                  ->where('teacher_id', $teacher->id)
-                  ->latest()
-                  ->first()?->score;
+            $score = Evaluation::where('component_id', $component->id)
+              ->where('teacher_id', $teacher->id)
+              ->latest()
+              ->first()?->score;
 
-              $scoreVal = $score ? $score / 10 : 0;
-              $weightVal = floatval($component->weight);
+            $scoreVal = $score ? $score / 10 : 0;
+            $weightVal = floatval($component->weight);
 
-              $weightedSum += $scoreVal * $weightVal;
-              $totalWeight += $weightVal;
+            $weightedSum += $scoreVal * $weightVal;
+            $totalWeight += $weightVal;
           }
 
           $finalScore = $totalWeight > 0 ? round($weightedSum / $totalWeight, 2) : 0;
