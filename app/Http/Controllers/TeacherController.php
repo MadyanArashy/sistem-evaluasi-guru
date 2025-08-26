@@ -94,7 +94,44 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
         $components = EvalComponent::all();
         $criterias = Criteria::all();
-        return view('view_teacher', compact('teacher', 'components', 'criterias'));
+
+         // Group components by criteria
+        $components = EvalComponent::with('criteria')->get();
+        $criteriaGroups = $components->groupBy('criteria_id');
+
+        $finalScore = 0;
+
+        // Calculate score for each criteria
+        foreach ($criteriaGroups as $criteriaId => $componentsGroup) {
+            $criteria = $componentsGroup->first()->criteria;
+            $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
+
+            $criteriaWeightedSum = 0;
+            $criteriaTotalWeight = 0;
+
+            // Calculate weighted average within criteria
+            foreach ($componentsGroup as $component) {
+                $evaluation = Evaluation::where('component_id', $component->id)
+                    ->where('teacher_id', $teacher->id)
+                    ->latest()
+                    ->first();
+
+                $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
+                $componentWeight = floatval($component->weight); // Bobot komponen dalam kriteria (0-100)
+
+                $criteriaWeightedSum += $scoreVal * $componentWeight;
+                $criteriaTotalWeight += $componentWeight;
+            }
+
+            // Normalize criteria score (0-5 scale)
+            $criteriaScore = $criteriaTotalWeight > 0 ?
+                ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
+
+            // Apply criteria weight to overall score
+            $finalScore += ($criteriaScore * $criteriaWeight) / 100;
+        }
+        $score = round($finalScore, 2);
+        return view('view_teacher', compact(['teacher', 'components', 'criterias', 'score']));
     }
 
     /**
