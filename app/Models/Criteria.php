@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Criteria extends Model
 {
     protected $fillable = [
-        "name",
-        "weight",
-        "description",
-        "style",
-        "icon",
-    ];
+    'name',
+    'description',
+    'weight',
+    'icon',
+    'style',
+];
 }

@@ -14,6 +14,7 @@ class CriteriaController extends Controller
     public function index()
     {
       $criterias = Criteria::all();
+      return view('criteria.index', compact('criterias'));
     }
 
     /**
@@ -28,7 +29,7 @@ class CriteriaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    { 
+    {
     try {
     $validated = $request->validate([
         "weight" => "integer|required",
@@ -58,19 +59,42 @@ class CriteriaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Criteria $criteria)
+    public function edit(string $id)
     {
-        //
+        $criteria = Criteria::findOrFail($id);
+        return view('edit_criteria', compact('criteria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Criteria $criteria)
-    {
-        //
-    }
+    public function update(Request $request, $id)
+{
+    // validasi dulu biar aman
+    $request->validate([
+        'name'        => 'required|string|max:255',
+        'description' => 'nullable|string|max:500',
+        'weight'      => 'required|numeric|min:0',
+        'icon'        => 'nullable|string',
+        'style'       => 'nullable|string',
+    ]);
 
+    // ambil data lama
+    $criteria = Criteria::findOrFail($id);
+
+    // update data
+   $criteria->update([
+    'name'        => $request->name,
+    'description' => $request->description,
+    'weight'      => $request->weight,
+    'icon'        => $request->icon ?? 'fa-solid fa-medal',
+    'style'       => $request->style ?? 'bg-indigo-500',
+]);
+
+
+    // redirect balik
+    return redirect()->route('admin')->with('success', "Criteria $request->name updated");
+}
     /**
      * Remove the specified resource from storage.
      */
