@@ -204,7 +204,7 @@
           <div class="flex justify-center items-center space-x-8">
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Total Skor</p>
-              <div class="text-4xl font-bold text-blue-600" id="overallScore">0.00</div>
+              <div class="text-4xl font-bold text-blue-600" id="overallScore">{{ $score }}</div>
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
@@ -227,33 +227,6 @@
       </div>
     </div>
   </div>
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const scores = document.querySelectorAll(".evalScore");
-    const weights = document.querySelectorAll(".evalWeight");
-    let weightedSum = 0;
-    let totalWeight = 0;
-
-    scores.forEach((score, i) => {
-      if (weights[i]) {
-        const scoreVal = parseFloat(score.textContent) || 0;
-        const weightVal = parseFloat(weights[i].textContent) || 0;
-
-        weightedSum += scoreVal * weightVal;
-        totalWeight += weightVal;
-      }
-    });
-
-    // normalize to 100 (optional)
-    const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : 0;
-
-    console.log("Weighted total:", weightedSum);
-    console.log("Final normalized score:", finalScore);
-
-    document.getElementById("overallScore").textContent = finalScore;
-  });
-
-
 </script>
 
 </x-app-layout>
