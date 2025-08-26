@@ -14,36 +14,52 @@ class TeacherController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-      $teachers = Teacher::all();
-      $scores = [];
+{
+    $teachers = Teacher::all();
+    $scores = [];
 
-      foreach ($teachers as $teacher) {
-          $components = EvalComponent::all();
+    foreach ($teachers as $teacher) {
+        // Group components by criteria
+        $components = EvalComponent::with('criteria')->get();
+        $criteriaGroups = $components->groupBy('criteria_id');
 
-          $weightedSum = 0;
-          $totalWeight = 0;
+        $finalScore = 0;
 
-          foreach ($components as $component) {
-            $score = Evaluation::where('component_id', $component->id)
-              ->where('teacher_id', $teacher->id)
-              ->latest()
-              ->first()?->score;
+        // Calculate score for each criteria
+        foreach ($criteriaGroups as $criteriaId => $componentsGroup) {
+            $criteria = $componentsGroup->first()->criteria;
+            $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
 
-            $scoreVal = $score ? $score / 10 : 0;
-            $weightVal = floatval($component->weight);
+            $criteriaWeightedSum = 0;
+            $criteriaTotalWeight = 0;
 
-            $weightedSum += $scoreVal * $weightVal;
-            $totalWeight += $weightVal;
-          }
+            // Calculate weighted average within criteria
+            foreach ($componentsGroup as $component) {
+                $evaluation = Evaluation::where('component_id', $component->id)
+                    ->where('teacher_id', $teacher->id)
+                    ->latest()
+                    ->first();
 
-          $finalScore = $totalWeight > 0 ? round($weightedSum / $totalWeight, 2) : 0;
-          $scores[$teacher->id] = $finalScore;
-      }
+                $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
+                $componentWeight = floatval($component->weight); // Bobot komponen dalam kriteria (0-100)
 
-      // 🔹 pass $scores to the view
-      return view('index_teacher', compact('teachers', 'scores'));
+                $criteriaWeightedSum += $scoreVal * $componentWeight;
+                $criteriaTotalWeight += $componentWeight;
+            }
+
+            // Normalize criteria score (0-5 scale)
+            $criteriaScore = $criteriaTotalWeight > 0 ?
+                ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
+
+            // Apply criteria weight to overall score
+            $finalScore += ($criteriaScore * $criteriaWeight) / 100;
+        }
+
+        $scores[$teacher->id] = round($finalScore, 2);
     }
+
+    return view('index_teacher', compact('teachers', 'scores'));
+}
 
 
     /**

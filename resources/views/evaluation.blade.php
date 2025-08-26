@@ -91,12 +91,15 @@
                 $no = 1;
               @endphp
 
-              <!-- Criteria Row -->
+              <!-- Criteria Row with Weight Display -->
               <tr class="bg-gray-100">
                 <td colspan="5" class="font-bold">
-                  <div class="py-2 px-3 font-semibold text-center"
+                  <div class="py-2 px-3 font-semibold text-center flex justify-between items-center"
                     style="color: {{ $secondaryColor }}; background-color: {{ $bgColor }};">
-                    {{ $criteria->name }}
+                    <span>{{ $criteria->name }}</span>
+                    <span class="text-sm bg-white px-2 py-1 rounded" style="color: {{ $primaryColor }};">
+                      Bobot: {{ $criteria->weight }}%
+                    </span>
                   </div>
                 </td>
               </tr>
@@ -134,6 +137,8 @@
                         data-teacher="{{ $teacher->id }}"
                         data-component="{{ $data->id }}"
                         data-user="{{ auth()->user()->id }}"
+                        data-criteria="{{ $criteria->id }}"
+                        data-criteria-weight="{{ $criteria->weight }}"
                         name="score"
                         required
                       >
@@ -164,7 +169,7 @@
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
-              <div class="px-6 py-3 bg-green-500 text-white rounded-full font-bold text-lg">Sangat Baik</div>
+              <div class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold text-lg" id="scoreCategory">Belum Dinilai</div>
             </div>
           </div>
         </div>
@@ -183,116 +188,166 @@
       </div>
     </div>
   </div>
-  <!-- JS to handle submit all -->
-<script>
-   function calculateScore() {
-    const scores = document.querySelectorAll(".evaluation-input");
-    const weights = document.querySelectorAll(".evalWeight");
-    let weightedSum = 0;
-    let totalWeight = 0;
 
-    scores.forEach((score, i) => {
-      if (weights[i]) {
-        const scoreVal = parseFloat(score.value || score.textContent) || 0;
-        const weightVal = parseFloat(weights[i].value || weights[i].textContent) || 0;
+  <!-- Updated JavaScript -->
+  <script>
+    function calculateScore() {
+        // Group evaluations by criteria
+        const criteriaGroups = {};
+        const inputs = document.querySelectorAll(".evaluation-input");
 
-        weightedSum += scoreVal * weightVal;
-        totalWeight += weightVal;
-      }
-    });
+        inputs.forEach((input) => {
+            const score = parseFloat(input.value) || 0;
+            const criteriaId = input.dataset.criteria;
+            const componentWeight = parseFloat(input.closest('tr').querySelector('.evalWeight').textContent) || 0;
+            const criteriaWeight = parseFloat(input.dataset.criteriaWeight) || 0;
 
-    // normalize to 100
-    const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : 0;
+            if (!criteriaGroups[criteriaId]) {
+                criteriaGroups[criteriaId] = {
+                    components: [],
+                    criteriaWeight: criteriaWeight
+                };
+            }
 
-    console.log("Weighted total:", weightedSum);
-    console.log("Final normalized score:", finalScore);
-
-    document.getElementById("overallScore").textContent = finalScore;
-  }
-
-    // 🔹 run when any evaluation input is typed
-    document.addEventListener("keyup", function(e) {
-      if (e.target.classList.contains("evaluation-input")) {
-        calculateScore();
-      }
-    });
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const inputs = document.querySelectorAll(".evaluation-input");
-    const submitBtn = document.getElementById("submitAll");
-
-    // 🔹 Fungsi cek input kosong
-    function checkInputs() {
-      let allFilled = true;
-      inputs.forEach(input => {
-        if (!input.value.trim()) {
-          allFilled = false;
-          // ubah ke warna default (indigo)
-          input.classList.remove('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
-          input.classList.add('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
-        } else {
-          // ubah ke warna hijau kalau sudah terisi
-          input.classList.remove('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
-          input.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
-        }
-      });
-      submitBtn.disabled = !allFilled;
-    }
-
-    // cek pertama kali (saat halaman load)
-    checkInputs();
-
-    // cek setiap kali ada perubahan input
-    inputs.forEach(input => {
-      input.addEventListener("input", checkInputs);
-    });
-
-    // 🔹 Tombol submitAll
-    submitBtn.addEventListener("click", () => {
-      let evaluations = collectEvaluations();
-
-      // Validasi lagi sebelum kirim
-      let hasEmpty = evaluations.some(e => e.score === "" || isNaN(e.score));
-      if (hasEmpty) {
-        alert("Harap isi semua nilai terlebih dahulu sebelum mengirim.");
-        return;
-      }
-
-      fetch("/evaluate/all", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ evaluations })
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Sukses:", data);
-        alert(data.message);
-      })
-      .catch(err => {
-        console.error("Error:", err);
-        alert("Terjadi kesalahan");
-      });
-    });
-
-    // 🔹 Kumpulkan data input
-    function collectEvaluations() {
-      let rows = document.querySelectorAll(".evaluation-input");
-      let data = [];
-      rows.forEach(row => {
-        data.push({
-          teacher_id: row.dataset.teacher,
-          component_id: row.dataset.component,
-          user_id: row.dataset.user,
-          score: row.value * 10
+            criteriaGroups[criteriaId].components.push({
+                score: score,
+                weight: componentWeight
+            });
         });
-      });
-      return data;
-    }
-  });
-</script>
 
+        let finalScore = 0;
+
+        // Calculate score for each criteria
+        Object.values(criteriaGroups).forEach(criteria => {
+            let criteriaWeightedSum = 0;
+            let criteriaTotalWeight = 0;
+
+            // Calculate weighted average within criteria
+            criteria.components.forEach(component => {
+                criteriaWeightedSum += component.score * component.weight;
+                criteriaTotalWeight += component.weight;
+            });
+
+            // Normalize criteria score (0-5 scale)
+            const criteriaScore = criteriaTotalWeight > 0 ?
+                (criteriaWeightedSum / criteriaTotalWeight) : 0;
+
+            // Apply criteria weight to overall score
+            finalScore += (criteriaScore * criteria.criteriaWeight) / 100;
+        });
+
+        console.log("Final Score:", finalScore.toFixed(2));
+        document.getElementById("overallScore").textContent = finalScore.toFixed(2);
+
+        // Update category based on score
+        updateScoreCategory(finalScore);
+    }
+
+    function updateScoreCategory(score) {
+        const categoryElement = document.getElementById('scoreCategory');
+        let category = '';
+        let categoryClass = '';
+
+        if (score >= 4.0) {
+            category = 'Sangat Baik';
+            categoryClass = 'bg-green-500';
+        } else if (score >= 3.0) {
+            category = 'Baik';
+            categoryClass = 'bg-blue-500';
+        } else if (score >= 2.0) {
+            category = 'Cukup';
+            categoryClass = 'bg-yellow-500';
+        } else if (score > 0) {
+            category = 'Kurang';
+            categoryClass = 'bg-red-500';
+        } else {
+            category = 'Belum Dinilai';
+            categoryClass = 'bg-gray-400';
+        }
+
+        categoryElement.textContent = category;
+        categoryElement.className = `px-6 py-3 ${categoryClass} text-white rounded-full font-bold text-lg`;
+    }
+
+    // Run when any evaluation input is typed
+    document.addEventListener("keyup", function(e) {
+        if (e.target.classList.contains("evaluation-input")) {
+            calculateScore();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll(".evaluation-input");
+        const submitBtn = document.getElementById("submitAll");
+
+        // Check empty inputs function
+        function checkInputs() {
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                    input.classList.remove('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                    input.classList.add('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+                } else {
+                    input.classList.remove('border-indigo-400', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+                    input.classList.add('border-green-500', 'focus:border-green-500', 'focus:ring-green-500');
+                }
+            });
+            submitBtn.disabled = !allFilled;
+        }
+
+        // Initial check when page loads
+        checkInputs();
+
+        // Check whenever input changes
+        inputs.forEach(input => {
+            input.addEventListener("input", checkInputs);
+        });
+
+        // Submit All button
+        submitBtn.addEventListener("click", () => {
+            let evaluations = collectEvaluations();
+
+            // Validate again before sending
+            let hasEmpty = evaluations.some(e => e.score === "" || isNaN(e.score));
+            if (hasEmpty) {
+                alert("Harap isi semua nilai terlebih dahulu sebelum mengirim.");
+                return;
+            }
+
+            fetch("/evaluate/all", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ evaluations })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Success:", data);
+                alert(data.message);
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                alert("Terjadi kesalahan");
+            });
+        });
+
+        // Collect input data
+        function collectEvaluations() {
+            let rows = document.querySelectorAll(".evaluation-input");
+            let data = [];
+            rows.forEach(row => {
+                data.push({
+                    teacher_id: row.dataset.teacher,
+                    component_id: row.dataset.component,
+                    user_id: row.dataset.user,
+                    score: row.value * 10
+                });
+            });
+            return data;
+        }
+    });
+  </script>
 </x-app-layout>
