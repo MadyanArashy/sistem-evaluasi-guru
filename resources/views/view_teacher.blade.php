@@ -88,11 +88,13 @@
             </p>
           </div>
         </div>
+        @if(auth()->check() && auth()->user()->role === 'evaluator')
         <div>
           <a href="{{ route('evaluation.create', ["id" => $teacher->id]) }}" class="action-btn detail-btn text-lg">
             <i class="fa-solid fa-arrow-up-right-from-square"></i></i>Evaluasi Baru
           </a>
         </div>
+        @endif
       </div>
 
       <!-- Success Message -->
