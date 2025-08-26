@@ -51,11 +51,25 @@
                 <label class="block mb-2 font-semibold text-gray-700">Role</label>
                 <div class="{{ $inputWrapper }}">
                     <i class="fas fa-user-tag text-blue-500 mr-3"></i>
-                    <select name="role" class="{{ $inputClass }} appearance-none" required>
+                    <select name="role" id="roleSelect" class="{{ $inputClass }} appearance-none" required>
                         <option value="">Pilih role</option>
                         <option value="admin">Admin</option>
                         <option value="guru">Guru</option>
                         <option value="evaluator">Evaluator</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Teacher Selection (only shown when role is guru) -->
+            <div id="teacherSelection" class="hidden">
+                <label class="block mb-2 font-semibold text-gray-700">Pilih Guru</label>
+                <div class="{{ $inputWrapper }}">
+                    <i class="fas fa-chalkboard-teacher text-blue-500 mr-3"></i>
+                    <select name="teacher_id" class="{{ $inputClass }} appearance-none">
+                        <option value="">Pilih guru (opsional)</option>
+                        @foreach($teachers as $teacher)
+                            <option value="{{ $teacher->id }}">{{ $teacher->name }} - {{ $teacher->subject }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -67,6 +81,18 @@
                            transform hover:-translate-y-0.5 transition-all duration-300">
                 <i class="fas fa-save mr-2"></i> Simpan Data User
             </button>
+
+            <!-- JavaScript to show/hide teacher selection -->
+            <script>
+                document.getElementById('roleSelect').addEventListener('change', function() {
+                    const teacherSelection = document.getElementById('teacherSelection');
+                    if (this.value === 'guru') {
+                        teacherSelection.classList.remove('hidden');
+                    } else {
+                        teacherSelection.classList.add('hidden');
+                    }
+                });
+            </script>
         </form>
     </div>
 </x-app-layout>

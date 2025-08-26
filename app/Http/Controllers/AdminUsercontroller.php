@@ -2,15 +2,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
-  public function create()
-  {
-    return view('admin.users.create');
-  }
+    public function create()
+    {
+        $teachers = Teacher::all(); // Fetch all teachers
+        return view('create_user', compact('teachers'));
+    }
 
   public function store(Request $request)
   {
@@ -18,7 +20,8 @@ class AdminUserController extends Controller
       'name' => 'required|string|max:255',
       'email' => 'required|string|email|max:255|unique:users',
       'password' => 'required|string|min:8',
-      'role' => 'required|string', // make sure you validate role
+      'role' => 'required|string',
+      'teacher_id' => 'nullable|exists:teachers,id',
     ]);
 
     User::create([
@@ -26,6 +29,7 @@ class AdminUserController extends Controller
       'email' => $validated['email'],
       'password' => Hash::make($validated['password']),
       'role' => $validated['role'],
+      'teacher_id' => $validated['teacher_id'] ?? null,
     ]);
     $role = $validated['role'];
     $name = $validated['name'];

@@ -88,11 +88,13 @@
             </p>
           </div>
         </div>
+        @if(auth()->check() && auth()->user()->role !== 'guru')
         <div>
           <a href="{{ route('evaluation.create', ["id" => $teacher->id]) }}" class="action-btn detail-btn text-lg">
             <i class="fa-solid fa-arrow-up-right-from-square"></i></i>Evaluasi Baru
           </a>
         </div>
+        @endif
       </div>
 
       <!-- Success Message -->
@@ -215,6 +217,7 @@
       </div>
 
       <!-- Action Buttons -->
+      @if(auth()->check() && auth()->user()->role !== 'guru')
       <div class="flex justify-center space-x-4 mt-8">
         <button class="add-btn action-btn">
           <i class="fa-solid fa-edit mr-2"></i>
@@ -225,6 +228,7 @@
           Cetak Laporan
         </button>
       </div>
+      @endif
     </div>
   </div>
   <script>
