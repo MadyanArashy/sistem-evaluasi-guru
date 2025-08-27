@@ -72,7 +72,7 @@
 
         <!-- Tombol Simpan -->
         <button type="submit" class="detail-btn w-full py-3 text-lg">
-          <i class="fas fa-save mr-2"></i> Simpan Data Guru
+          <i class="fas fa-save mr-2"></i> Simpan Data Komponen
         </button>
       </form>
     </div>
