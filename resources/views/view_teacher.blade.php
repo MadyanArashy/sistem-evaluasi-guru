@@ -217,6 +217,7 @@
       </div>
 
       <!-- Action Buttons -->
+      @if(auth()->check() && auth()->user()->role !== 'guru')
       <div class="flex justify-center space-x-4 mt-8">
         <button class="add-btn action-btn">
           <i class="fa-solid fa-edit mr-2"></i>
@@ -227,6 +228,7 @@
           Cetak Laporan
         </button>
       </div>
+      @endif
     </div>
   </div>
 </script>

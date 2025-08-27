@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/create-user', function () {
-        return view('create_user');
-    })->name('user.create');
+    Route::get('/create-user', [AdminUserController::class, 'create'])->name('user.create');
     Route::post('/create-user', [AdminUserController::class, 'store'])->name('user.store');
     Route::delete('/create-user/{id}', [AdminUserController::class, 'destroy'])->name('user.destroy');
 });

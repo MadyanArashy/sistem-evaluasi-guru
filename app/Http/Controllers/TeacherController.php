@@ -7,6 +7,7 @@ use App\Models\Evaluation;
 use App\Models\Teacher;
 use App\Models\EvalComponent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -14,7 +15,11 @@ class TeacherController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
+  {
+   // Check if user has role 'guru' and has a teacher_id
+    if (Auth::check() && Auth::user()->role === 'guru' && Auth::user()->teacher_id) {
+        return redirect()->route('teacher.show', ['id' => Auth::user()->teacher_id]);
+    }
     $teachers = Teacher::all();
     $scores = [];
 
@@ -54,7 +59,6 @@ class TeacherController extends Controller
             // Apply criteria weight to overall score
             $finalScore += ($criteriaScore * $criteriaWeight) / 100;
         }
-
         $scores[$teacher->id] = round($finalScore, 2);
     }
 
@@ -67,7 +71,13 @@ class TeacherController extends Controller
      */
     public function create()
     {
-      return view('create_teacher');
+        // Restrict access for guru users
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            return redirect()->route('teacher.index')
+                ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
+        }
+        
+        return view('create_teacher');
     }
 
     /**
@@ -75,15 +85,21 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-      $validated = $request->validate([
-        "name" => "required|string",
-        "degree" => "required|string",
-        "subject" => "required|string",
-      ]);
+        // Restrict access for guru users
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            return redirect()->route('teacher.index')
+                ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
+        }
+        
+        $validated = $request->validate([
+            "name" => "required|string",
+            "degree" => "required|string",
+            "subject" => "required|string",
+        ]);
 
-      Teacher::create($validated);
+        Teacher::create($validated);
 
-      return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
+        return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
     }
 
     /**
@@ -92,6 +108,13 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
+        
+        // Check if user is guru and trying to access another teacher's data
+        if (Auth::check() && Auth::user()->role === 'guru' && Auth::user()->teacher_id != $id) {
+            return redirect()->route('teacher.show', ['id' => Auth::user()->teacher_id])
+                ->with('error', 'Anda hanya dapat melihat data guru Anda sendiri');
+        }
+        
         $components = EvalComponent::all();
         $criterias = Criteria::all();
 
@@ -139,6 +162,12 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
+        // Restrict access for guru users
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            return redirect()->route('teacher.index')
+                ->with('error', 'Anda tidak memiliki akses untuk mengedit guru');
+        }
+        
         return view('edit_teacher', compact('teacher'));
     }
 
@@ -147,6 +176,12 @@ class TeacherController extends Controller
      */
     public function update(Request $request, Teacher $teacher)
     {
+        // Restrict access for guru users
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            return redirect()->route('teacher.index')
+                ->with('error', 'Anda tidak memiliki akses untuk mengupdate guru');
+        }
+        
         $validated = $request->validate([
             "name" => "required|string",
             "degree" => "required|string",
@@ -163,8 +198,14 @@ class TeacherController extends Controller
      */
     public function destroy(string $id)
     {
-       $teacher = Teacher::findOrFail($id);
-       $teacher->deleteOrFail();
-       return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');
+        // Restrict access for guru users
+        if (Auth::check() && Auth::user()->role === 'guru') {
+            return redirect()->route('teacher.index')
+                ->with('error', 'Anda tidak memiliki akses untuk menghapus guru');
+        }
+        
+        $teacher = Teacher::findOrFail($id);
+        $teacher->deleteOrFail();
+        return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');
     }
 }
