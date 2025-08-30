@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Criteria;
 use App\Models\EvalComponent;
 use Illuminate\Http\Request;
+use App\Services\ActivityLogger;
+use Illuminate\Support\Facades\Auth;
 
 class CriteriaController extends Controller
 {
@@ -28,25 +30,35 @@ class CriteriaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-    try {
+ public function store(Request $request)
+{
+  try {
     $validated = $request->validate([
-        "weight" => "integer|required",
-        "name" => "string|required",
-        "description" => "string|required",
-        "style" => "string|required",
-        "icon" => "string|required",
+      "weight" => "integer|required",
+      "name" => "string|required",
+      "description" => "string|required",
+      "style" => "string|required",
+      "icon" => "string|required",
     ]);
 
     $criteria = Criteria::create($validated);
 
-        return redirect()->route('admin')->with('success', "criteria $request->name successfully added");
-    } catch (\Throwable $e) {
-        dd('Error:', $e->getMessage());
-    }
+    // log the activity
+    $user = Auth::user();
+    ActivityLogger::log(
+      'create criteria',
+      '{$user->role} {$user->name} added criteria "{$criteria->name}"',
+      'create',
+      $user->id
+    );
 
-    }
+    return redirect()->route('admin')
+      ->with('success', "criteria {$criteria->name} successfully added");
+  } catch (\Throwable $e) {
+    dd('Error:', $e->getMessage());
+  }
+}
+
 
     /**
      * Display the specified resource.
