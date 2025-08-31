@@ -127,75 +127,76 @@
         @endif
         <div class="relative">
 
-          <!-- Users Table -->
-          <div class="section-header">
-            <h3 class="section-title">
-              <i class="fas fa-users-cog text-blue-600"></i>
-              Data Users
-            </h3>
-            <a href="{{ route('user.create') }}" class="add-btn">
-              <i class="fas fa-plus"></i>
-              Tambah User
-            </a>
-          </div>
+        <!-- Users Table -->
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="fas fa-users-cog text-blue-600"></i>
+            Data Users
+          </h3>
+          <a href="{{ route('user.create') }}" class="add-btn">
+            <i class="fas fa-plus"></i>
+            Tambah User
+          </a>
+        </div>
 
-          <div class="table-container overflow-auto xl:overflow-hidden">
-            <table class="min-w-full" id="users">
-              <thead class="table-header">
-                <tr>
-                  <th class="text-left">No</th>
-                  <th class="text-left">Nama</th>
-                  <th class="text-center">Role</th>
-                  <th class="text-center">Pembuatan Akun</th>
-                  <th class="text-center">Tindakan</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($users as $data)
-                <tr class="table-row">
-                <td class="p-6">
-                  <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    1
-                  </div>
-                </td>
-                <td class="flex items-center gap-2 p-6">
-                <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                  <i class="fas fa-user text-white"></i>
-                </div>
-                <div class="min-w-[150px]">
-                  <div class="component-name font-semibold">{{ $data->name }}</div>
-                  <div class="component-description text-gray-500">{{ $data->id }}</div>
-                </div>
-              </td>
-              <td class="p-6 text-center w-32">
-                <div class="weight-badge inline-flex items-center gap-1">
-                  <i class="fas fa-user-tag"></i>
-                  {{ $data->role }}
-                </div>
-              </td>
-                <td class="p-6 text-center">
-                  {{ $data->created_at->format('d M Y') }}
-                </td>
-                <td class="p-6 text-center">
-                  <div class="flex justify-center space-x-2">
-                    <a href="#" class="action-btn edit-btn">
-                      <i class="fas fa-edit"></i>Edit
-                    </a>
-                    <form action="{{ route('user.destroy', $data->id) }}" method="POST" style="display:inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="action-btn delete-btn"
-                        onclick="return confirm('Are you sure you want to delete this user?')">
-                        <i class="fas fa-trash"></i> Hapus
-                      </button>
-                    </form>
-                  </div>
-                </td>
+        <div class="table-container overflow-auto xl:overflow-hidden">
+          <table class="min-w-full" id="users">
+            <thead class="table-header">
+              <tr>
+                <th class="text-left">No</th>
+                <th class="text-left">Nama</th>
+                <th class="text-center">Role</th>
+                <th class="text-center">Pembuatan Akun</th>
+                <th class="text-center">Tindakan</th>
               </tr>
-              @endforeach
+            </thead>
+            <tbody>
+              @foreach ($users as $data)
+              <tr class="table-row">
+              <td class="p-6">
+                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  1
+                </div>
+              </td>
+              <td class="flex items-center gap-2 p-6">
+              <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                <i class="fas fa-user text-white"></i>
+              </div>
+              <div class="min-w-[150px]">
+                <div class="component-name font-semibold">{{ $data->name }}</div>
+                <div class="component-description text-gray-500">{{ $data->id }}</div>
+              </div>
+            </td>
+            <td class="p-6 text-center w-32">
+              <div class="weight-badge inline-flex items-center gap-1">
+                <i class="fas fa-user-tag"></i>
+                {{ $data->role }}
+              </div>
+            </td>
+              <td class="p-6 text-center">
+                {{ $data->created_at->format('d M Y') }}
+              </td>
+              <td class="p-6 text-center">
+                <div class="flex justify-center space-x-2">
+                  <a href="#" class="action-btn edit-btn">
+                    <i class="fas fa-edit"></i>Edit
+                  </a>
+                  <form action="{{ route('user.destroy', $data->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-btn delete-btn"
+                      onclick="return confirm('Are you sure you want to delete this user?')">
+                      <i class="fas fa-trash"></i> Hapus
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            @endforeach
             </tbody>
           </table>
         </div>
+
         <!-- Kriteria Table -->
         <div class="section-header">
           <h3 class="section-title">
@@ -288,7 +289,7 @@
             <tbody>
               @php
                 // Group by criteria_id
-                $groupedComponents = $components
+                $groupedComponents = $evalcomponents
                 // Sort all components by criteria_id first
                 ->sortBy('criteria_id')
 
@@ -307,9 +308,9 @@
               $no = 1;
               @endphp
 
-              @foreach($groupedComponents as $criteriaId => $componentsGroup)
+              @foreach($groupedComponents as $criteriaId => $evalcomponentsGroup)
                 @php
-                  $criteria = $componentsGroup->first()->criteria;
+                  $criteria = $evalcomponentsGroup->first()->criteria;
 
                   // Extract colors from style
                   preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
@@ -321,7 +322,7 @@
                   $bgColor = "rgba($r, $g, $b, 0.1)";
                 @endphp
 
-                  @foreach($componentsGroup as $data)
+                  @foreach($evalcomponentsGroup as $data)
                     <tr class="table-row">
                       <td class="p-6">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
@@ -348,7 +349,7 @@
                       </td>
                       <td class="p-6 text-center">
                         <div class="flex justify-center space-x-2">
-                          <a href="" class="action-btn edit-btn">
+                          <a href="{{ route('component.edit', ["id" => $data->id]) }}" class="action-btn edit-btn">
                             <i class="fas fa-edit"></i> Edit
                           </a>
                           <form action="{{ route('component.destroy', $data->id) }}" method="POST" style="display:inline;">
@@ -391,7 +392,7 @@
                 <i class="fas fa-puzzle-piece text-white text-lg"></i>
               </div>
             </div>
-            <div class="text-3xl font-bold text-purple-600 mb-2">{{ $components->count() }}</div>
+            <div class="text-3xl font-bold text-purple-600 mb-2">{{ $evalcomponents->count() }}</div>
             <p class="text-gray-600 text-sm">Komponen evaluasi terdefinisi</p>
             <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
               @foreach($criterias as $criteria)
@@ -439,7 +440,7 @@ function calculateTotalPercentage() {
 // === Hitung jumlah komponen per kriteria ===
 function calculateComponentsPerCriteria() {
   // Ambil data dari Laravel
-  const components = @json($components);
+  const components = @json($evalcomponents);
 
   // Hitung per criteria_id
   const counts = {};

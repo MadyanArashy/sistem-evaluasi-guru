@@ -23,9 +23,9 @@ class EvaluationController extends Controller
     public function create(string $id)
     {
       $teacher = Teacher::findOrFail($id);
-      $components = EvalComponent::all();
+      $evalcomponents = EvalComponent::all();
 
-      return view('evaluation', compact('teacher', 'components'));
+      return view('evaluation', compact('teacher', 'evalcomponents'));
     }
 
     /**
@@ -72,6 +72,8 @@ class EvaluationController extends Controller
       }, $validated['evaluations']);
 
       Evaluation::insert($evaluations);
+
+
 
       return response()->json([
         'success' => true,

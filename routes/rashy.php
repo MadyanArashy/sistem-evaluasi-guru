@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function() {
   Route::get('/create-eval-component',[EvalComponentController::class, 'create'])->name('component.create');
   Route::post('/create-eval-component',[EvalComponentController::class, 'store'])->name('component.store');
+  Route::get('/edit-eval-component/{id}',[EvalComponentController::class, 'edit'])->name('component.edit');
+  Route::patch('/edit-eval-component/{id}',[EvalComponentController::class, 'update'])->name('component.update');
   Route::delete('/eval-component/{id}',[EvalComponentController::class, 'destroy'])->name('component.destroy');
 });
 
@@ -37,4 +39,4 @@ Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
 Route::get('/activity', function () {
   $activities = Activity::latest()->get();
   return view('activity', compact('activities'));
-})->middleware(['auth', 'verified', 'admin.only']);
+})->middleware(['auth', 'verified', 'admin.only'])->name('activity');

@@ -6,6 +6,7 @@ use App\Models\Criteria;
 use App\Models\Evaluation;
 use App\Models\Teacher;
 use App\Models\EvalComponent;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,31 +26,31 @@ class TeacherController extends Controller
 
     foreach ($teachers as $teacher) {
         // Group components by criteria
-        $components = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $components->groupBy('criteria_id');
+        $evalcomponents = EvalComponent::with('criteria')->get();
+        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
         $finalScore = 0;
 
         // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $componentsGroup) {
-            $criteria = $componentsGroup->first()->criteria;
+        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
+            $criteria = $evalcomponentsGroup->first()->criteria;
             $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
 
             $criteriaWeightedSum = 0;
             $criteriaTotalWeight = 0;
 
             // Calculate weighted average within criteria
-            foreach ($componentsGroup as $component) {
-                $evaluation = Evaluation::where('component_id', $component->id)
+            foreach ($evalcomponentsGroup as $evalcomponent) {
+                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
                     ->where('teacher_id', $teacher->id)
                     ->latest()
                     ->first();
 
                 $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $componentWeight = floatval($component->weight); // Bobot komponen dalam kriteria (0-100)
+                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
 
-                $criteriaWeightedSum += $scoreVal * $componentWeight;
-                $criteriaTotalWeight += $componentWeight;
+                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
+                $criteriaTotalWeight += $evalcomponentWeight;
             }
 
             // Normalize criteria score (0-5 scale)
@@ -76,7 +77,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')
                 ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
         }
-        
+
         return view('create_teacher');
     }
 
@@ -90,7 +91,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')
                 ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
         }
-        
+
         $validated = $request->validate([
             "name" => "required|string",
             "degree" => "required|string",
@@ -108,42 +109,42 @@ class TeacherController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-        
+
         // Check if user is guru and trying to access another teacher's data
         if (Auth::check() && Auth::user()->role === 'guru' && Auth::user()->teacher_id != $id) {
             return redirect()->route('teacher.show', ['id' => Auth::user()->teacher_id])
                 ->with('error', 'Anda hanya dapat melihat data guru Anda sendiri');
         }
-        
-        $components = EvalComponent::all();
+
+        $evalcomponents = EvalComponent::all();
         $criterias = Criteria::all();
 
          // Group components by criteria
-        $components = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $components->groupBy('criteria_id');
+        $evalcomponents = EvalComponent::with('criteria')->get();
+        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
         $finalScore = 0;
 
         // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $componentsGroup) {
-            $criteria = $componentsGroup->first()->criteria;
+        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
+            $criteria = $evalcomponentsGroup->first()->criteria;
             $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
 
             $criteriaWeightedSum = 0;
             $criteriaTotalWeight = 0;
 
             // Calculate weighted average within criteria
-            foreach ($componentsGroup as $component) {
-                $evaluation = Evaluation::where('component_id', $component->id)
+            foreach ($evalcomponentsGroup as $evalcomponent) {
+                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
                     ->where('teacher_id', $teacher->id)
                     ->latest()
                     ->first();
 
                 $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $componentWeight = floatval($component->weight); // Bobot komponen dalam kriteria (0-100)
+                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
 
-                $criteriaWeightedSum += $scoreVal * $componentWeight;
-                $criteriaTotalWeight += $componentWeight;
+                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
+                $criteriaTotalWeight += $evalcomponentWeight;
             }
 
             // Normalize criteria score (0-5 scale)
@@ -154,7 +155,7 @@ class TeacherController extends Controller
             $finalScore += ($criteriaScore * $criteriaWeight) / 100;
         }
         $score = round($finalScore, 2);
-        return view('view_teacher', compact(['teacher', 'components', 'criterias', 'score']));
+        return view('view_teacher', compact(['teacher', 'evalcomponents', 'criterias', 'score']));
     }
 
     /**
@@ -167,7 +168,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')
                 ->with('error', 'Anda tidak memiliki akses untuk mengedit guru');
         }
-        
+
         return view('edit_teacher', compact('teacher'));
     }
 
@@ -181,7 +182,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')
                 ->with('error', 'Anda tidak memiliki akses untuk mengupdate guru');
         }
-        
+
         $validated = $request->validate([
             "name" => "required|string",
             "degree" => "required|string",
@@ -203,7 +204,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')
                 ->with('error', 'Anda tidak memiliki akses untuk menghapus guru');
         }
-        
+
         $teacher = Teacher::findOrFail($id);
         $teacher->deleteOrFail();
         return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');

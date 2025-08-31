@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Criteria;
 use App\Models\EvalComponent;
+use App\Models\Criteria;
+use App\Models\Teacher;
+use App\Models\User;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class EvalComponentController extends Controller
 {
@@ -30,16 +35,30 @@ class EvalComponentController extends Controller
      */
     public function store(Request $request)
     {
-      $validated = $request->validate([
-        "criteria_id" => "integer|required|exists:criterias,id",
-        "name" => "string|required",
-        "weight" => "integer|required",
-        "description" => "string|required",
-      ]);
+      try {
+        $validated = $request->validate([
+          "criteria_id" => "integer|required|exists:criterias,id",
+          "name" => "string|required",
+          "weight" => "integer|required",
+          "description" => "string|required",
+        ]);
 
-      EvalComponent::create($validated);
+        $evalcomponent = EvalComponent::create($validated);
 
-      return redirect()->to(route('admin').'#components')->with('success', 'Berhasil tambah eval komponen');
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'create criteria',
+          "{$user->role} {$user->name} created component \"{$evalcomponent->name}\" ($evalcomponent->id)",
+          'create',
+          $user->id
+        );
+
+
+        return redirect()->to(route('admin').'#components')->with('success', "Berhasil tambah komponen \"{$evalcomponent->name}\"!");
+      } catch (Throwable $e) {
+        dd('Error:', $e->getMessage());
+      }
     }
 
     /**
@@ -53,17 +72,48 @@ class EvalComponentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EvalComponent $evalComponent)
+    public function edit(string $id)
     {
-        //
+      $evalcomponent = EvalComponent::findOrFail($id);
+      $criterias = Criteria::all();
+      $evalcomponents = EvalComponent::all();
+      $users = User::all();
+      return view('edit_evalcomponent', compact('evalcomponent', 'criterias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, EvalComponent $evalComponent)
+    public function update(Request $request, string $id)
     {
-        //
+      // validasi dulu biar aman
+    $validated = $request->validate([
+      "criteria_id" => "integer|required|exists:criterias,id",
+      "name" => "string|required",
+      "weight" => "integer|required",
+      "description" => "string|required",
+    ]);
+
+    // ambil data lama
+    $evalcomponent = EvalComponent::findOrFail($id);
+
+    // update data
+    $evalcomponent->update($validated);
+
+    $evalcomponent = $request;
+
+    // log the activity
+    $user = Auth::user();
+    ActivityLogger::log(
+      'edit evalcomponent',
+      "{$user->role} {$user->name} edited evalcomponent \"{$evalcomponent->name}\" ($evalcomponent->id)",
+      'edit',
+      $user->id
+    );
+
+
+    // redirect balik
+    return redirect()->route('admin')->with('success', "Berhasil ubah kriteria \"$request->name\"!");
     }
 
     /**
@@ -73,6 +123,18 @@ class EvalComponentController extends Controller
     {
       $evalcomponent = EvalComponent::findOrFail($id);
       $evalcomponent->deleteOrFail();
+
+
+      // log the activity
+      $user = Auth::user();
+      ActivityLogger::log(
+        'delete component',
+        "{$user->role} {$user->name} deleted component \"{$evalcomponent->name}\" ($evalcomponent->id)",
+        'delete',
+        $user->id
+      );
+
+
 
       return redirect()->to(route('admin').'#components')->with('success', 'Successfully deleted evaluation component!');
     }

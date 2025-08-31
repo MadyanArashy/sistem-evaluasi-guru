@@ -52,8 +52,8 @@ class CriteriaController extends Controller
       $user->id
     );
 
-    return redirect()->route('admin')
-      ->with('success', "criteria {$criteria->name} successfully added");
+    return redirect()->to(route('admin').'#criterias')
+      ->with('success', "Berhasil tambah kriteria {$criteria->name}");
   } catch (\Throwable $e) {
     dd('Error:', $e->getMessage());
   }
@@ -83,7 +83,7 @@ class CriteriaController extends Controller
     public function update(Request $request, $id)
 {
     // validasi dulu biar aman
-    $request->validate([
+    $validated = $request->validate([
         'name'        => 'required|string|max:255',
         'description' => 'nullable|string|max:500',
         'weight'      => 'required|numeric|min:0',
@@ -95,13 +95,7 @@ class CriteriaController extends Controller
     $criteria = Criteria::findOrFail($id);
 
     // update data
-    $criteria->update([
-      'name'        => $request->name,
-      'description' => $request->description,
-      'weight'      => $request->weight,
-      'icon'        => $request->icon ?? 'fa-solid fa-medal',
-      'style'       => $request->style ?? 'bg-indigo-500',
-    ]);
+    $criteria->update($validated);
 
     $criteria = $request;
 
@@ -116,7 +110,7 @@ class CriteriaController extends Controller
 
 
     // redirect balik
-    return redirect()->route('admin')->with('success', "Criteria $request->name updated");
+    return redirect()->route('admin')->with('success', "Berhasil ubah kriteria \"$request->name\"!");
 }
     /**
      * Remove the specified resource from storage.
@@ -129,7 +123,7 @@ class CriteriaController extends Controller
       if (EvalComponent::where('criteria_id', $id)->exists()) {
         return redirect()
           ->route('admin')
-          ->with('fail', "Delete any EvalComponent with the '{$criteria->name}' ID before deleting.");
+          ->with('fail', "Hapus EvalComponent yang memiliki ID '{$criteria->name}' sebelum menghapus.");
       }
 
       // Now safe to delete
@@ -145,13 +139,13 @@ class CriteriaController extends Controller
 
         return redirect()
           ->route('admin')
-          ->with('success', 'Criteria deleted.');
+          ->with('success', 'Berhasil hapus kriteria!.');
 
       }
 
       return redirect()
           ->route('admin')
-          ->with('fail', 'Failed to delete criteria.');
+          ->with('fail', 'Gagal hapus kriteria.');
   }
 
 }

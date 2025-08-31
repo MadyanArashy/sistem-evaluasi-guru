@@ -73,16 +73,16 @@
           </thead>
           <tbody>
             @php
-            $groupedComponents = $components
+            $groupedComponents = $evalcomponents
                 ->sortBy('criteria_id')
                 ->groupBy('criteria_id')
                 ->sortKeys()
                 ->map(fn ($group) => $group->sortBy('criteria_id'));
             @endphp
 
-            @foreach($groupedComponents as $criteriaId => $componentsGroup)
+            @foreach($groupedComponents as $criteriaId => $evalcomponentsGroup)
               @php
-                $criteria = $componentsGroup->first()->criteria;
+                $criteria = $evalcomponentsGroup->first()->criteria;
                 preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
                 $primaryColor = $matches[0][0] ?? '#000000';
                 $secondaryColor = $matches[0][1] ?? '#000000';
@@ -105,7 +105,7 @@
               </tr>
 
               <!-- Components under this criteria -->
-              @foreach($componentsGroup as $data)
+              @foreach($evalcomponentsGroup as $data)
                 <tr class="table-row">
                   <td class="p-6">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"

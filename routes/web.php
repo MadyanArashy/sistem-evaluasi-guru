@@ -23,31 +23,31 @@ Route::get('/home', function () {
   $scores = [];
 foreach ($teachers as $teacher) {
         // Group components by criteria
-        $components = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $components->groupBy('criteria_id');
+        $evalcomponents = EvalComponent::with('criteria')->get();
+        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
         $finalScore = 0;
 
         // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $componentsGroup) {
-            $criteria = $componentsGroup->first()->criteria;
+        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
+            $criteria = $evalcomponentsGroup->first()->criteria;
             $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
 
             $criteriaWeightedSum = 0;
             $criteriaTotalWeight = 0;
 
             // Calculate weighted average within criteria
-            foreach ($componentsGroup as $component) {
-                $evaluation = Evaluation::where('component_id', $component->id)
+            foreach ($evalcomponentsGroup as $evalcomponent) {
+                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
                     ->where('teacher_id', $teacher->id)
                     ->latest()
                     ->first();
 
                 $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $componentWeight = floatval($component->weight); // Bobot komponen dalam kriteria (0-100)
+                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
 
-                $criteriaWeightedSum += $scoreVal * $componentWeight;
-                $criteriaTotalWeight += $componentWeight;
+                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
+                $criteriaTotalWeight += $evalcomponentWeight;
             }
 
             // Normalize criteria score (0-5 scale)
@@ -81,10 +81,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin', function () {
   $criterias = Criteria::all();
   $teachers = Teacher::all();
-  $components = EvalComponent::all();
+  $evalcomponents = EvalComponent::all();
   $evaluations = Evaluation::all();
   $users = User::all();
-  return view('admin', compact('criterias', 'teachers', 'components', 'evaluations', 'users'));
+  return view('admin', compact('criterias', 'teachers', 'evalcomponents', 'evaluations', 'users'));
 })->middleware(['auth', 'verified', 'admin.only'])->name('admin');
 
 require __DIR__.'/auth.php';

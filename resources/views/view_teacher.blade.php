@@ -115,7 +115,7 @@
           </thead>
           <tbody>
             @php
-            $groupedComponents = $components
+            $groupedComponents = $evalcomponents
                 // Sort all components by criteria_id first
                 ->sortBy('criteria_id')
 
@@ -131,9 +131,9 @@
                 });
             @endphp
 
-            @foreach($groupedComponents as $criteriaId => $componentsGroup)
+            @foreach($groupedComponents as $criteriaId => $evalcomponentsGroup)
               @php
-                $criteria = $componentsGroup->first()->criteria;
+                $criteria = $evalcomponentsGroup->first()->criteria;
 
                 // Extract first and second color from style
                 preg_match_all('/#([0-9a-fA-F]{6})/', $criteria->style, $matches);
@@ -158,7 +158,7 @@
               </tr>
 
               <!-- Components under this criteria -->
-              @foreach($componentsGroup as $data)
+              @foreach($evalcomponentsGroup as $data)
               @php
                 $criteria = Criteria::find($data->criteria_id);
               @endphp
@@ -188,7 +188,7 @@
                     </div>
                   </td>
                   @if($loop->first)
-                    <td class="p-6 text-center entire-column" rowspan="{{ count($componentsGroup) }}">
+                    <td class="p-6 text-center entire-column" rowspan="{{ count($evalcomponentsGroup) }}">
                       <div class="all-score inline-block">{{ $criteria->weight }}</div>
                     </td>
                   @endif
