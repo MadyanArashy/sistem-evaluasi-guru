@@ -9,6 +9,7 @@ use App\Models\Criteria;
 use App\Models\EvalComponent;
 use App\Models\Evaluation;
 use App\Models\Teacher;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -32,3 +33,8 @@ Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
     ->name('evaluation.bulkStore');
 
 });
+
+Route::get('/activity', function () {
+  $activities = Activity::latest()->get();
+  return view('activity', compact('activities'));
+})->middleware(['auth', 'verified', 'admin.only']);

@@ -47,7 +47,7 @@ class CriteriaController extends Controller
     $user = Auth::user();
     ActivityLogger::log(
       'create criteria',
-      '{$user->role} {$user->name} added criteria "{$criteria->name}"',
+      "{$user->role} {$user->name} added criteria \"{$criteria->name}\" ($criteria->id)",
       'create',
       $user->id
     );
@@ -95,13 +95,24 @@ class CriteriaController extends Controller
     $criteria = Criteria::findOrFail($id);
 
     // update data
-   $criteria->update([
-    'name'        => $request->name,
-    'description' => $request->description,
-    'weight'      => $request->weight,
-    'icon'        => $request->icon ?? 'fa-solid fa-medal',
-    'style'       => $request->style ?? 'bg-indigo-500',
-]);
+    $criteria->update([
+      'name'        => $request->name,
+      'description' => $request->description,
+      'weight'      => $request->weight,
+      'icon'        => $request->icon ?? 'fa-solid fa-medal',
+      'style'       => $request->style ?? 'bg-indigo-500',
+    ]);
+
+    $criteria = $request;
+
+    // log the activity
+    $user = Auth::user();
+    ActivityLogger::log(
+      'edit criteria',
+      "{$user->role} {$user->name} edited criteria \"{$criteria->name}\" ($criteria->id)",
+      'edit',
+      $user->id
+    );
 
 
     // redirect balik
@@ -116,16 +127,26 @@ class CriteriaController extends Controller
 
       // Check if there are related EvalComponent rows first
       if (EvalComponent::where('criteria_id', $id)->exists()) {
-          return redirect()
-              ->route('admin')
-              ->with('fail', "Delete any EvalComponent with the '{$criteria->name}' ID before deleting.");
+        return redirect()
+          ->route('admin')
+          ->with('fail', "Delete any EvalComponent with the '{$criteria->name}' ID before deleting.");
       }
 
       // Now safe to delete
       if ($criteria->delete()) {
-          return redirect()
-              ->route('admin')
-              ->with('success', 'Criteria deleted.');
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'delete criteria',
+          "{$user->role} {$user->name} deleted criteria \"{$criteria->name}\" ($criteria->id)",
+          'delete',
+          $user->id
+        );
+
+        return redirect()
+          ->route('admin')
+          ->with('success', 'Criteria deleted.');
+
       }
 
       return redirect()

@@ -1,10 +1,5 @@
 <x-app-layout>
 <style>
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 .header-title {
   color: white;
   font-size: 2rem;
@@ -91,43 +86,6 @@
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-.score-badge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.score-badge:hover::before {
-  left: 100%;
-}
-
-.edit-btn {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-}
-
-.edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
-}
-
-.delete-btn {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-}
-
-.delete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-}
-
 .pagination-section {
   margin-top: 32px;
   padding: 24px;
@@ -167,10 +125,11 @@
   transition: all 0.3s ease;
   min-width: 44px;
   text-align: center;
+  text-decoration: none;
 }
 
 .pagination-btn:hover {
- background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   transform: translateY(-2px);
@@ -178,19 +137,41 @@
 }
 
 .pagination-btn.active {
- background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-@media (max-width: 768px) {
-  .content-card {
-    margin: 16px;
-    padding: 24px;
-    border-radius: 24px;
-  }
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
+.type-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.user-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
   .search-filter-section {
     padding: 16px;
   }
@@ -200,273 +181,285 @@
     text-align: center;
   }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
 </style>
-  <!-- Main Content -->
-  <div class="mx-auto px-2 py-12 relative z-10">
-    <div class="content-card">
-      <div class="text-gray-900">
 
-        <!-- Section Header -->
-        <div class="section-header">
-          <h3 class="section-title">
-            <i class="fas fa-chalkboard-teacher text-blue-600"></i>
-            Aktivitas Terkini
-          </h3>
+<!-- Main Content -->
+<div class="mx-auto px-2 py-12 relative z-10">
+  <div class="content-card">
+    <div class="text-gray-900">
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-chalkboard-teacher text-blue-600"></i>
+          Aktivitas Terkini
+        </h3>
+      </div>
+
+      <!-- Success Message -->
+      @if(session('success'))
+        @include('partials.success')
+      @endif
+
+      <!-- Search and Filter Section -->
+      <div class="search-filter-section">
+        <div class="relative flex-1">
+          <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
+          <input type="text" id="searchInput" placeholder="Cari berdasarkan nama, deskripsi, atau tipe..."
+            class="search-input pl-12" />
         </div>
-
-        <!-- Success Message -->
-        @if(session('success'))
-          @include('partials.success')
-        @endif
-
-        <!-- Search and Filter Section -->
-        <div class="search-filter-section">
-          <div class="relative flex-1">
-            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
-            <input type="text" id="searchInput" placeholder="Cari berdasarkan nama, gelar, atau mata pelajaran..."
-              class="search-input pl-12" />
-          </div>
-          <div class="relative">
-            <i class="fas fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <select id="filterMapel" class="filter-select pl-12">
-              <option value="" selected>Semua Mata Pelajaran</option>
-              @foreach($teachers->unique('subject') as $data)
-              <option value="{{ $data->subject }}">{{ $data->subject }}</option>
-              @endforeach
-            </select>
-          </div>
+        <div class="relative">
+          <i class="fas fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <select id="filterByType" class="filter-select pl-12">
+            <option value="" selected>Semua Tipe</option>
+            @foreach($activities->pluck('type')->unique() as $type)
+              <option value="{{ $type }}">{{ $type }}</option>
+            @endforeach
+          </select>
         </div>
+      </div>
 
-        <!-- Teachers Table -->
-        <div class="table-container overflow-auto xl:overflow-hidden">
-          <table class="min-w-full" id="guruTable">
-            <thead class="table-header">
-              <tr>
-                <th class="text-left">No</th>
-                <th class="text-left">Profil Guru</th>
-                <th class="text-left">Kualifikasi</th>
-                <th class="text-left">Bidang Keahlian</th>
-                <th class="text-center">Performa</th>
-                <th class="text-center">Tindakan</th>
+      <!-- Activities Table -->
+      <div class="table-container">
+        <table class="min-w-full table-fixed" id="activityTable">
+          <colgroup>
+            <col style="width: 8%">
+            <col style="width: 20%">
+            <col style="width: 45%">
+            <col style="width: 15%">
+            <col style="width: 12%">
+          </colgroup>
+          <thead class="table-header">
+            <tr>
+              <th class="text-left px-6 py-4">No</th>
+              <th class="text-left px-6 py-4">Nama</th>
+              <th class="text-left px-6 py-4">Deskripsi</th>
+              <th class="text-center px-6 py-4">Tipe</th>
+              <th class="text-center px-6 py-4">Pelaku</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($activities as $index => $data)
+              <tr class="table-row">
+                <td class="px-6 py-4 align-top">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    {{ $index + 1 }}
+                  </div>
+                </td>
+                <td class="px-6 py-4 align-top">
+                  <div class="font-bold text-gray-900 break-words">{{ $data->name }}</div>
+                </td>
+                <td class="px-6 py-4 align-top">
+                  <div class="text-gray-900 break-words leading-relaxed">{{ $data->description }}</div>
+                </td>
+                <td class="px-6 py-4 text-center align-top">
+                  <span class="type-badge whitespace-nowrap">{{ $data->type }}</span>
+                </td>
+                <td class="px-6 py-4 text-center align-top">
+                  <span class="user-badge whitespace-nowrap">
+                    @if(isset($data->user))
+                      {{ $data->user->name ?? $data->user_id }}
+                    @else
+                      {{ $data->user_id }}
+                    @endif
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <?php $no = 1 ?>
-              @foreach ($teachers as $data)
-                <tr class="table-row">
-                  <td class="p-6">
-                    <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                      {{ $no++ }}
-                    </div>
-                  </td>
-                  <td class="p-6">
-                    <div class="flex items-center space-x-4">
-                      <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        {{ substr($data->name, 0, 1) }}
-                      </div>
-                      <div>
-                        <p class="text-lg font-bold text-gray-900 block">{{ $data->name }}</p>
-                        <div class="text-sm text-gray-500 flex items-center mt-1">
-                          Guru Profesional
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="p-6">
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 border border-purple-200">
-                      <i class="fas fa-graduation-cap mr-2"></i>
-                      {{ $data->degree }}
-                    </span>
-                  </td>
-                  <td class="p-6">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-book text-white"></i>
-                      </div>
-                      <div>
-                        <div class="font-bold text-gray-900">{{ $data->subject }}</div>
-                        <div class="text-sm text-gray-500">Mata Pelajaran</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="p-6 text-center">
-                    <div class="score-badge">
-                      <i class="fas fa-star mr-1"></i>
-                      <span class="evalScore">
-                        {{ $scores[$data->id] ?? '0.00' }}
-                      </span>
-                    </div>
-                  </td>
-                  <td class="p-6 text-center">
-                    <div class="flex justify-center space-x-2">
-                      <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
-                        <i class="fas fa-eye mr-1"></i>Detail
-                      </a>
-                      <a href="{{ route('teacher.edit', $data->id) }}" class="action-btn edit-btn">
-                        <i class="fas fa-edit mr-1"></i>Edit
-                      </a>
-                      <form action="{{ route('teacher.destroy', $data->id) }}" method="POST"
-                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="action-btn delete-btn">
-                          <i class="fas fa-trash mr-1"></i>Hapus
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
 
-        <!-- Pagination Section -->
-        <div class="pagination-section">
+      <!-- Pagination Section -->
+      <div class="pagination-section">
+        @if(method_exists($activities, 'total'))
+          <!-- For paginated results -->
           <div class="pagination-info">
-            Menampilkan <span>1</span> sampai <span>10</span> dari <span>35</span> guru
+            Menampilkan <span>{{ $activities->firstItem() }}</span> sampai <span>{{ $activities->lastItem() }}</span> dari <span>{{ $activities->total() }}</span> aktivitas
           </div>
           <div class="pagination-controls">
-            <button class="pagination-btn">
+            @if($activities->onFirstPage())
+              <button class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left mr-1"></i>
+                Sebelumnya
+              </button>
+            @else
+              <a href="{{ $activities->previousPageUrl() }}" class="pagination-btn">
+                <i class="fas fa-chevron-left mr-1"></i>
+                Sebelumnya
+              </a>
+            @endif
+
+            @foreach($activities->getUrlRange(1, $activities->lastPage()) as $page => $url)
+              @if($page == $activities->currentPage())
+                <button class="pagination-btn active">{{ $page }}</button>
+              @else
+                <a href="{{ $url }}" class="pagination-btn">{{ $page }}</a>
+              @endif
+            @endforeach
+
+            @if($activities->hasMorePages())
+              <a href="{{ $activities->nextPageUrl() }}" class="pagination-btn">
+                Selanjutnya
+                <i class="fas fa-chevron-right ml-1"></i>
+              </a>
+            @else
+              <button class="pagination-btn" disabled>
+                Selanjutnya
+                <i class="fas fa-chevron-right ml-1"></i>
+              </button>
+            @endif
+          </div>
+        @else
+          <!-- For regular collections -->
+          <div class="pagination-info">
+            Menampilkan <span>1</span> sampai <span>{{ $activities->count() }}</span> dari <span>{{ $activities->count() }}</span> aktivitas
+          </div>
+          <div class="pagination-controls">
+            <button class="pagination-btn" disabled>
               <i class="fas fa-chevron-left mr-1"></i>
               Sebelumnya
             </button>
             <button class="pagination-btn active">1</button>
-            <button class="pagination-btn">2</button>
-            <button class="pagination-btn">3</button>
-            <button class="pagination-btn">4</button>
-            <button class="pagination-btn">
+            <button class="pagination-btn" disabled>
               Selanjutnya
               <i class="fas fa-chevron-right ml-1"></i>
             </button>
           </div>
-        </div>
+        @endif
       </div>
     </div>
+  </div>
 </div>
 
 <!-- Enhanced JavaScript for Search and Filter -->
 <script>
-// Enhanced search functionality
-document.getElementById('searchInput').addEventListener('keyup', function () {
-  const searchValue = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#guruTable tbody tr');
-  let visibleCount = 0;
+document.addEventListener('DOMContentLoaded', function() {
+  // Enhanced search functionality
+  const searchInput = document.getElementById('searchInput');
+  const filterSelect = document.getElementById('filterByType');
 
-  rows.forEach((row, index) => {
-    const cells = row.querySelectorAll('td');
-    let found = false;
+  if (searchInput) {
+    searchInput.addEventListener('keyup', function () {
+      const searchValue = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#activityTable tbody tr');
+      let visibleCount = 0;
 
-    // Search in name, degree, and subject columns
-    for (let i = 1; i < cells.length - 1; i++) {
-      if (cells[i].textContent.toLowerCase().includes(searchValue)) {
-        found = true;
-        break;
-      }
-    }
+      rows.forEach((row, index) => {
+        const cells = row.querySelectorAll('td');
+        let found = false;
 
-    if (found) {
-      row.style.display = '';
-      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
-      visibleCount++;
-    } else {
-      row.style.display = 'none';
-    }
-  });
+        // Search in name, description, type, and user columns
+        for (let i = 1; i < cells.length; i++) {
+          if (cells[i].textContent.toLowerCase().includes(searchValue)) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          row.style.display = '';
+          row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      // Update pagination info
+      updatePaginationInfo(visibleCount);
+    });
+  }
+
+  // Enhanced filter functionality
+  if (filterSelect) {
+    filterSelect.addEventListener('change', function () {
+      const filterValue = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#activityTable tbody tr');
+      let visibleCount = 0;
+
+      rows.forEach((row, index) => {
+        const typeCell = row.querySelectorAll('td')[3];
+        const type = typeCell ? typeCell.textContent.toLowerCase() : '';
+        const shouldShow = !filterValue || type.includes(filterValue);
+
+        if (shouldShow) {
+          row.style.display = '';
+          row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      updatePaginationInfo(visibleCount);
+    });
+  }
 
   // Update pagination info
-  updatePaginationInfo(visibleCount);
-});
-
-// Enhanced filter functionality
-document.getElementById('filterMapel').addEventListener('change', function () {
-  const filterValue = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#guruTable tbody tr');
-  let visibleCount = 0;
-
-  rows.forEach((row, index) => {
-    const subject = row.querySelectorAll('td')[3].textContent.toLowerCase();
-    const shouldShow = !filterValue || subject.includes(filterValue);
-
-    if (shouldShow) {
-      row.style.display = '';
-      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
-      visibleCount++;
-    } else {
-      row.style.display = 'none';
-    }
-  });
-
-  updatePaginationInfo(visibleCount);
-});
-
-// Update pagination info
-function updatePaginationInfo(count) {
-  const paginationInfo = document.querySelector('.pagination-info');
-  if (paginationInfo) {
-    paginationInfo.innerHTML = `Menampilkan <span>1</span> sampai <span>${Math.min(10, count)}</span> dari <span>${count}</span> guru`;
-  }
-}
-
-// Add fade-in animation keyframe
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  function updatePaginationInfo(count) {
+    const paginationInfo = document.querySelector('.pagination-info');
+    if (paginationInfo) {
+      paginationInfo.innerHTML = `Menampilkan <span>1</span> sampai <span>${Math.min(10, count)}</span> dari <span>${count}</span> aktivitas`;
     }
   }
-`;
-document.head.appendChild(style);
 
-// Pagination button interactions
-document.querySelectorAll('.pagination-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    // Remove active class from all buttons
-    document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
+  // Pagination button interactions
+  document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      // Only add ripple effect, don't prevent navigation for links
+      if (this.tagName === 'BUTTON') {
+        // Remove active class from all buttons
+        document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
 
-    // Add active class to clicked button (if it's a number)
-    if (!isNaN(this.textContent.trim())) {
-      this.classList.add('active');
-    }
+        // Add active class to clicked button (if it's a number)
+        if (!isNaN(this.textContent.trim())) {
+          this.classList.add('active');
+        }
+      }
 
-    // Add ripple effect
-    const ripple = document.createElement('div');
-    ripple.style.position = 'absolute';
-    ripple.style.background = 'rgba(255, 255, 255, 0.5)';
-    ripple.style.borderRadius = '50%';
-    ripple.style.transform = 'scale(0)';
-    ripple.style.animation = 'ripple 0.6s linear';
-    ripple.style.left = '50%';
-    ripple.style.top = '50%';
-    ripple.style.width = ripple.style.height = '100px';
-    ripple.style.marginLeft = ripple.style.marginTop = '-50px';
+      // Add ripple effect
+      const ripple = document.createElement('div');
+      ripple.style.position = 'absolute';
+      ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+      ripple.style.borderRadius = '50%';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.animation = 'ripple 0.6s linear';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      ripple.style.width = ripple.style.height = '100px';
+      ripple.style.marginLeft = ripple.style.marginTop = '-50px';
+      ripple.style.pointerEvents = 'none';
 
-    this.style.position = 'relative';
-    this.style.overflow = 'hidden';
-    this.appendChild(ripple);
+      this.style.position = 'relative';
+      this.style.overflow = 'hidden';
+      this.appendChild(ripple);
 
-    setTimeout(() => {
-      ripple.remove();
-    }, 600);
+      setTimeout(() => {
+        if (ripple.parentNode) {
+          ripple.remove();
+        }
+      }, 600);
+    });
   });
 });
-
-// Add ripple animation
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = `
-  @keyframes ripple {
-    to {
-      transform: scale(2);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(rippleStyle);
 </script>
 </x-app-layout>
