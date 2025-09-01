@@ -86,19 +86,22 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        // Restrict access for guru users
-        if (Auth::check() && Auth::user()->role === 'guru') {
-            return redirect()->route('teacher.index')
-                ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
-        }
-
         $validated = $request->validate([
-            "name" => "required|string",
-            "degree" => "required|string",
-            "subject" => "required|string",
+          "name" => "required|string",
+          "degree" => "required|string",
+          "subject" => "required|string",
         ]);
 
-        Teacher::create($validated);
+        $teacher = Teacher::create($validated);
+
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'create teacher',
+          "{$user->role} {$user->name} created teacher \"{$teacher->name}\" ($teacher->id)",
+          'create',
+          $user->id
+        );
 
         return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
     }
@@ -175,7 +178,7 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(Request $request, string $id)
     {
         // Restrict access for guru users
         if (Auth::check() && Auth::user()->role === 'guru') {
@@ -189,7 +192,18 @@ class TeacherController extends Controller
             "subject" => "required|string",
         ]);
 
+        $teacher = Teacher::findOrFail($id);
+
         $teacher->update($validated);
+
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'edit teacher',
+          "{$user->role} {$user->name} edited teacher \"{$teacher->name}\" ($teacher->id)",
+          'edit',
+          $user->id
+        );
 
         return redirect()->route('teacher.index')->with('success', 'Guru berhasil diperbarui!');
     }
@@ -207,6 +221,16 @@ class TeacherController extends Controller
 
         $teacher = Teacher::findOrFail($id);
         $teacher->deleteOrFail();
+
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'delete teacher',
+          "{$user->role} {$user->name} deleted teacher \"{$teacher->name}\" ($teacher->id)",
+          'delete',
+          $user->id
+        );
+
         return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');
     }
 }
