@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\EvalComponent;
 use App\Models\Evaluation;
 use App\Models\Teacher;
+use App\Services\ActivityLogger;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class EvaluationController extends Controller
@@ -23,9 +25,9 @@ class EvaluationController extends Controller
     public function create(string $id)
     {
       $teacher = Teacher::findOrFail($id);
-      $components = EvalComponent::all();
+      $evalcomponents = EvalComponent::all();
 
-      return view('evaluation', compact('teacher', 'components'));
+      return view('evaluation', compact('teacher', 'evalcomponents'));
     }
 
     /**
@@ -54,38 +56,52 @@ class EvaluationController extends Controller
     }
 
   public function bulkStore(Request $request)
-  {
-    try {
-      $validated = $request->validate([
-        'evaluations' => 'required|array|min:1',
-        'evaluations.*.teacher_id'   => 'required|integer|exists:teachers,id',
-        'evaluations.*.component_id' => 'required|integer|exists:eval_components,id',
-        'evaluations.*.user_id'      => 'required|integer|exists:users,id',
-        'evaluations.*.score' => 'required|numeric|min:0|max:50',
-      ]);
+{
+  try {
+    $validated = $request->validate([
+      'evaluations' => 'required|array|min:1',
+      'evaluations.*.teacher_id'   => 'required|integer|exists:teachers,id',
+      'evaluations.*.component_id' => 'required|integer|exists:eval_components,id',
+      'evaluations.*.user_id'      => 'required|integer|exists:users,id',
+      'evaluations.*.score'        => 'required|numeric|min:0|max:50',
+    ]);
 
-      $now = now();
-      $evaluations = array_map(function ($item) use ($now) {
-        $item['created_at'] = $now;
-        $item['updated_at'] = $now;
-        return $item;
-      }, $validated['evaluations']);
+    $now = now();
+    $evaluations = array_map(function ($item) use ($now) {
+      $item['created_at'] = $now;
+      $item['updated_at'] = $now;
+      return $item;
+    }, $validated['evaluations']);
 
-      Evaluation::insert($evaluations);
+    Evaluation::insert($evaluations);
 
-      return response()->json([
-        'success' => true,
-        'message' => 'Semua evaluasi berhasil disimpan',
-        'count'   => count($evaluations),
-      ], 201);
+    // ambil teacher dari data pertama
+    $teacherId = $validated['evaluations'][0]['teacher_id'];
+    $teacher   = Teacher::find($teacherId);
 
-    } catch (\Throwable $e) {
-      return response()->json([
-        'success' => false,
-        'message' => $e->getMessage(),
-      ], 500);
-    }
+    // log the activity
+    $user = Auth::user();
+
+    ActivityLogger::log(
+      'create evaluations',
+      "{$user->role} {$user->name} created evaluations for teacher {$teacher->name} ({$teacher->id})",
+      'create',
+      $user->id
+    );
+
+    return response()->json([
+      'success' => true,
+      'message' => 'Semua evaluasi berhasil disimpan',
+    ], 201);
+
+  } catch (\Throwable $e) {
+    return response()->json([
+      'success' => false,
+      'message' => $e->getMessage(),
+    ], 500);
   }
+}
+
 
 
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Criteria;
 use App\Models\EvalComponent;
 use Illuminate\Http\Request;
+use App\Services\ActivityLogger;
+use Illuminate\Support\Facades\Auth;
 
 class CriteriaController extends Controller
 {
@@ -28,25 +30,35 @@ class CriteriaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-    try {
+ public function store(Request $request)
+{
+  try {
     $validated = $request->validate([
-        "weight" => "integer|required",
-        "name" => "string|required",
-        "description" => "string|required",
-        "style" => "string|required",
-        "icon" => "string|required",
+      "weight" => "integer|required",
+      "name" => "string|required",
+      "description" => "string|required",
+      "style" => "string|required",
+      "icon" => "string|required",
     ]);
 
     $criteria = Criteria::create($validated);
 
-        return redirect()->route('admin')->with('success', "criteria $request->name successfully added");
-    } catch (\Throwable $e) {
-        dd('Error:', $e->getMessage());
-    }
+    // log the activity
+    $user = Auth::user();
+    ActivityLogger::log(
+      'create criteria',
+      "{$user->role} {$user->name} added criteria \"{$criteria->name}\" ($criteria->id)",
+      'create',
+      $user->id
+    );
 
-    }
+    return redirect()->to(route('admin').'#criterias')
+      ->with('success', "Berhasil tambah kriteria {$criteria->name}");
+  } catch (\Throwable $e) {
+    dd('Error:', $e->getMessage());
+  }
+}
+
 
     /**
      * Display the specified resource.
@@ -71,7 +83,7 @@ class CriteriaController extends Controller
     public function update(Request $request, $id)
 {
     // validasi dulu biar aman
-    $request->validate([
+    $validated = $request->validate([
         'name'        => 'required|string|max:255',
         'description' => 'nullable|string|max:500',
         'weight'      => 'required|numeric|min:0',
@@ -83,17 +95,22 @@ class CriteriaController extends Controller
     $criteria = Criteria::findOrFail($id);
 
     // update data
-   $criteria->update([
-    'name'        => $request->name,
-    'description' => $request->description,
-    'weight'      => $request->weight,
-    'icon'        => $request->icon ?? 'fa-solid fa-medal',
-    'style'       => $request->style ?? 'bg-indigo-500',
-]);
+    $criteria->update($validated);
+
+    $criteria = $request;
+
+    // log the activity
+    $user = Auth::user();
+    ActivityLogger::log(
+      'edit criteria',
+      "{$user->role} {$user->name} edited criteria \"{$criteria->name}\" ($criteria->id)",
+      'edit',
+      $user->id
+    );
 
 
     // redirect balik
-    return redirect()->route('admin')->with('success', "Criteria $request->name updated");
+    return redirect()->route('admin')->with('success', "Berhasil ubah kriteria \"$request->name\"!");
 }
     /**
      * Remove the specified resource from storage.
@@ -104,21 +121,31 @@ class CriteriaController extends Controller
 
       // Check if there are related EvalComponent rows first
       if (EvalComponent::where('criteria_id', $id)->exists()) {
-          return redirect()
-              ->route('admin')
-              ->with('fail', "Delete any EvalComponent with the '{$criteria->name}' ID before deleting.");
+        return redirect()
+          ->route('admin')
+          ->with('fail', "Hapus EvalComponent yang memiliki ID '{$criteria->name}' sebelum menghapus.");
       }
 
       // Now safe to delete
       if ($criteria->delete()) {
-          return redirect()
-              ->route('admin')
-              ->with('success', 'Criteria deleted.');
+        // log the activity
+        $user = Auth::user();
+        ActivityLogger::log(
+          'delete criteria',
+          "{$user->role} {$user->name} deleted criteria \"{$criteria->name}\" ($criteria->id)",
+          'delete',
+          $user->id
+        );
+
+        return redirect()
+          ->route('admin')
+          ->with('success', 'Berhasil hapus kriteria!.');
+
       }
 
       return redirect()
           ->route('admin')
-          ->with('fail', 'Failed to delete criteria.');
+          ->with('fail', 'Gagal hapus kriteria.');
   }
 
 }
