@@ -17,10 +17,7 @@ class TeacherController extends Controller
      */
     public function index()
   {
-   // Check if user has role 'guru' and has a teacher_id
-    if (Auth::check() && Auth::user()->role === 'guru' && Auth::user()->teacher_id) {
-        return redirect()->route('teacher.show', ['id' => Auth::user()->teacher_id]);
-    }
+    // Hilangkan redirect untuk user role guru agar bisa akses index
     $teachers = Teacher::all();
     $scores = [];
 
