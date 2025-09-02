@@ -249,8 +249,10 @@
                 <th class="text-left">Profil Guru</th>
                 <th class="text-left">Kualifikasi</th>
                 <th class="text-left">Bidang Keahlian</th>
+                @if(Auth::user()->role !== 'guru')
                 <th class="text-center">Performa</th>
                 <th class="text-center">Tindakan</th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -292,6 +294,7 @@
                       </div>
                     </div>
                   </td>
+                  @if(Auth::user()->role !== 'guru')
                   <td class="p-6 text-center">
                     <div class="score-badge">
                       <i class="fas fa-star mr-1"></i>
@@ -305,6 +308,7 @@
                       <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
                         <i class="fas fa-eye mr-1"></i>Detail
                       </a>
+                      @if(Auth::user()->role !== 'evaluator')
                       <a href="{{ route('teacher.edit', $data->id) }}" class="action-btn edit-btn">
                         <i class="fas fa-edit mr-1"></i>Edit
                       </a>
@@ -316,8 +320,10 @@
                           <i class="fas fa-trash mr-1"></i>Hapus
                         </button>
                       </form>
+                      @endif
                     </div>
                   </td>
+                  @endif
                 </tr>
               @endforeach
             </tbody>
