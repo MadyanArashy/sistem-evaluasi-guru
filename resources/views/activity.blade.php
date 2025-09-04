@@ -149,22 +149,10 @@
   pointer-events: none;
 }
 
-.type-badge {
+.time-badge {
   display: inline-block;
   padding: 8px 16px;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.user-badge {
-  display: inline-block;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #e24040, #bc2828);
   color: white;
   border-radius: 20px;
   font-size: 0.875rem;
@@ -254,6 +242,7 @@
               <th class="text-left px-6 py-4">Deskripsi</th>
               <th class="text-center px-6 py-4">Tipe</th>
               <th class="text-center px-6 py-4">Pelaku</th>
+              <th class="text-center px-6 py-4">Waktu</th>
             </tr>
           </thead>
           <tbody>
@@ -271,16 +260,19 @@
                   <div class="text-gray-900 break-words leading-relaxed">{{ $data->description }}</div>
                 </td>
                 <td class="px-6 py-4 text-center align-top">
-                  <span class="type-badge whitespace-nowrap">{{ $data->type }}</span>
+                  <span class="weight-badge whitespace-nowrap">{{ $data->type }}</span>
                 </td>
                 <td class="px-6 py-4 text-center align-top">
-                  <span class="user-badge whitespace-nowrap">
+                  <span class="score-badge whitespace-nowrap">
                     @if(isset($data->user))
-                      {{ $data->user->name ?? $data->user_id }}
+                    {{ $data->user->name ?? $data->user_id }}
                     @else
-                      {{ $data->user_id }}
+                    {{ $data->user_id }}
                     @endif
                   </span>
+                </td>
+                <td class="px-6 py-4 text-center align-top">
+                  <span class="time-badge whitespace-nowrap">{{ $data->created_at }}</span>
                 </td>
               </tr>
             @endforeach

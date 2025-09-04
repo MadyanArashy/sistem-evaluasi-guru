@@ -126,6 +126,7 @@
           @include('partials.success')
         @endif
         <div class="relative">
+        <!-- Semester Table -->
 
         <!-- User Table -->
         @include('partials.user_table', ["users" => $users])

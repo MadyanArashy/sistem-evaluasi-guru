@@ -4,7 +4,7 @@
     <i class="fas fa-users-cog text-blue-600"></i>
     Data Users
   </h3>
-  <a href="{{ route('user.create') }}" class="add-btn">
+  <a href="{{ route('semester.create') }}" class="add-btn">
     <i class="fas fa-plus"></i>
     Tambah User
   </a>
@@ -26,7 +26,7 @@
       <tr class="table-row">
       <td class="p-6">
         <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-          {{ $loop->iteration }}
+          1
         </div>
       </td>
       <td class="flex items-center gap-2 p-6">

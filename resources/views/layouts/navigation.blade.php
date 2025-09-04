@@ -23,11 +23,11 @@
     <a href="{{ route('home') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
     </a>
-   @if(auth()->check() && auth()->user()->role === 'admin')
-    <a href="{{ route('admin') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
-      <i class="fa-solid fa-user-gear"></i> Admin
-    </a>
-  @endif
+    @if(auth()->check() && auth()->user()->role === 'admin')
+      <a href="{{ route('admin') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
+        <i class="fa-solid fa-user-gear"></i> Admin
+      </a>
+    @endif
     <a href="{{ route('teacher.index' ) }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-users mr-2"></i> Data Guru
     </a>
