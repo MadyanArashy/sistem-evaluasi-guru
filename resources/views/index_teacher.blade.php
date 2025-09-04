@@ -356,70 +356,297 @@
 
 <!-- Enhanced JavaScript for Search and Filter -->
 <script>
-// Enhanced search functionality
-document.getElementById('searchInput').addEventListener('keyup', function () {
-  const searchValue = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#guruTable tbody tr');
-  let visibleCount = 0;
+// Enhanced Pagination System with Search and Filter Integration
+class TeacherTablePagination {
+  constructor() {
+    this.currentPage = 1;
+    this.itemsPerPage = 10;
+    this.allRows = [];
+    this.filteredRows = [];
+    this.init();
+  }
 
-  rows.forEach((row, index) => {
-    const cells = row.querySelectorAll('td');
-    let found = false;
+  init() {
+    // Get all table rows and store them
+    this.allRows = Array.from(document.querySelectorAll('#guruTable tbody tr'));
+    this.filteredRows = [...this.allRows];
 
-    // Search in name, degree, and subject columns
-    for (let i = 1; i < cells.length - 1; i++) {
-      if (cells[i].textContent.toLowerCase().includes(searchValue)) {
-        found = true;
-        break;
+    // Initialize pagination
+    this.updateDisplay();
+    this.setupEventListeners();
+  }
+
+  setupEventListeners() {
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('keyup', (e) => {
+        this.handleSearch(e.target.value);
+      });
+    }
+
+    // Filter functionality
+    const filterSelect = document.getElementById('filterMapel');
+    if (filterSelect) {
+      filterSelect.addEventListener('change', (e) => {
+        this.handleFilter(e.target.value);
+      });
+    }
+
+    // Pagination button events
+    this.setupPaginationEvents();
+  }
+
+  handleSearch(searchValue) {
+    const searchTerm = searchValue.toLowerCase().trim();
+
+    this.filteredRows = this.allRows.filter(row => {
+      if (!searchTerm) return true;
+
+      const cells = row.querySelectorAll('td');
+      // Search in name (index 1), degree (index 2), and subject (index 3) columns
+      for (let i = 1; i <= 3; i++) {
+        if (cells[i] && cells[i].textContent.toLowerCase().includes(searchTerm)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    // Apply current filter if exists
+    const currentFilter = document.getElementById('filterMapel')?.value;
+    if (currentFilter) {
+      this.applySubjectFilter(currentFilter);
+    }
+
+    this.currentPage = 1; // Reset to first page
+    this.updateDisplay();
+  }
+
+  handleFilter(filterValue) {
+    // Start with search-filtered results
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase().trim();
+
+    if (searchTerm) {
+      this.filteredRows = this.allRows.filter(row => {
+        const cells = row.querySelectorAll('td');
+        for (let i = 1; i <= 3; i++) {
+          if (cells[i] && cells[i].textContent.toLowerCase().includes(searchTerm)) {
+            return true;
+          }
+        }
+        return false;
+      });
+    } else {
+      this.filteredRows = [...this.allRows];
+    }
+
+    // Apply subject filter
+    this.applySubjectFilter(filterValue);
+
+    this.currentPage = 1; // Reset to first page
+    this.updateDisplay();
+  }
+
+  applySubjectFilter(filterValue) {
+    if (!filterValue) return;
+
+    const filterTerm = filterValue.toLowerCase();
+    this.filteredRows = this.filteredRows.filter(row => {
+      const subjectCell = row.querySelectorAll('td')[3];
+      return subjectCell && subjectCell.textContent.toLowerCase().includes(filterTerm);
+    });
+  }
+
+  updateDisplay() {
+    this.hideAllRows();
+    this.showCurrentPageRows();
+    this.updatePaginationInfo();
+    this.updatePaginationControls();
+  }
+
+  hideAllRows() {
+    this.allRows.forEach(row => {
+      row.style.display = 'none';
+    });
+  }
+
+  showCurrentPageRows() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    const rowsToShow = this.filteredRows.slice(startIndex, endIndex);
+
+    rowsToShow.forEach((row, index) => {
+      row.style.display = '';
+      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
+
+      // Update row numbers
+      const numberCell = row.querySelector('td:first-child .w-8');
+      if (numberCell) {
+        numberCell.textContent = startIndex + index + 1;
+      }
+    });
+  }
+
+  updatePaginationInfo() {
+    const totalItems = this.filteredRows.length;
+    const startItem = totalItems === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
+    const endItem = Math.min(this.currentPage * this.itemsPerPage, totalItems);
+
+    const paginationInfo = document.querySelector('.pagination-info');
+    if (paginationInfo) {
+      paginationInfo.innerHTML = `
+        Menampilkan <span>${startItem}</span> sampai <span>${endItem}</span> dari <span>${totalItems}</span> guru
+      `;
+    }
+  }
+
+  updatePaginationControls() {
+    const totalPages = Math.ceil(this.filteredRows.length / this.itemsPerPage);
+    const paginationControls = document.querySelector('.pagination-controls');
+
+    if (!paginationControls) return;
+
+    // Clear existing controls
+    paginationControls.innerHTML = '';
+
+    // Previous button
+    const prevBtn = this.createPaginationButton('prev', 'Sebelumnya', this.currentPage <= 1);
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left mr-1"></i>Sebelumnya';
+    paginationControls.appendChild(prevBtn);
+
+    // Page number buttons
+    const { startPage, endPage } = this.calculatePageRange(totalPages);
+
+    // First page and ellipsis
+    if (startPage > 1) {
+      paginationControls.appendChild(this.createPaginationButton('page', '1', false, 1));
+      if (startPage > 2) {
+        const ellipsis = document.createElement('span');
+        ellipsis.textContent = '...';
+        ellipsis.className = 'px-3 py-2 text-gray-500';
+        paginationControls.appendChild(ellipsis);
       }
     }
 
-    if (found) {
-      row.style.display = '';
-      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
-      visibleCount++;
-    } else {
-      row.style.display = 'none';
+    // Page range buttons
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = this.createPaginationButton('page', i.toString(), false, i);
+      if (i === this.currentPage) {
+        pageBtn.classList.add('active');
+      }
+      paginationControls.appendChild(pageBtn);
     }
-  });
 
-  // Update pagination info
-  updatePaginationInfo(visibleCount);
-});
-
-// Enhanced filter functionality
-document.getElementById('filterMapel').addEventListener('change', function () {
-  const filterValue = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#guruTable tbody tr');
-  let visibleCount = 0;
-
-  rows.forEach((row, index) => {
-    const subject = row.querySelectorAll('td')[3].textContent.toLowerCase();
-    const shouldShow = !filterValue || subject.includes(filterValue);
-
-    if (shouldShow) {
-      row.style.display = '';
-      row.style.animation = `fadeIn 0.3s ease ${index * 0.1}s both`;
-      visibleCount++;
-    } else {
-      row.style.display = 'none';
+    // Last page and ellipsis
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        const ellipsis = document.createElement('span');
+        ellipsis.textContent = '...';
+        ellipsis.className = 'px-3 py-2 text-gray-500';
+        paginationControls.appendChild(ellipsis);
+      }
+      paginationControls.appendChild(this.createPaginationButton('page', totalPages.toString(), false, totalPages));
     }
-  });
 
-  updatePaginationInfo(visibleCount);
-});
+    // Next button
+    const nextBtn = this.createPaginationButton('next', 'Selanjutnya', this.currentPage >= totalPages);
+    nextBtn.innerHTML = 'Selanjutnya<i class="fas fa-chevron-right ml-1"></i>';
+    paginationControls.appendChild(nextBtn);
+  }
 
-// Update pagination info
-function updatePaginationInfo(count) {
-  const paginationInfo = document.querySelector('.pagination-info');
-  if (paginationInfo) {
-    paginationInfo.innerHTML = `Menampilkan <span>1</span> sampai <span>${Math.min(10, count)}</span> dari <span>${count}</span> guru`;
+  calculatePageRange(totalPages) {
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    return { startPage, endPage };
+  }
+
+  createPaginationButton(type, text, disabled = false, pageNumber = null) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.className = 'pagination-btn';
+
+    if (disabled) {
+      button.disabled = true;
+      button.classList.add('opacity-50', 'cursor-not-allowed');
+      button.style.pointerEvents = 'none';
+    }
+
+    button.addEventListener('click', () => {
+      if (disabled) return;
+
+      this.addRippleEffect(button);
+
+      switch (type) {
+        case 'prev':
+          if (this.currentPage > 1) {
+            this.currentPage--;
+            this.updateDisplay();
+          }
+          break;
+        case 'next':
+          const totalPages = Math.ceil(this.filteredRows.length / this.itemsPerPage);
+          if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.updateDisplay();
+          }
+          break;
+        case 'page':
+          if (pageNumber && pageNumber !== this.currentPage) {
+            this.currentPage = pageNumber;
+            this.updateDisplay();
+          }
+          break;
+      }
+    });
+
+    return button;
+  }
+
+  addRippleEffect(button) {
+    const ripple = document.createElement('div');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = '50%';
+    ripple.style.top = '50%';
+    ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+    ripple.className = 'ripple';
+
+    button.style.position = 'relative';
+    button.style.overflow = 'hidden';
+    button.appendChild(ripple);
+
+    // Animate ripple
+    requestAnimationFrame(() => {
+      ripple.style.transform = 'translate(-50%, -50%) scale(2)';
+      ripple.style.opacity = '0';
+    });
+
+    setTimeout(() => {
+      if (ripple.parentNode) {
+        ripple.remove();
+      }
+    }, 600);
+  }
+
+  setupPaginationEvents() {
+    // This method is called during init, but actual event setup
+    // is handled in updatePaginationControls() for dynamic buttons
   }
 }
 
-// Add fade-in animation keyframe
-const style = document.createElement('style');
-style.textContent = `
+// CSS for animations and ripple effect
+const paginationStyles = document.createElement('style');
+paginationStyles.textContent = `
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -430,52 +657,65 @@ style.textContent = `
       transform: translateY(0);
     }
   }
-`;
-document.head.appendChild(style);
 
-// Pagination button interactions
-document.querySelectorAll('.pagination-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    // Remove active class from all buttons
-    document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
+  .ripple {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+  }
 
-    // Add active class to clicked button (if it's a number)
-    if (!isNaN(this.textContent.trim())) {
-      this.classList.add('active');
+  .pagination-btn:disabled {
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .pagination-btn:disabled:hover {
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .pagination-controls {
+      justify-content: center;
     }
 
-    // Add ripple effect
-    const ripple = document.createElement('div');
-    ripple.style.position = 'absolute';
-    ripple.style.background = 'rgba(255, 255, 255, 0.5)';
-    ripple.style.borderRadius = '50%';
-    ripple.style.transform = 'scale(0)';
-    ripple.style.animation = 'ripple 0.6s linear';
-    ripple.style.left = '50%';
-    ripple.style.top = '50%';
-    ripple.style.width = ripple.style.height = '100px';
-    ripple.style.marginLeft = ripple.style.marginTop = '-50px';
-
-    this.style.position = 'relative';
-    this.style.overflow = 'hidden';
-    this.appendChild(ripple);
-
-    setTimeout(() => {
-      ripple.remove();
-    }, 600);
-  });
-});
-
-// Add ripple animation
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = `
-  @keyframes ripple {
-    to {
-      transform: scale(2);
-      opacity: 0;
+    .pagination-btn {
+      min-width: 40px;
+      padding: 8px 12px;
+      font-size: 14px;
     }
   }
 `;
-document.head.appendChild(rippleStyle);
+document.head.appendChild(paginationStyles);
+
+// Initialize pagination when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a bit to ensure all elements are rendered
+  setTimeout(() => {
+    const pagination = new TeacherTablePagination();
+
+    // Make it globally accessible for debugging
+    window.teacherPagination = pagination;
+  }, 100);
+});
+
+// Handle dynamic content updates (if you're loading data via AJAX)
+function refreshPagination() {
+  if (window.teacherPagination) {
+    window.teacherPagination.init();
+  }
+}
 </script>
 </x-app-layout>
