@@ -23,14 +23,35 @@
     <a href="{{ route('home') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
     </a>
+
     @if(auth()->check() && auth()->user()->role === 'admin')
       <a href="{{ route('admin') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
-        <i class="fa-solid fa-user-gear"></i> Admin
+        <i class="fa-solid fa-user-gear mr-2"></i> Admin
       </a>
+
+      @if(request()->routeIs('admin'))
+        <!-- Sub navigation (only visible on lg and up) -->
+        <div class="hidden lg:block ml-10 space-y-1 text-sm">
+          <a href="#semesters" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">
+            Semesters
+          </a>
+          <a href="#users" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">
+            Users
+          </a>
+          <a href="#criterias" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">
+            Criterias
+          </a>
+          <a href="#components" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">
+            Components
+          </a>
+        </div>
+      @endif
     @endif
-    <a href="{{ route('teacher.index' ) }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
+
+    <a href="{{ route('teacher.index') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-users mr-2"></i> Data Guru
     </a>
+
     <a href="{{ route('activity') }}" class="block px-6 py-3 border-l-4 border-transparent hover:bg-white/10 hover:border-white transition-all duration-300 hover:translate-x-1 text-white/90">
       <i class="fas fa-building mr-2"></i> Aktivitas
     </a>
