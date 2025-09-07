@@ -49,7 +49,7 @@
       </td>
       <td class="p-6 text-center">
         <div class="flex justify-center space-x-2">
-          <a href="#" class="action-btn edit-btn">
+          <a href="{{ route('user.edit', $data->id) }}" class="action-btn edit-btn">
             <i class="fas fa-edit"></i>Edit
           </a>
           <form action="{{ route('user.destroy', $data->id) }}" method="POST" style="display:inline;">

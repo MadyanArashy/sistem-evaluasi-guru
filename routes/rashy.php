@@ -44,4 +44,5 @@ Route::get('/activity', function () {
 Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
   Route::get('/create-semester', [SemesterController::class, 'create'])->name('semester.create');
   Route::post('/create-semester', [SemesterController::class, 'store'])->name('semester.store');
+  Route::delete('/semester', [SemesterController::class, 'destroy'])->name('semester.destroy');
 });

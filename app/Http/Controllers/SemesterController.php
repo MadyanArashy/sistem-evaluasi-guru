@@ -20,16 +20,32 @@ class SemesterController extends Controller
      */
     public function create()
     {
-        //
+      return view('create_semester');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+   public function store(Request $request)
+  {
+    $validated = $request->validate([
+      "tahun_ajaran" => "required|regex:/^\d{4}-\d{4}$/", // format 2025-2026
+      "semester"     => "required|in:1,2",
+    ]);
+
+    // Validasi tambahan: pastikan tahun kedua = tahun pertama + 1
+    [$start, $end] = explode('-', $validated['tahun_ajaran']);
+    if ((int)$end !== (int)$start + 1) {
+      return back()->withErrors([
+        'tahun_ajaran' => 'Format tahun ajaran harus berurutan, contoh: 2025-2026',
+      ])->withInput();
     }
+
+    Semester::create($validated);
+
+    return redirect()->route('admin')->with('success', 'Semester berhasil disimpan!');
+  }
+
 
     /**
      * Display the specified resource.

@@ -127,6 +127,7 @@
         @endif
         <div class="relative">
         <!-- Semester Table -->
+        @include('partials.semester_table', ["semesters" => $semesters])
 
         <!-- User Table -->
         @include('partials.user_table', ["users" => $users])

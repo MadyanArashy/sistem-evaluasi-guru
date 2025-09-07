@@ -2,11 +2,11 @@
 <div class="section-header">
   <h3 class="section-title">
     <i class="fas fa-users-cog text-blue-600"></i>
-    Data Users
+    Data Semester
   </h3>
   <a href="{{ route('semester.create') }}" class="add-btn">
     <i class="fas fa-plus"></i>
-    Tambah User
+    Tambah Semester
   </a>
 </div>
 
@@ -15,48 +15,39 @@
     <thead class="table-header">
       <tr>
         <th class="text-left">No</th>
-        <th class="text-left">Nama</th>
-        <th class="text-center">Role</th>
-        <th class="text-center">Pembuatan Akun</th>
+        <th class="text-left">Semester</th>
+        <th class="text-center">Tahun Ajaran</th>
         <th class="text-center">Tindakan</th>
       </tr>
     </thead>
     <tbody>
-      @foreach ($users as $data)
+      @foreach ($semesters as $data)
       <tr class="table-row">
       <td class="p-6">
-        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-          1
+        <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+          {{ $loop->iteration }}
         </div>
       </td>
       <td class="flex items-center gap-2 p-6">
-      <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-user text-white"></i>
+      <div class="w-12 h-12 p-3 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <i class="fa-solid fa-calendar-days text-white"></i>
       </div>
       <div class="min-w-[150px]">
-        <div class="component-name font-semibold">{{ $data->name }}</div>
-        <div class="component-description text-gray-500">{{ $data->id }}</div>
-      </div>
-    </td>
-    <td class="p-6 text-center w-32">
-      <div class="weight-badge inline-flex items-center gap-1">
-        <i class="fas fa-user-tag"></i>
-        {{ $data->role }}
+        <div class="component-name font-semibold">
+          {{ $data->semester == 1 ? 'Ganjil' : 'Genap' }}
+        </div>
       </div>
     </td>
       <td class="p-6 text-center">
-        {{ $data->created_at->format('d M Y') }}
+        {{ $data->tahun_ajaran }}
       </td>
       <td class="p-6 text-center">
         <div class="flex justify-center space-x-2">
-          <a href="#" class="action-btn edit-btn">
-            <i class="fas fa-edit"></i>Edit
-          </a>
-          <form action="{{ route('user.destroy', $data->id) }}" method="POST" style="display:inline;">
+          <form action="{{ route('semester.destroy', $data->id) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
             <button type="submit" class="action-btn delete-btn"
-              onclick="return confirm('Are you sure you want to delete this user?')">
+              onclick="return confirm('Are you sure you want to delete this semester?')">
               <i class="fas fa-trash"></i> Hapus
             </button>
           </form>
