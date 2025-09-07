@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeacherController;
 use App\Models\Criteria;
+use App\Models\Semester;
 use App\Models\User;
 use App\Models\EvalComponent;
 use App\Models\Evaluation;
@@ -84,7 +85,8 @@ Route::get('/admin', function () {
   $evalcomponents = EvalComponent::all();
   $evaluations = Evaluation::all();
   $users = User::all();
-  return view('admin', compact('criterias', 'teachers', 'evalcomponents', 'evaluations', 'users'));
+  $semesters = Semester::all();
+  return view('admin', compact('criterias', 'teachers', 'evalcomponents', 'evaluations', 'users', 'semesters'));
 })->middleware(['auth', 'verified', 'admin.only'])->name('admin');
 
 require __DIR__.'/auth.php';
