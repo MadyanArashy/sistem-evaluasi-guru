@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\EvalComponentController;
@@ -33,10 +34,14 @@ Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
   Route::post('/evaluate', [EvaluationController::class, 'store'])->name('evaluation.store');
   Route::post('/evaluate/all', [EvaluationController::class, 'bulkStore'])
     ->name('evaluation.bulkStore');
-
 });
 
 Route::get('/activity', function () {
   $activities = Activity::latest()->get();
   return view('activity', compact('activities'));
 })->middleware(['auth', 'verified', 'admin.only'])->name('activity');
+
+Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
+  Route::get('/create-semester', [SemesterController::class, 'create'])->name('semester.create');
+  Route::post('/create-semester', [SemesterController::class, 'store'])->name('semester.store');
+});
