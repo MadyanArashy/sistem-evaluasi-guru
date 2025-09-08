@@ -223,10 +223,10 @@
           <i class="fa-solid fa-edit mr-2"></i>
           Edit Evaluasi
         </button>
-        <button class="more-btn action-btn">
+        <a href="{{ route('teacher.report', ['id' => $teacher->id]) }}" class="more-btn action-btn" target="_blank" rel="noopener noreferrer">
           <i class="fa-solid fa-print mr-2"></i>
           Cetak Laporan
-        </button>
+        </a>
       </div>
       @endif
     </div>
