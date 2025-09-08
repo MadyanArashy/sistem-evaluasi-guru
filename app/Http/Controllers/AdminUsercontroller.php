@@ -89,9 +89,9 @@ class AdminUserController extends Controller
 
     ActivityLogger::log(
       'update user',
-      `successfully updated user account {$validated['name']}`,
+      "successfully updated user account {$validated['name']}",
       'edit',
-      Auth::user(),
+      Auth::user()->id,
     );
 
     return redirect()->to(route('admin') . '#users')
