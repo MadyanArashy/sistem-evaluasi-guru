@@ -15,10 +15,11 @@ return new class extends Migration
         Schema::create('eval_components', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(Criteria::class, 'criteria_id');
+            $table->foreignIdFor(Criteria::class, 'criteria_id')
+                  ->constrained('criterias')
+                  ->onDelete('cascade');
             $table->string('name');
             $table->smallInteger('weight');
-
         });
     }
 

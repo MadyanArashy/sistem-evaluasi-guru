@@ -12,5 +12,10 @@ class Criteria extends Model
     'weight',
     'icon',
     'style',
-];
+    ];
+
+    public function components()
+  {
+    return $this->hasMany(EvalComponent::class, 'criteria_id');
+  }
 }

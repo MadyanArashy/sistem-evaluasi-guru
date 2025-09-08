@@ -116,36 +116,28 @@ class CriteriaController extends Controller
      * Remove the specified resource from storage.
      */
    public function destroy(string $id)
-  {
-      $criteria = Criteria::findOrFail($id);
+{
+    $criteria = Criteria::findOrFail($id);
 
-      // Check if there are related EvalComponent rows first
-      if (EvalComponent::where('criteria_id', $id)->exists()) {
-        return redirect()
-          ->route('admin')
-          ->with('fail', "Hapus EvalComponent yang memiliki ID '{$criteria->name}' sebelum menghapus.");
-      }
-
-      // Now safe to delete
-      if ($criteria->delete()) {
-        // log the activity
-        $user = Auth::user();
-        ActivityLogger::log(
-          'delete criteria',
-          "{$user->role} {$user->name} deleted criteria \"{$criteria->name}\" ($criteria->id)",
-          'delete',
-          $user->id
-        );
-
-        return redirect()
-          ->route('admin')
-          ->with('success', 'Berhasil hapus kriteria!.');
-
-      }
+    if ($criteria->delete()) {
+      // log the activity
+      $user = Auth::user();
+      ActivityLogger::log(
+        'delete criteria',
+        "{$user->role} {$user->name} deleted criteria \"{$criteria->name}\" ($criteria->id)",
+        'delete',
+        $user->id
+      );
 
       return redirect()
-          ->route('admin')
-          ->with('fail', 'Gagal hapus kriteria.');
-  }
+        ->route('admin')
+        ->with('success', 'Berhasil hapus kriteria!.');
+    }
+
+    return redirect()
+      ->route('admin')
+      ->with('fail', 'Gagal hapus kriteria.');
+}
+
 
 }
