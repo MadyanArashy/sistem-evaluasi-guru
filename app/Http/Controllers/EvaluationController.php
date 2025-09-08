@@ -62,6 +62,7 @@ class EvaluationController extends Controller
       'evaluations' => 'required|array|min:1',
       'evaluations.*.teacher_id'   => 'required|integer|exists:teachers,id',
       'evaluations.*.component_id' => 'required|integer|exists:eval_components,id',
+      'evaluations.*.semester_id' => 'required|integer|exists:semesters,id',
       'evaluations.*.user_id'      => 'required|integer|exists:users,id',
       'evaluations.*.score'        => 'required|numeric|min:0|max:50',
     ]);

@@ -11,7 +11,7 @@
 </div>
 
 <div class="table-container overflow-auto xl:overflow-hidden">
-  <table class="min-w-full" id="users">
+  <table class="min-w-full" id="semesters">
     <thead class="table-header">
       <tr>
         <th class="text-left">No</th>

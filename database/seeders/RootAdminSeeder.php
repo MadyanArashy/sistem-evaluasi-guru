@@ -14,13 +14,13 @@ class RootAdminSeeder extends Seeder
      */
     public function run(): void
     {
-         if (!User::where('email', 'root@gmail.com')->exists()) {
-            User::factory()->create([
-                'name' => 'root',
-                'email' => 'root@gmail.com',
-                'password' => Hash::make('12345678'),
-                'role' => 'admin',
-            ]);
+        if (!User::where('email', 'root@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'root',
+            'email' => 'root@gmail.com',
+            'password' => Hash::make('12345678'),
+            'role' => 'admin',
+        ]);
         }
     }
 }

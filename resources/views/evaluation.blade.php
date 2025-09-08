@@ -1,5 +1,5 @@
 @php
-  use App\Models\Evaluations;
+  use App\Models\Semester;
 @endphp
 <x-app-layout>
   <style>
@@ -142,6 +142,7 @@
                         name="score"
                         required
                       >
+                      
                     </form>
                   </td>
                 </tr>
@@ -152,8 +153,26 @@
       </div>
 
       <!-- Add Submit All button -->
-      <div class="flex justify-center mt-6 items-center gap-4">
-        <button id="semesterButton"></button>
+      <div class="flex flex-col justify-center mt-6 items-center gap-4">
+        <!-- Semester Selection Section -->
+        <div class="semester-section">
+          <label class="semester-label">
+            <i class="fas fa-calendar-alt text-blue-600"></i>
+            Pilih Semester Evaluasi
+          </label>
+          <select id="semesterSelect" class="semester-dropdown" required>
+            <option value="" disabled selected>-- Pilih Semester --</option>
+            @foreach(Semester::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'asc')->get() as $semester)
+              <option value="{{ $semester->id }}">
+                {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}, {{ $semester->tahun_ajaran }}
+              </option>
+            @endforeach
+          </select>
+          <p class="text-sm text-gray-600 mt-2">
+            <i class="fas fa-info-circle mr-1"></i>
+            Pilih semester untuk melakukan evaluasi guru
+          </p>
+        </div>
         <button id="submitAll" class="action-btn gradient-element text-white px-6 py-3 rounded-lg shadow-md">
           <i class="fa-solid fa-paper-plane mr-2"></i> Submit Semua
         </button>
