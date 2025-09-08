@@ -10,8 +10,9 @@
         </div>
 
         <!-- Form -->
-        <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
+            @method('PUT')
 
             @php
                 $inputWrapper =
@@ -26,7 +27,7 @@
                 <label class="block mb-2 font-semibold text-gray-700">Nama</label>
                 <div class="{{ $inputWrapper }}">
                     <i class="fas fa-user text-blue-500 mr-3"></i>
-                    <input type="text" name="name" placeholder="Masukkan nama" class="{{ $inputClass }}" required />
+                    <input type="text" name="name" placeholder="Masukkan nama" class="{{ $inputClass }}" required value="{{ $user->name }}"/>
                 </div>
             </div>
 
@@ -35,7 +36,7 @@
                 <label class="block mb-2 font-semibold text-gray-700">Email</label>
                 <div class="{{ $inputWrapper }}">
                     <i class="fas fa-envelope text-blue-500 mr-3"></i>
-                    <input type="email" name="email" placeholder="Masukkan email" class="{{ $inputClass }}" required />
+                    <input type="email" name="email" placeholder="Masukkan email" class="{{ $inputClass }}" required value="{{ $user->email }}"/>
                 </div>
             </div>
 
@@ -44,7 +45,7 @@
                 <label class="block mb-2 font-semibold text-gray-700">Password</label>
                 <div class="{{ $inputWrapper }}">
                     <i class="fas fa-lock text-blue-500 mr-3"></i>
-                    <input type="password" name="password" placeholder="Masukkan password" class="{{ $inputClass }}" required />
+                    <input type="password" name="password" placeholder="Kosongkan jika tidak diganti" class="{{ $inputClass }}" />
                 </div>
             </div>
 
@@ -55,14 +56,14 @@
                     <i class="fas fa-user-tag text-blue-500 mr-3"></i>
                     <select name="role" id="roleSelect" class="{{ $inputClass }} appearance-none" required>
                         <option value="">Pilih role</option>
-                        <option value="admin">Admin</option>
-                        <option value="guru">Guru</option>
-                        <option value="evaluator">Evaluator</option>
+                        <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="guru" {{ $user->role === 'guru' ? 'selected' : '' }}>Guru</option>
+                        <option value="evaluator" {{ $user->role === 'evaluator' ? 'selected' : '' }}>Evaluator</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Teacher Selection (only shown when role is guru) -->
+             <!-- Teacher Selection (only shown when role is guru) -->
             <div id="teacherSelection" class="hidden">
                 <label class="block mb-2 font-semibold text-gray-700">Pilih Guru</label>
                 <div class="{{ $inputWrapper }}">
@@ -70,7 +71,7 @@
                     <select name="teacher_id" class="{{ $inputClass }} appearance-none">
                         <option value="">Pilih guru (opsional)</option>
                         @foreach($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->name }} - {{ $teacher->subject }}</option>
+                            <option value="{{ $teacher->id }}" {{ $user->teacher_id === $teacher->id ? 'selected' : '' }}>{{ $teacher->name }} - {{ $teacher->subject }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -86,15 +87,26 @@
 
             <!-- JavaScript to show/hide teacher selection -->
             <script>
-                document.getElementById('roleSelect').addEventListener('change', function() {
-                    const teacherSelection = document.getElementById('teacherSelection');
-                    if (this.value === 'guru') {
-                        teacherSelection.classList.remove('hidden');
-                    } else {
-                        teacherSelection.classList.add('hidden');
-                    }
-                });
+              document.addEventListener("DOMContentLoaded", function() {
+                const roleSelect = document.getElementById('roleSelect');
+                const teacherSelection = document.getElementById('teacherSelection');
+
+                function toggleTeacherSelection() {
+                  if (roleSelect.value === 'guru') {
+                    teacherSelection.classList.remove('hidden');
+                  } else {
+                    teacherSelection.classList.add('hidden');
+                  }
+                }
+
+                // Jalankan sekali saat load
+                toggleTeacherSelection();
+
+                // Jalankan setiap kali role berubah
+                roleSelect.addEventListener('change', toggleTeacherSelection);
+              });
             </script>
+
         </form>
     </div>
 </x-app-layout>

@@ -152,7 +152,8 @@
       </div>
 
       <!-- Add Submit All button -->
-      <div class="flex justify-center mt-6">
+      <div class="flex justify-center mt-6 items-center gap-4">
+        <button id="semesterButton"></button>
         <button id="submitAll" class="action-btn gradient-element text-white px-6 py-3 rounded-lg shadow-md">
           <i class="fa-solid fa-paper-plane mr-2"></i> Submit Semua
         </button>

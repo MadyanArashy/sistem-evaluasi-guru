@@ -17,7 +17,6 @@ class TeacherController extends Controller
      */
     public function index()
   {
-    // Hilangkan redirect untuk user role guru agar bisa akses index
     $teachers = Teacher::all();
     $scores = [];
 

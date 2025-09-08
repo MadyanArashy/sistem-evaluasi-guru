@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Semester;
+use Illuminate\Http\Request;
+
+class SemesterController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+      return view('create_semester');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+   public function store(Request $request)
+  {
+    $validated = $request->validate([
+      "tahun_ajaran" => "required|regex:/^\d{4}-\d{4}$/", // format 2025-2026
+      "semester"     => "required|in:1,2",
+    ]);
+
+    // Validasi tambahan: pastikan tahun kedua = tahun pertama + 1
+    [$start, $end] = explode('-', $validated['tahun_ajaran']);
+    if ((int)$end !== (int)$start + 1) {
+      return back()->withErrors([
+        'tahun_ajaran' => 'Format tahun ajaran harus berurutan, contoh: 2025-2026',
+      ])->withInput();
+    }
+
+    Semester::create($validated);
+
+    return redirect()->route('admin')->with('success', 'Semester berhasil disimpan!');
+  }
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Semester $semester)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Semester $semester)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Semester $semester)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Semester $semester)
+    {
+        //
+    }
+}
