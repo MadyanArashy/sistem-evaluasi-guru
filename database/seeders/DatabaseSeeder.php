@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
       $this->call([
         RootAdminSeeder::class,
         CriteriaSeeder::class,
-        TeacherSeeder::class
+        EvalComponentSeeder::class,
+        TeacherSeeder::class,
       ]);
     }
 }

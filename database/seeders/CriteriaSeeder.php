@@ -9,7 +9,7 @@ class CriteriaSeeder extends Seeder
 {
   public function run(): void
     {
-      Criteria::query()->createMany([
+      Criteria::insert([
         [
           "name" => "Pedagogik",
           "weight" => 40,

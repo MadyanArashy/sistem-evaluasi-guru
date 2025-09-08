@@ -13,7 +13,7 @@ class EvalComponentSeeder extends Seeder
      */
     public function run(): void
     {
-      EvalComponent::query()->createMany([
+      EvalComponent::insert([
         [
           "criteria_id" => 1,
           "name" => "Pengumpulan Administrasi Guru",

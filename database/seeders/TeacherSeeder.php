@@ -12,7 +12,7 @@ class TeacherSeeder extends Seeder
      */
     public function run(): void
     {
-      Teacher::query()->createMany([
+      Teacher::insert([
         [
           "name" => "Lita Lidya",
           "degree" => "S.Kom",
