@@ -60,9 +60,11 @@
                 <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Bidang Keahlian
                 </th>
+                @if(auth()->check() && auth()->user()->role !== 'guru')
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Performa
                 </th>
+                @endif
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Aksi
                 </th>
@@ -99,14 +101,16 @@
                     </div>
                   </div>
                 </td>
+                @if(auth()->check() && auth()->user()->role !== 'guru')
                 <td class="p-6 text-center">
-                    <div class="score-badge">
-                      <i class="fas fa-star mr-1"></i>
-                      <span class="evalScore">
-                        {{ $scores[$data->id] ?? '0.00' }}
-                      </span>
-                    </div>
-                  </td>
+                  <div class="score-badge">
+                    <i class="fas fa-star mr-1"></i>
+                    <span class="evalScore">
+                      {{ $scores[$data->id] ?? '0.00' }}
+                    </span>
+                  </div>
+                </td>
+                @endif
                 <td class="p-6 text-center">
                   <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="detail-btn w-40">
                     <i class="fas fa-eye mr-2"></i>

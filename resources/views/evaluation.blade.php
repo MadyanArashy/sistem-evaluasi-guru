@@ -29,6 +29,47 @@
     .score-good { border-color: #3b82f6; color: #1e40af; background: linear-gradient(135deg, #dbeafe, #93c5fd); }
     .score-fair { border-color: #f59e0b; color: #92400e; background: linear-gradient(135deg, #fef3c7, #fcd34d); }
     .score-poor { border-color: #ef4444; color: #991b1b; background: linear-gradient(135deg, #fee2e2, #fca5a5); }
+
+    .semester-dropdown {
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.8));
+      border: 2px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      min-width: 250px;
+    }
+
+    .semester-dropdown:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .semester-dropdown:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .semester-section {
+      background: linear-gradient(135deg, rgba(249, 250, 251, 0.8), rgba(243, 244, 246, 0.6));
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .semester-label {
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   </style>
 
   <div class="mx-auto px-2 py-12 relative z-10">
@@ -59,6 +100,28 @@
       @if(session('success'))
         @include('partials.success')
       @endif
+
+         <!-- Semester Selection Section -->
+        <div class="mx-auto flex justify-center">
+          <div class="semester-section">
+            <label class="semester-label">
+              <i class="fas fa-calendar-alt text-blue-600"></i>
+              Pilih Semester Evaluasi
+            </label>
+            <select id="semesterSelect" class="semester-dropdown" required>
+              <option value="" disabled selected>-- Pilih Semester --</option>
+              @foreach(Semester::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'asc')->get() as $semester)
+                <option value="{{ $semester->id }}">
+                  {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}, {{ $semester->tahun_ajaran }}
+                </option>
+              @endforeach
+            </select>
+            <p class="text-sm text-gray-600 mt-2">
+              <i class="fas fa-info-circle mr-1"></i>
+              Pilih semester untuk melakukan evaluasi guru
+            </p>
+          </div>
+        </div>
 
       <!-- Evaluation Components Table -->
       <div class="table-container overflow-auto xl:overflow-hidden">
@@ -154,26 +217,7 @@
       </div>
 
       <!-- Add Submit All button -->
-      <div class="flex flex-col justify-center mt-6 items-center gap-4">
-        <!-- Semester Selection Section -->
-        <div class="semester-section">
-          <label class="semester-label">
-            <i class="fas fa-calendar-alt text-blue-600"></i>
-            Pilih Semester Evaluasi
-          </label>
-          <select id="semesterSelect" class="semester-dropdown" required>
-            <option value="" disabled selected>-- Pilih Semester --</option>
-            @foreach(Semester::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'asc')->get() as $semester)
-              <option value="{{ $semester->id }}">
-                {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}, {{ $semester->tahun_ajaran }}
-              </option>
-            @endforeach
-          </select>
-          <p class="text-sm text-gray-600 mt-2">
-            <i class="fas fa-info-circle mr-1"></i>
-            Pilih semester untuk melakukan evaluasi guru
-          </p>
-        </div>
+      <div class="flex justify-center mt-6 items-center gap-4">
         <button id="submitAll" class="action-btn gradient-element text-white px-6 py-3 rounded-lg shadow-md">
           <i class="fa-solid fa-paper-plane mr-2"></i> Submit Semua
         </button>
@@ -194,18 +238,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex justify-center space-x-4 mt-8">
-        <button class="add-btn action-btn">
-          <i class="fa-solid fa-edit mr-2"></i>
-          Edit Evaluasi
-        </button>
-        <button class="more-btn action-btn">
-          <i class="fa-solid fa-print mr-2"></i>
-          Cetak Laporan
-        </button>
       </div>
     </div>
   </div>
