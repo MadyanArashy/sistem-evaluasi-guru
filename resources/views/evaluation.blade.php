@@ -129,6 +129,7 @@
                       <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
                       <input type="hidden" name="component_id" value="{{ $data->id }}">
                       <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                      <input type="hidden" name="semester_id" class="semester-input" value="">
                       <input type="number"
                         step="0.1"
                         min="1"
@@ -142,7 +143,7 @@
                         name="score"
                         required
                       >
-                      
+
                     </form>
                   </td>
                 </tr>
@@ -355,19 +356,35 @@
         });
 
         // Collect input data
-        function collectEvaluations() {
-            let rows = document.querySelectorAll(".evaluation-input");
-            let data = [];
-            rows.forEach(row => {
-                data.push({
-                    teacher_id: row.dataset.teacher,
-                    component_id: row.dataset.component,
-                    user_id: row.dataset.user,
-                    score: row.value * 10
-                });
-            });
-            return data;
-        }
+       function collectEvaluations() {
+        let rows = document.querySelectorAll(".evaluation-input");
+        let semesterId = document.getElementById("semesterSelect").value;
+        let data = [];
+        rows.forEach(row => {
+          data.push({
+            teacher_id: row.dataset.teacher,
+            component_id: row.dataset.component,
+            user_id: row.dataset.user,
+            semester_id: semesterId, // 🔑 tambahkan ini
+            score: row.value * 10
+          });
+        });
+        return data;
+      }
+
     });
+    document.addEventListener("DOMContentLoaded", () => {
+      const semesterSelect = document.getElementById("semesterSelect");
+
+      semesterSelect.addEventListener("change", function() {
+        const semesterId = this.value;
+        document.querySelectorAll(".semester-input").forEach(input => {
+          input.value = semesterId;
+        });
+      });
+
+      // ... kode lain (checkInputs, submitAll, dsb)
+    });
+
   </script>
 </x-app-layout>

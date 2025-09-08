@@ -96,9 +96,10 @@ class EvaluationController extends Controller
     ], 201);
 
   } catch (\Throwable $e) {
+    \Log::error('Bulk store evaluations failed', ['error' => $e]);
     return response()->json([
       'success' => false,
-      'message' => $e->getMessage(),
+      'message' => 'Terjadi kesalahan saat menyimpan evaluasi',
     ], 500);
   }
 }
