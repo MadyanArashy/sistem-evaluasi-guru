@@ -24,48 +24,62 @@ public function index()
     } else {
         $teachers = Teacher::all();
     }
+
+    // Get current academic year (latest year in semesters)
+    $currentYear = \App\Models\Semester::orderBy('tahun_ajaran', 'desc')->first()?->tahun_ajaran;
+
+    // Get semesters for current academic year (Ganjil and Genap)
+    $currentSemesters = \App\Models\Semester::where('tahun_ajaran', $currentYear)
+        ->orderBy('semester', 'asc')
+        ->get();
+
     $scores = [];
 
     foreach ($teachers as $teacher) {
-        // Group components by criteria
-        $evalcomponents = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
+        $scores[$teacher->id] = [];
 
-        $finalScore = 0;
+        foreach ($currentSemesters as $semester) {
+            // Group components by criteria
+            $evalcomponents = EvalComponent::with('criteria')->get();
+            $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
-        // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
-            $criteria = $evalcomponentsGroup->first()->criteria;
-            $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
+            $finalScore = 0;
 
-            $criteriaWeightedSum = 0;
-            $criteriaTotalWeight = 0;
+            // Calculate score for each criteria
+            foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
+                $criteria = $evalcomponentsGroup->first()->criteria;
+                $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
 
-            // Calculate weighted average within criteria
-            foreach ($evalcomponentsGroup as $evalcomponent) {
-                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
-                    ->where('teacher_id', $teacher->id)
-                    ->latest()
-                    ->first();
+                $criteriaWeightedSum = 0;
+                $criteriaTotalWeight = 0;
 
-                $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
+                // Calculate weighted average within criteria
+                foreach ($evalcomponentsGroup as $evalcomponent) {
+                    $evaluation = Evaluation::where('component_id', $evalcomponent->id)
+                        ->where('teacher_id', $teacher->id)
+                        ->where('semester_id', $semester->id)
+                        ->latest()
+                        ->first();
 
-                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
-                $criteriaTotalWeight += $evalcomponentWeight;
+                    $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
+                    $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
+
+                    $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
+                    $criteriaTotalWeight += $evalcomponentWeight;
+                }
+
+                // Normalize criteria score (0-5 scale)
+                $criteriaScore = $criteriaTotalWeight > 0 ?
+                    ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
+
+                // Apply criteria weight to overall score
+                $finalScore += ($criteriaScore * $criteriaWeight) / 100;
             }
-
-            // Normalize criteria score (0-5 scale)
-            $criteriaScore = $criteriaTotalWeight > 0 ?
-                ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
-
-            // Apply criteria weight to overall score
-            $finalScore += ($criteriaScore * $criteriaWeight) / 100;
+            $scores[$teacher->id][$semester->semester] = round($finalScore, 2);
         }
-        $scores[$teacher->id] = round($finalScore, 2);
     }
 
-    return view('index_teacher', compact('teachers', 'scores'));
+    return view('index_teacher', compact('teachers', 'scores', 'currentYear', 'currentSemesters'));
 }
 
 

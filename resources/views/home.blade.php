@@ -85,6 +85,13 @@
                   <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
                 </th>
                 @endforeach
+                @else
+                @foreach($semesters as $semester)
+                <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
+                  {{ $semester->tahun_ajaran }}<br>
+                  <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
+                </th>
+                @endforeach
                 @endif
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Aksi
@@ -124,6 +131,17 @@
                 </td>
                 @if(auth()->check() && auth()->user()->role !== 'guru')
                 @foreach($semesters->take(3) as $semester)
+                <td class="p-6 text-center">
+                  <div class="score-badge">
+                    <i class="fas fa-star mr-1"></i>
+                    <span class="evalScore">
+                      {{ $scores[$data->id][$semester->id]['score'] ?? '0.00' }}
+                    </span>
+                  </div>
+                </td>
+                @endforeach
+                @else
+                @foreach($semesters as $semester)
                 <td class="p-6 text-center">
                   <div class="score-badge">
                     <i class="fas fa-star mr-1"></i>

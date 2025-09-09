@@ -252,6 +252,13 @@
                 @if(Auth::user()->role !== 'guru')
                 <th class="text-center">Performa</th>
                 <th class="text-center">Tindakan</th>
+                @else
+                @foreach($currentSemesters as $semester)
+                <th class="text-center">
+                    {{ $currentYear }}<br>
+                    {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}
+                </th>
+                @endforeach
                 @endif
               </tr>
             </thead>
@@ -321,6 +328,19 @@
                         </button>
                       </form>
                       @endif
+                    </div>
+                  </td>
+                  @else
+                  <td class="p-6 text-center">
+                    <div class="score-badge">
+                      <i class="fas fa-star mr-1"></i>
+                      <span class="evalScore">
+                        @if(Auth::user()->teacher_id == $data->id)
+                          {{ $scores[$data->id] ?? '0.00' }}
+                        @else
+                          -
+                        @endif
+                      </span>
                     </div>
                   </td>
                   @endif
