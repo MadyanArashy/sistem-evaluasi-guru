@@ -124,7 +124,36 @@ public function index()
         $evalcomponents = EvalComponent::all();
         $criterias = Criteria::all();
 
-         // Group components by criteria
+        // Get all semesters where this teacher has evaluations
+        $teacherSemesters = \App\Models\Semester::whereHas('evaluations', function($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })
+        ->orderBy('tahun_ajaran', 'desc')
+        ->orderBy('semester', 'desc')
+        ->get();
+
+        // Calculate scores for each semester
+        $semesterScores = [];
+        foreach ($teacherSemesters as $semester) {
+            $score = $this->calculateTeacherScore($teacher->id, $semester->id);
+            $semesterScores[$semester->id] = [
+                'score' => $score,
+                'semester_name' => $semester->semester == 1 ? 'Ganjil' : 'Genap',
+                'tahun_ajaran' => $semester->tahun_ajaran,
+                'semester' => $semester
+            ];
+        }
+
+        // Calculate overall score (latest semester)
+        $latestSemester = $teacherSemesters->first();
+        $overallScore = $latestSemester ? $this->calculateTeacherScore($teacher->id, $latestSemester->id) : 0;
+
+        return view('view_teacher', compact(['teacher', 'evalcomponents', 'criterias', 'semesterScores', 'overallScore']));
+    }
+
+    private function calculateTeacherScore($teacherId, $semesterId)
+    {
+        // Group components by criteria
         $evalcomponents = EvalComponent::with('criteria')->get();
         $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
@@ -141,7 +170,8 @@ public function index()
             // Calculate weighted average within criteria
             foreach ($evalcomponentsGroup as $evalcomponent) {
                 $evaluation = Evaluation::where('component_id', $evalcomponent->id)
-                    ->where('teacher_id', $teacher->id)
+                    ->where('teacher_id', $teacherId)
+                    ->where('semester_id', $semesterId)
                     ->latest()
                     ->first();
 
@@ -159,8 +189,8 @@ public function index()
             // Apply criteria weight to overall score
             $finalScore += ($criteriaScore * $criteriaWeight) / 100;
         }
-        $score = round($finalScore, 2);
-        return view('view_teacher', compact(['teacher', 'evalcomponents', 'criterias', 'score']));
+
+        return round($finalScore, 2);
     }
 
     /**
@@ -226,46 +256,16 @@ public function index()
         $evalcomponents = EvalComponent::all();
         $criterias = Criteria::all();
 
-         // Group components by criteria
-        $evalcomponents = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
+        // Get latest semester for this teacher
+        $latestSemester = \App\Models\Semester::whereHas('evaluations', function($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })
+        ->orderBy('tahun_ajaran', 'desc')
+        ->orderBy('semester', 'desc')
+        ->first();
 
-        $finalScore = 0;
-
-        // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
-            $criteria = $evalcomponentsGroup->first()->criteria;
-            $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
-
-            $criteriaWeightedSum = 0;
-            $criteriaTotalWeight = 0;
-
-            // Calculate weighted average within criteria
-            foreach ($evalcomponentsGroup as $evalcomponent) {
-                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
-                    ->where('teacher_id', $teacher->id)
-                    ->latest()
-                    ->first();
-
-                $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
-
-                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
-                $criteriaTotalWeight += $evalcomponentWeight;
-            }
-
-            // Normalize criteria score (0-5 scale)
-            $criteriaScore = $criteriaTotalWeight > 0 ?
-                ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
-
-            // Apply criteria weight to overall score
-            $finalScore += ($criteriaScore * $criteriaWeight) / 100;
-        }
-        $score = round($finalScore, 2);
-
-        // Get semester information from the latest evaluation
-        $latestEvaluation = Evaluation::where('teacher_id', $teacher->id)->latest()->first();
-        $semester = $latestEvaluation ? $latestEvaluation->semester : null;
+        $score = $latestSemester ? $this->calculateTeacherScore($teacher->id, $latestSemester->id) : 0;
+        $semester = $latestSemester;
 
         // Load PDF view
         $pdf = Pdf::loadView('pdf.teacher_report', compact(['teacher', 'evalcomponents', 'criterias', 'score', 'semester']));

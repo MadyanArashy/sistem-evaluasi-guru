@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\HomeController;
 use App\Models\Criteria;
 use App\Models\Semester;
 use App\Models\User;
@@ -15,60 +16,7 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::get('/home', function () {
-  $user = Auth::user();
-  if ($user && $user->role === 'guru') {
-      $teachers = Teacher::where('id', $user->teacher_id)->get();
-  } else {
-      $teachers = Teacher::limit(5)->get();
-  }
-  if (EvalComponent::count() > 0){
-    $evaluationCount = Evaluation::count() / EvalComponent::count();
-  } else {
-    $evaluationCount = 0;
-  }
-  $scores = [];
-foreach ($teachers as $teacher) {
-        // Group components by criteria
-        $evalcomponents = EvalComponent::with('criteria')->get();
-        $criteriaGroups = $evalcomponents->groupBy('criteria_id');
-
-        $finalScore = 0;
-
-        // Calculate score for each criteria
-        foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
-            $criteria = $evalcomponentsGroup->first()->criteria;
-            $criteriaWeight = floatval($criteria->weight); // Bobot kriteria (0-100)
-
-            $criteriaWeightedSum = 0;
-            $criteriaTotalWeight = 0;
-
-            // Calculate weighted average within criteria
-            foreach ($evalcomponentsGroup as $evalcomponent) {
-                $evaluation = Evaluation::where('component_id', $evalcomponent->id)
-                    ->where('teacher_id', $teacher->id)
-                    ->latest()
-                    ->first();
-
-                $scoreVal = $evaluation ? ($evaluation->score / 10) : 0; // Convert back to 1-5 scale
-                $evalcomponentWeight = floatval($evalcomponent->weight); // Bobot komponen dalam kriteria (0-100)
-
-                $criteriaWeightedSum += $scoreVal * $evalcomponentWeight;
-                $criteriaTotalWeight += $evalcomponentWeight;
-            }
-
-            // Normalize criteria score (0-5 scale)
-            $criteriaScore = $criteriaTotalWeight > 0 ?
-                ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
-
-            // Apply criteria weight to overall score
-            $finalScore += ($criteriaScore * $criteriaWeight) / 100;
-        }
-
-        $scores[$teacher->id] = round($finalScore, 2);
-    }
-  return view('home', compact('teachers', 'evaluationCount', 'scores'));
-})->middleware(['auth', 'verified'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
