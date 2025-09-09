@@ -10,4 +10,9 @@ class Semester extends Model
     'semester',
     'tahun_ajaran'
   ];
+
+  public function evaluations()
+  {
+    return $this->hasMany(\App\Models\Evaluation::class, 'semester_id');
+  }
 }

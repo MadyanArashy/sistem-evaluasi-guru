@@ -1,10 +1,11 @@
-# TODO: Filter Teacher List for Guru Role
+# TODO: Show Score Feature in Teacher Account
 
 ## Tasks
-- [x] Modify TeacherController@index method to filter teachers based on user role
-- [ ] Test the changes by logging in as different user types
+- [x] Modify index_teacher.blade.php to display the "Performa" column for teacher role
+- [x] Ensure only the logged-in teacher's score is shown in their account
+- [ ] Test the changes by logging in as a teacher user
 
 ## Details
-- For users with role 'guru', only show their own teacher record
-- For other roles (admin, evaluator), show all teachers as before
-- No changes needed in the view file
+- Added the "Performa" column to the teacher list table for guru role
+- The score is calculated in TeacherController and displayed only for the logged-in teacher
+- Actions column remains hidden for guru role to prevent unauthorized edits

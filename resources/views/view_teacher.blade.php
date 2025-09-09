@@ -177,8 +177,15 @@
                     <div class="score-badge">
                       <i class="fas fa-star mr-1"></i>
                       <span class="evalScore">
-                        {{ number_format(Evaluation::where('component_id', $data->id)->where('teacher_id', $teacher->id)
-                        ->latest()->first()?->score / 10, 1) ?? '-' }}</span>/5.0
+                        @php
+                          $latestSemester = collect($semesterScores)->keys()->first();
+                          $evaluation = $latestSemester ? Evaluation::where('component_id', $data->id)
+                            ->where('teacher_id', $teacher->id)
+                            ->where('semester_id', $latestSemester)
+                            ->latest()->first() : null;
+                        @endphp
+                        {{ $evaluation ? number_format($evaluation->score / 10, 1) : '-' }}
+                      </span>/5.0
                     </div>
                   </td>
                   <td class="p-6 text-center">
@@ -199,6 +206,29 @@
         </table>
       </div>
 
+      <!-- Semester Scores History -->
+      @if(count($semesterScores) > 0)
+      <div class="mt-8 p-8 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200">
+        <div class="text-center mb-6">
+          <h3 class="text-2xl font-bold gradient-text">Riwayat Penilaian per Semester</h3>
+          <p class="text-gray-600 mt-2">Data lengkap dari semester pertama bekerja hingga sekarang</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @foreach($semesterScores as $semesterId => $semesterData)
+          <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-purple-100 hover:shadow-xl transition-shadow duration-300">
+            <div class="text-center">
+              <div class="text-sm text-gray-500 mb-1">{{ $semesterData['tahun_ajaran'] }}</div>
+              <div class="text-lg font-bold text-purple-600 mb-3">{{ $semesterData['semester_name'] }}</div>
+              <div class="text-3xl font-bold text-purple-700 mb-2">{{ $semesterData['score'] }}</div>
+              <div class="text-xs text-gray-500">Skor Evaluasi</div>
+            </div>
+          </div>
+          @endforeach
+        </div>
+      </div>
+      @endif
+
       <!-- Overall Score Section -->
       <div class="mt-8 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200">
         <div class="text-center">
@@ -206,7 +236,7 @@
           <div class="flex justify-center items-center space-x-8">
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Total Skor</p>
-              <div class="text-4xl font-bold text-blue-600" id="overallScore">{{ $score }}</div>
+              <div class="text-4xl font-bold text-blue-600" id="overallScore">{{ $overallScore }}</div>
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
