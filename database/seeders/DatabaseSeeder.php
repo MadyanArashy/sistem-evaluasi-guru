@@ -16,9 +16,10 @@ class DatabaseSeeder extends Seeder
     {
       $this->call([
         RootAdminSeeder::class,
+        TeacherSeeder::class,
         CriteriaSeeder::class,
         EvalComponentSeeder::class,
-        TeacherSeeder::class,
+        SemesterSeeder::class,
       ]);
     }
 }

@@ -64,8 +64,8 @@
   </a>
 
   <!-- Data pribadi guru (khusus teacher) -->
-  @if(auth()->user()->role === 'guru')
-    <a href="{{ route('teacher.show', auth()->user()->id) }}"
+  @if(auth()->user()->role === 'guru' && auth()->user()->role != null)
+    <a href="{{ route('teacher.show', auth()->user()->teacher_id) }}"
        class="block px-6 py-3 border-l-4 transition-all duration-300 hover:bg-white/10 hover:border-white hover:translate-x-1
        {{ request()->routeIs('teacher.show') ? 'bg-white/10 border-white text-white' : 'border-transparent text-white/90' }}">
       <i class="fas fa-id-card mr-2"></i> Data Saya
