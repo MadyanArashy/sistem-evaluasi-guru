@@ -9,7 +9,7 @@ class CriteriaSeeder extends Seeder
 {
   public function run(): void
     {
-      Criteria::insert([
+      $criterias = [
         [
           "name" => "Pedagogik",
           "weight" => 40,
@@ -38,6 +38,10 @@ class CriteriaSeeder extends Seeder
           "icon" => "fa-solid fa-users",
           "description" => "Kemampuan pendidik berkomunikasi dan bergaul secara efektif"
         ],
-      ]);
+      ];
+
+      foreach($criterias as $criteria) {
+        Criteria::create($criteria);
+      }
     }
 }

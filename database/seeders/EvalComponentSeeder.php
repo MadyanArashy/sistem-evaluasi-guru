@@ -13,7 +13,7 @@ class EvalComponentSeeder extends Seeder
      */
     public function run(): void
     {
-      EvalComponent::insert([
+      $evalcomponents = [
         [
           "criteria_id" => 1,
           "name" => "Pengumpulan Administrasi Guru",
@@ -110,6 +110,10 @@ class EvalComponentSeeder extends Seeder
           "weight" => 43,
           "description" => "Keterlibatan di kepanitiaan dan kontribusi pada kegiatan di sekolah/yayasan"
         ],
-      ]);
+      ];
+
+      foreach($evalcomponents as $component) {
+        EvalComponent::create($component);
+      }
     }
 }
