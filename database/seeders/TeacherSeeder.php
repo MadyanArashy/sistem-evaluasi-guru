@@ -12,7 +12,7 @@ class TeacherSeeder extends Seeder
      */
     public function run(): void
     {
-      Teacher::insert([
+      $teachers = [
         [
           "name" => "Lita Lidya",
           "degree" => "S.Kom",
@@ -28,6 +28,10 @@ class TeacherSeeder extends Seeder
           "degree" => "S.Si",
           "subject" => "Matematika",
         ],
-      ]);
+      ];
+
+      foreach($teachers as $teacher) {
+        Teacher::create($teacher);
+      }
     }
 }

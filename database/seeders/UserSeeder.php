@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-      User::insert([
+      $users = [
         [
           'name' => 'Eval',
           'email' => 'eval@gmail.com',
@@ -49,6 +49,10 @@ class UserSeeder extends Seeder
           'role' => 'guru',
           'teacher_id' => '3',
         ],
-      ]);
+      ];
+
+      foreach ($users as $user) {
+        User::create($user);
+      }
     }
 }

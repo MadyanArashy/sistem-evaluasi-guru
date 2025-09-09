@@ -12,7 +12,7 @@ class SemesterSeeder extends Seeder
      */
     public function run(): void
     {
-      Semester::insert([
+      $semesters = [
         [
           "semester" => "1",
           "tahun_ajaran" => "2024-2025",
@@ -29,6 +29,9 @@ class SemesterSeeder extends Seeder
           "semester" => "2",
           "tahun_ajaran" => "2025-2026",
         ],
-      ]);
+      ];
+      foreach($semesters as $semester) {
+        Semester::create($semester);
+      }
     }
 }
