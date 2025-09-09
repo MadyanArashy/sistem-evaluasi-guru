@@ -233,7 +233,7 @@
             <i class="fas fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             <select id="filterMapel" class="filter-select pl-12">
               <option value="" selected>Semua Mata Pelajaran</option>
-              @foreach($teachers->pluck('subject')->unique('subject') as $subject)
+              @foreach($teachers->unique('subject')->pluck('subject') as $subject)
               <option value="{{ $subject }}">{{ $subject }}</option>
               @endforeach
             </select>
