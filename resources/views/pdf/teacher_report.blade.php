@@ -76,6 +76,9 @@
     <div class="teacher-info">
         <h2>{{ $teacher->name }} {{ $teacher->degree }}</h2>
         <p><strong>Mata Pelajaran:</strong> {{ $teacher->subject }}</p>
+        @if($semester)
+        <p><strong>Semester:</strong> {{ $semester->semester == 1 ? 'Ganjil' : ($semester->semester == 2 ? 'Genap' : 'Unknown') }} - {{ $semester->tahun_ajaran }}</p>
+        @endif
         <p><strong>Tanggal Laporan:</strong> {{ date('d-m-Y') }}</p>
     </div>
 

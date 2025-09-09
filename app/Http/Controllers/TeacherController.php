@@ -16,9 +16,14 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+public function index()
   {
-    $teachers = Teacher::all();
+    $user = Auth::user();
+    if ($user && $user->role === 'guru') {
+        $teachers = Teacher::where('id', $user->teacher_id)->get();
+    } else {
+        $teachers = Teacher::all();
+    }
     $scores = [];
 
     foreach ($teachers as $teacher) {
@@ -258,8 +263,12 @@ class TeacherController extends Controller
         }
         $score = round($finalScore, 2);
 
+        // Get semester information from the latest evaluation
+        $latestEvaluation = Evaluation::where('teacher_id', $teacher->id)->latest()->first();
+        $semester = $latestEvaluation ? $latestEvaluation->semester : null;
+
         // Load PDF view
-        $pdf = Pdf::loadView('pdf.teacher_report', compact(['teacher', 'evalcomponents', 'criterias', 'score']));
+        $pdf = Pdf::loadView('pdf.teacher_report', compact(['teacher', 'evalcomponents', 'criterias', 'score', 'semester']));
 
         // Return PDF download
         return $pdf->download('laporan_guru_' . $teacher->name . '.pdf');
