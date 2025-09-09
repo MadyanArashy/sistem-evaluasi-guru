@@ -64,10 +64,10 @@
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Performa
                 </th>
-                @endif
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Aksi
                 </th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -110,13 +110,13 @@
                     </span>
                   </div>
                 </td>
-                @endif
                 <td class="p-6 text-center">
                   <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="detail-btn w-40">
                     <i class="fas fa-eye mr-2"></i>
                     Lihat Detail
                   </a>
                 </td>
+                @endif
               </tr>
               @endforeach
             </tbody>
