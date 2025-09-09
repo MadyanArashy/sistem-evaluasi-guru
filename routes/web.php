@@ -9,13 +9,19 @@ use App\Models\EvalComponent;
 use App\Models\Evaluation;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return redirect()->route('home');
 });
 
 Route::get('/home', function () {
-  $teachers = Teacher::limit(5)->get();
+  $user = Auth::user();
+  if ($user && $user->role === 'guru') {
+      $teachers = Teacher::where('id', $user->teacher_id)->get();
+  } else {
+      $teachers = Teacher::limit(5)->get();
+  }
   if (EvalComponent::count() > 0){
     $evaluationCount = Evaluation::count() / EvalComponent::count();
   } else {
