@@ -47,15 +47,16 @@
         <a href="#components" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">Components</a>
       </div>
     @endif
+  @endif
 
-    <!-- Data Guru (khusus admin) -->
+  @if(auth()->user()->role !== 'guru')
+    <!-- Data Guru (khusus non-guru) -->
     <a href="{{ route('teacher.index') }}"
        class="block px-6 py-3 border-l-4 transition-all duration-300 hover:bg-white/10 hover:border-white hover:translate-x-1
        {{ request()->routeIs('teacher.index') ? 'bg-white/10 border-white text-white' : 'border-transparent text-white/90' }}">
       <i class="fas fa-users mr-2"></i> Data Guru
     </a>
   @endif
-
   <!-- Menu yang bisa diakses semua (admin & teacher) -->
   <a href="{{ route('activity') }}"
      class="block px-6 py-3 border-l-4 transition-all duration-300 hover:bg-white/10 hover:border-white hover:translate-x-1
