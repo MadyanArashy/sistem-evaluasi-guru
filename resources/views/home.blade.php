@@ -173,58 +173,6 @@
       </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="activity-card">
-      <h2 class="section-title">
-        <i class="fas fa-clock mr-3"></i>
-        Aktivitas Terkini
-      </h2>
-
-      <div class="space-y-4">
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-blue-500 to-cyan-600">
-            <i class="fas fa-user-plus text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Guru Baru Bergabung</h6>
-            <p class="text-sm text-gray-600">Dr. Ahmad Wijaya telah bergabung sebagai guru Matematika</p>
-            <small class="text-xs text-gray-400">2 menit yang lalu</small>
-          </div>
-          <div class="text-green-500">
-            <i class="fas fa-check-circle text-xl"></i>
-          </div>
-        </div>
-
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-green-500 to-emerald-600">
-            <i class="fas fa-file-upload text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Nilai Siswa Diperbarui</h6>
-            <p class="text-sm text-gray-600">128 data nilai berhasil diperbarui untuk semester ini</p>
-            <small class="text-xs text-gray-400">1 jam yang lalu</small>
-          </div>
-          <div class="text-blue-500">
-            <i class="fas fa-info-circle text-xl"></i>
-          </div>
-        </div>
-
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-purple-500 to-pink-600">
-            <i class="fas fa-chart-bar text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Laporan Bulanan Siap</h6>
-            <p class="text-sm text-gray-600">Laporan evaluasi bulan ini telah selesai dibuat</p>
-            <small class="text-xs text-gray-400">3 jam yang lalu</small>
-          </div>
-          <div class="text-purple-500">
-            <i class="fas fa-download text-xl"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Footer -->
     <div class="footer-section">
       <div class="max-w-4xl mx-auto">

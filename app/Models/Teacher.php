@@ -10,6 +10,13 @@ class Teacher extends Model
         "name",
         "degree",
         "subject",
+        "status"
+    ];
+    /**
+     * Automatically set the teacher's status as Honor.
+     */
+    protected $attributes = [
+        'status' => 'Honor',
     ];
 
     /**
@@ -17,6 +24,6 @@ class Teacher extends Model
      */
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasOne(User::class);
     }
 }
