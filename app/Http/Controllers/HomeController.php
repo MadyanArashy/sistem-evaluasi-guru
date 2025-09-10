@@ -15,15 +15,15 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        // Get filter parameters
-        $tahunAjaranFilter = $request->get('tahun_ajaran'); // academic year like '2025-2026' or null for all
-
         // Get teachers based on user role
         if ($user && $user->role === 'guru') {
-             $teachers = Teacher::where('id', $user->teacher_id)->get();
+            return redirect()->route('teacher.show', $user->teacher_id);
         } else {
-            $teachers = Teacher::limit(5)->get();
+            $teachers = Teacher::all();
         }
+
+        // Get filter parameters
+        $tahunAjaranFilter = $request->get('tahun_ajaran'); // academic year like '2025-2026' or null for all
 
         // Get semesters based on filter
         if ($tahunAjaranFilter) {
