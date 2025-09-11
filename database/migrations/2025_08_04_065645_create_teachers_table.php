@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('degree');
             $table->string('subject');
-            $table->enum('status', ['Honor', 'Calon Guru Tetap', 'Guru Tetap']);
+            $table->enum('status', ['Guru Honor', 'Calon Guru Tetap', 'Guru Tetap']);
         });
     }
 

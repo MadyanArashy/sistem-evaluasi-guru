@@ -78,6 +78,9 @@
                 <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Bidang Keahlian
                 </th>
+                <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                  Status
+                </th>
                 @if(auth()->check() && auth()->user()->role !== 'guru')
                 @foreach($semesters->take(3) as $semester)
                 <th class="p-6 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
@@ -126,6 +129,16 @@
                     <div>
                       <div class="text-sm font-bold text-gray-900">{{ $data->subject }}</div>
                       <div class="text-xs text-gray-500">Mata Pelajaran</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-6">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                      <i class="fas fa-laptop-code text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-gray-900">{{ $data->status }}</div>
                     </div>
                   </div>
                 </td>

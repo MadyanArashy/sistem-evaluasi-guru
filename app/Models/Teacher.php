@@ -16,7 +16,7 @@ class Teacher extends Model
      * Automatically set the teacher's status as Honor.
      */
     protected $attributes = [
-        'status' => 'Honor',
+        'status' => 'Guru Honor',
     ];
 
     /**
