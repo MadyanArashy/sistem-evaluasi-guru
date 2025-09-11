@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\EvalComponent;
 use App\Models\Evaluation;
+use App\Models\Teacher;
 use Illuminate\Database\Seeder;
 
 class EvaluationSeeder extends Seeder
@@ -14,20 +15,22 @@ class EvaluationSeeder extends Seeder
     public function run(): void
     {
       $evalcomponents = EvalComponent::all();
+      $teachers = Teacher::all();
 
       $now = now();
       $evaluations = [];
-
-      foreach ($evalcomponents as $component) {
-        $evaluations[] = [
-          'teacher_id'   => 1,
-          'user_id'      => 2,
-          'score'        => 40,
-          'semester_id'  => 1,
-          'component_id' => $component->id,
-          'created_at'   => $now,
-          'updated_at'   => $now,
-        ];
+      foreach($teachers as $teacher) {
+        foreach ($evalcomponents as $component) {
+          $evaluations[] = [
+            'teacher_id'   => $teacher->id,
+            'user_id'      => 2,
+            'score'        => rand(35, 50),
+            'semester_id'  => 1,
+            'component_id' => $component->id,
+            'created_at'   => $now,
+            'updated_at'   => $now,
+          ];
+        }
       }
 
       Evaluation::insert($evaluations);

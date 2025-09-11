@@ -17,7 +17,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-white/70 text-sm font-medium mb-2">Total Guru</p>
-            <h2 class="text-4xl font-bold text-white">{{ $teachers->count() }}</h2>
+            <h2 class="text-4xl font-bold text-white">{{ isset($totalTeachers) ? $totalTeachers->count() : $teachers->total() }}</h2>
           </div>
           <div class="stat-icon">
             <i class="fas fa-user-tie text-white text-2xl"></i>
@@ -62,6 +62,16 @@
                 @endfor
               </select>
             </form>
+          </div>
+        </div>
+
+        <!-- Pagination Info -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-sm text-gray-600">
+            Menampilkan {{ $teachers->firstItem() ?? 0 }} - {{ $teachers->lastItem() ?? 0 }} dari {{ $teachers->total() }} guru
+          </div>
+          <div class="text-sm text-gray-600">
+            Halaman {{ $teachers->currentPage() }} dari {{ $teachers->lastPage() }}
           </div>
         </div>
 
@@ -175,6 +185,11 @@
               @endforeach
             </tbody>
           </table>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-container">
+            {{ $teachers->appends(request()->query())->links('custom.pagination') }}
+          </div>
 
           <div class="p-6 border-t border-gray-100">
             <a href="{{ route('teacher.index') }}" class="more-btn">

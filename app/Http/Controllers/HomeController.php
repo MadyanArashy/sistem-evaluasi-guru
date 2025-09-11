@@ -15,11 +15,13 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        // Get teachers based on user role
+        // Get teachers based on user role with pagination
         if ($user && $user->role === 'guru') {
             return redirect()->route('teacher.show', $user->teacher_id);
         } else {
-            $teachers = Teacher::all();
+            // Add pagination - 10 teachers per page
+            $teachers = Teacher::paginate(10);
+            $allTeachers = Teacher::all(); // For stats calculation
         }
 
         // Get filter parameters
@@ -47,7 +49,7 @@ class HomeController extends Controller
             $evaluationCount = 0;
         }
 
-        // Calculate scores per semester for each teacher
+        // Calculate scores per semester for each teacher (only for current page teachers)
         $scores = [];
         foreach ($teachers as $teacher) {
             $teacherScores = [];
@@ -64,7 +66,10 @@ class HomeController extends Controller
             $scores[$teacher->id] = $teacherScores;
         }
 
-        return view('home', compact('teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter'));
+        // Use allTeachers for total count in stats, but teachers (paginated) for display
+        $totalTeachers = $allTeachers ?? $teachers;
+
+        return view('home', compact('teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter', 'totalTeachers'));
     }
 
     private function calculateTeacherScore($teacherId, $semesterId)
