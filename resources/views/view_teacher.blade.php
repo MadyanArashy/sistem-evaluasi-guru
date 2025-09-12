@@ -86,6 +86,7 @@
             <p class="text-xl">
               {{ $teacher->subject }}
             </p>
+
           </div>
         </div>
         @if(auth()->check() && auth()->user()->role === 'evaluator')

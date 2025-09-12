@@ -18,7 +18,7 @@ class SemesterSeeder extends Seeder
           "tahun_ajaran" => "2024-2025",
         ],
         [
-          "semester" => "1",
+          "semester" => "2",
           "tahun_ajaran" => "2024-2025",
         ],
         [

@@ -15,6 +15,9 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
+        // Get all semesters as a collection for the filter dropdown
+        $allSemesters = Semester::orderByDesc('id')->get();
+
         // Get teachers based on user role with pagination
         if ($user && $user->role === 'guru') {
             return redirect()->route('teacher.show', $user->teacher_id);
@@ -32,13 +35,13 @@ class HomeController extends Controller
             // Filter by specific academic year
             $semesters = Semester::where('tahun_ajaran', $tahunAjaranFilter)
                                 ->orderBy('tahun_ajaran', 'desc')
-                                ->orderBy('semester', 'desc')
+                                ->orderBy('semester', 'asc')
                                 ->get();
         } else {
             // Show current academic year only (2025-2026) when no filter
             $currentAcademicYear = '2025-2026';
             $semesters = Semester::where('tahun_ajaran', $currentAcademicYear)
-                                ->orderBy('semester', 'desc')
+                                ->orderBy('semester', 'asc')
                                 ->get();
         }
 
@@ -69,7 +72,7 @@ class HomeController extends Controller
         // Use allTeachers for total count in stats, but teachers (paginated) for display
         $totalTeachers = $allTeachers ?? $teachers;
 
-        return view('home', compact('teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter', 'totalTeachers'));
+        return view('home', compact(['teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter', 'totalTeachers', 'allSemesters']));
     }
 
     private function calculateTeacherScore($teacherId, $semesterId)

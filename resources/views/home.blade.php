@@ -55,11 +55,11 @@
               <select name="tahun_ajaran" id="tahun_ajaran" onchange="this.form.submit()"
                       class="bg-blue-600/80 border-2 border-blue-400 rounded-lg px-4 py-2 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 hover:bg-blue-500/80 transition-colors duration-200">
                 <option value="" class="bg-gray-800">Semua Tahun</option>
-                @for ($year = 2024; $year <= 2030; $year++)
-                  <option value="{{ $year }}-{{ $year+1 }}" {{ request('tahun_ajaran') === $year.'-'.($year+1) ? 'selected' : '' }} class="bg-gray-800">
-                    {{ $year }} - {{ $year+1 }}
+                @foreach ($allSemesters->unique('tahun_ajaran') as $semester)
+                  <option value="{{ $semester->tahun_ajaran }}" {{ request('tahun_ajaran') === $semester->tahun_ajaran ? 'selected' : '' }} class="bg-gray-800">
+                    {{ $semester->tahun_ajaran }}
                   </option>
-                @endfor
+                @endforeach
               </select>
             </form>
           </div>
@@ -189,13 +189,6 @@
           <!-- Pagination Controls -->
           <div class="pagination-container">
             {{ $teachers->appends(request()->query())->links('custom.pagination') }}
-          </div>
-
-          <div class="p-6 border-t border-gray-100">
-            <a href="{{ route('teacher.index') }}" class="more-btn">
-              <i class="fas fa-arrow-right mr-2"></i>
-              Lihat Semua Guru
-            </a>
           </div>
         </div>
       </div>
