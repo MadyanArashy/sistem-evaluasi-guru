@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
     Route::delete('/teacher/{id}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
-    Route::get('/teachers', [TeacherController::class, 'index'])->name('teacher.index');
+    Route::put('/teacher/{id}/promote', [TeacherController::class, 'promote'])->name('teacher.promote')->middleware('evaluator.only');
 });
 
 Route::get('/admin', function () {

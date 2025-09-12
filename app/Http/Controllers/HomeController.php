@@ -15,28 +15,33 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
+        // Get all semesters as a collection for the filter dropdown
+        $allSemesters = Semester::orderByDesc('id')->get();
+
+        // Get teachers based on user role with pagination
+        if ($user && $user->role === 'guru') {
+            return redirect()->route('teacher.show', $user->teacher_id);
+        } else {
+            // Add pagination - 10 teachers per page
+            $teachers = Teacher::paginate(10);
+            $allTeachers = Teacher::all(); // For stats calculation
+        }
+
         // Get filter parameters
         $tahunAjaranFilter = $request->get('tahun_ajaran'); // academic year like '2025-2026' or null for all
-
-        // Get teachers based on user role
-        if ($user && $user->role === 'guru') {
-             $teachers = Teacher::where('id', $user->teacher_id)->get();
-        } else {
-            $teachers = Teacher::limit(5)->get();
-        }
 
         // Get semesters based on filter
         if ($tahunAjaranFilter) {
             // Filter by specific academic year
             $semesters = Semester::where('tahun_ajaran', $tahunAjaranFilter)
                                 ->orderBy('tahun_ajaran', 'desc')
-                                ->orderBy('semester', 'desc')
+                                ->orderBy('semester', 'asc')
                                 ->get();
         } else {
             // Show current academic year only (2025-2026) when no filter
             $currentAcademicYear = '2025-2026';
             $semesters = Semester::where('tahun_ajaran', $currentAcademicYear)
-                                ->orderBy('semester', 'desc')
+                                ->orderBy('semester', 'asc')
                                 ->get();
         }
 
@@ -47,7 +52,7 @@ class HomeController extends Controller
             $evaluationCount = 0;
         }
 
-        // Calculate scores per semester for each teacher
+        // Calculate scores per semester for each teacher (only for current page teachers)
         $scores = [];
         foreach ($teachers as $teacher) {
             $teacherScores = [];
@@ -64,7 +69,10 @@ class HomeController extends Controller
             $scores[$teacher->id] = $teacherScores;
         }
 
-        return view('home', compact('teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter'));
+        // Use allTeachers for total count in stats, but teachers (paginated) for display
+        $totalTeachers = $allTeachers ?? $teachers;
+
+        return view('home', compact(['teachers', 'evaluationCount', 'scores', 'semesters', 'tahunAjaranFilter', 'totalTeachers', 'allSemesters']));
     }
 
     private function calculateTeacherScore($teacherId, $semesterId)

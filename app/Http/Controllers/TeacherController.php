@@ -289,6 +289,63 @@ public function index()
     }
 
     /**
+ * Promote teacher from "Calon Guru Tetap" to "Guru Tetap"
+ *
+ * @param int $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function promote($id)
+{
+    try {
+        $teacher = Teacher::findOrFail($id);
+
+        // Check if user is authorized (evaluator role)
+        if (!auth()->check() || auth()->user()->role !== 'evaluator') {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk melakukan promosi guru.');
+        }
+
+        // Check if teacher has "Calon Guru Tetap" status
+        if ($teacher->status !== 'Calon Guru Tetap') {
+            return redirect()->back()->with('error', 'Guru ini tidak memenuhi syarat untuk dipromosikan. Status saat ini: ' . $teacher->status);
+        }
+
+        // Update teacher status
+        $teacher->update(['status' => 'Guru Tetap']);
+
+        // Log the activity
+        $user = auth()->user();
+        ActivityLogger::log(
+            'teacher promoted',
+            "{$user->role} {$user->name} promoted teacher {$teacher->name} ({$teacher->id}) from 'Calon Guru Tetap' to 'Guru Tetap'",
+            'update',
+            $user->id
+        );
+
+        // Log for system monitoring
+        \Log::info("Teacher promoted manually", [
+            'teacher_id' => $teacher->id,
+            'teacher_name' => $teacher->name,
+            'promoted_by' => $user->name,
+            'promoted_by_id' => $user->id,
+            'old_status' => 'Calon Guru Tetap',
+            'new_status' => 'Guru Tetap',
+            'promotion_date' => now()
+        ]);
+
+        return redirect()->back()->with('success', "Guru {$teacher->name} berhasil dipromosikan menjadi Guru Tetap!");
+
+    } catch (\Exception $e) {
+        \Log::error('Failed to promote teacher', [
+            'teacher_id' => $id,
+            'error' => $e->getMessage(),
+            'user_id' => auth()->id()
+        ]);
+
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat mempromosikan guru. Silakan coba lagi.');
+    }
+  }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

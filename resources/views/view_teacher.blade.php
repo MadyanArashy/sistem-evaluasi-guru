@@ -86,6 +86,9 @@
             <p class="text-xl">
               {{ $teacher->subject }}
             </p>
+            <p class="component-description">
+              {{ $teacher->status }}
+            </p>
           </div>
         </div>
         @if(auth()->check() && auth()->user()->role === 'evaluator')
@@ -246,7 +249,7 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
+     <!-- Action Buttons -->
       @if(auth()->check() && auth()->user()->role !== 'guru')
       <div class="flex justify-center space-x-4 mt-8">
         <button class="add-btn action-btn">
@@ -257,6 +260,18 @@
           <i class="fa-solid fa-print mr-2"></i>
           Cetak Laporan
         </a>
+
+        <!-- Promote to Guru Tetap Button -->
+        @if(auth()->user()->role === 'evaluator' && $teacher->status === 'Calon Guru Tetap')
+        <form action="{{ route('teacher.promote', ['id' => $teacher->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin mempromosikan {{ $teacher->name }} menjadi Guru Tetap?')">
+          @csrf
+          @method('PUT')
+          <button type="submit" class="promote-btn action-btn">
+            <i class="fa-solid fa-star mr-2"></i>
+            Promosikan ke Guru Tetap
+          </button>
+        </form>
+        @endif
       </div>
       @endif
     </div>

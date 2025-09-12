@@ -20,6 +20,7 @@ return new class extends Migration
                   ->onDelete('cascade');
             $table->string('name');
             $table->smallInteger('weight');
+            $table->string('description');
         });
     }
 

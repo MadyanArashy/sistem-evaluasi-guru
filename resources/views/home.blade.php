@@ -17,7 +17,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-white/70 text-sm font-medium mb-2">Total Guru</p>
-            <h2 class="text-4xl font-bold text-white">{{ $teachers->count() }}</h2>
+            <h2 class="text-4xl font-bold text-white">{{ isset($totalTeachers) ? $totalTeachers->count() : $teachers->total() }}</h2>
           </div>
           <div class="stat-icon">
             <i class="fas fa-user-tie text-white text-2xl"></i>
@@ -55,13 +55,23 @@
               <select name="tahun_ajaran" id="tahun_ajaran" onchange="this.form.submit()"
                       class="bg-blue-600/80 border-2 border-blue-400 rounded-lg px-4 py-2 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 hover:bg-blue-500/80 transition-colors duration-200">
                 <option value="" class="bg-gray-800">Semua Tahun</option>
-                @for ($year = 2024; $year <= 2030; $year++)
-                  <option value="{{ $year }}-{{ $year+1 }}" {{ request('tahun_ajaran') === $year.'-'.($year+1) ? 'selected' : '' }} class="bg-gray-800">
-                    {{ $year }} - {{ $year+1 }}
+                @foreach ($allSemesters->unique('tahun_ajaran') as $semester)
+                  <option value="{{ $semester->tahun_ajaran }}" {{ request('tahun_ajaran') === $semester->tahun_ajaran ? 'selected' : '' }} class="bg-gray-800">
+                    {{ $semester->tahun_ajaran }}
                   </option>
-                @endfor
+                @endforeach
               </select>
             </form>
+          </div>
+        </div>
+
+        <!-- Pagination Info -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-sm text-gray-600">
+            Menampilkan {{ $teachers->firstItem() ?? 0 }} - {{ $teachers->lastItem() ?? 0 }} dari {{ $teachers->total() }} guru
+          </div>
+          <div class="text-sm text-gray-600">
+            Halaman {{ $teachers->currentPage() }} dari {{ $teachers->lastPage() }}
           </div>
         </div>
 
@@ -77,6 +87,9 @@
                 </th>
                 <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Bidang Keahlian
+                </th>
+                <th class="p-6 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                  Status
                 </th>
                 @if(auth()->check() && auth()->user()->role !== 'guru')
                 @foreach($semesters->take(3) as $semester)
@@ -129,6 +142,16 @@
                     </div>
                   </div>
                 </td>
+                <td class="p-6">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                      <i class="fas fa-laptop-code text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-gray-900">{{ $data->status }}</div>
+                    </div>
+                  </div>
+                </td>
                 @if(auth()->check() && auth()->user()->role !== 'guru')
                 @foreach($semesters->take(3) as $semester)
                 <td class="p-6 text-center">
@@ -163,63 +186,9 @@
             </tbody>
           </table>
 
-          <div class="p-6 border-t border-gray-100">
-            <a href="{{ route('teacher.index') }}" class="more-btn">
-              <i class="fas fa-arrow-right mr-2"></i>
-              Lihat Semua Guru
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="activity-card">
-      <h2 class="section-title">
-        <i class="fas fa-clock mr-3"></i>
-        Aktivitas Terkini
-      </h2>
-
-      <div class="space-y-4">
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-blue-500 to-cyan-600">
-            <i class="fas fa-user-plus text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Guru Baru Bergabung</h6>
-            <p class="text-sm text-gray-600">Dr. Ahmad Wijaya telah bergabung sebagai guru Matematika</p>
-            <small class="text-xs text-gray-400">2 menit yang lalu</small>
-          </div>
-          <div class="text-green-500">
-            <i class="fas fa-check-circle text-xl"></i>
-          </div>
-        </div>
-
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-green-500 to-emerald-600">
-            <i class="fas fa-file-upload text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Nilai Siswa Diperbarui</h6>
-            <p class="text-sm text-gray-600">128 data nilai berhasil diperbarui untuk semester ini</p>
-            <small class="text-xs text-gray-400">1 jam yang lalu</small>
-          </div>
-          <div class="text-blue-500">
-            <i class="fas fa-info-circle text-xl"></i>
-          </div>
-        </div>
-
-        <div class="activity-item flex items-center space-x-4">
-          <div class="activity-icon bg-gradient-to-br from-purple-500 to-pink-600">
-            <i class="fas fa-chart-bar text-white text-lg"></i>
-          </div>
-          <div class="flex-1">
-            <h6 class="font-bold text-gray-900">Laporan Bulanan Siap</h6>
-            <p class="text-sm text-gray-600">Laporan evaluasi bulan ini telah selesai dibuat</p>
-            <small class="text-xs text-gray-400">3 jam yang lalu</small>
-          </div>
-          <div class="text-purple-500">
-            <i class="fas fa-download text-xl"></i>
+          <!-- Pagination Controls -->
+          <div class="pagination-container">
+            {{ $teachers->appends(request()->query())->links('custom.pagination') }}
           </div>
         </div>
       </div>
