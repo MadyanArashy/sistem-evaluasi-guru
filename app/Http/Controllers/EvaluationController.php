@@ -114,6 +114,12 @@ class EvaluationController extends Controller
  * @param int $teacherId
  * @return void
  */
+/**
+ * Check if teacher meets criteria for status update and update if necessary
+ *
+ * @param int $teacherId
+ * @return void
+ */
 private function checkAndUpdateTeacherStatus($teacherId)
 {
     try {
@@ -129,39 +135,40 @@ private function checkAndUpdateTeacherStatus($teacherId)
             return;
         }
 
-        // Get all semesters with evaluations for this teacher, ordered by academic year and semester
-        $semestersWithEvaluations = Semester::whereHas('evaluations', function($query) use ($teacherId) {
+        // Get all academic years with evaluations for this teacher
+        $academicYearsWithEvaluations = Semester::whereHas('evaluations', function($query) use ($teacherId) {
             $query->where('teacher_id', $teacherId);
         })
+        ->select('tahun_ajaran')
+        ->distinct()
         ->orderBy('tahun_ajaran', 'asc')
-        ->orderBy('semester', 'asc')
-        ->get();
+        ->pluck('tahun_ajaran');
 
-        // Check if teacher has evaluations in at least 4 semesters
-        if ($semestersWithEvaluations->count() < 4) {
+        // Check if teacher has evaluations in at least 4 different academic years
+        if ($academicYearsWithEvaluations->count() < 4) {
             return;
         }
 
-        // Get the latest 4 semesters
-        $latestFourSemesters = $semestersWithEvaluations->take(-4);
+        // Get the latest 4 academic years
+        $latestFourAcademicYears = $academicYearsWithEvaluations->take(-4);
 
-        $semesterAverages = [];
+        $academicYearAverages = [];
 
-        foreach ($latestFourSemesters as $semester) {
-            $semesterAverage = $this->calculateTeacherSemesterAverage($teacherId, $semester->id);
+        foreach ($latestFourAcademicYears as $academicYear) {
+            $academicYearAverage = $this->calculateTeacherAcademicYearAverage($teacherId, $academicYear);
 
-            if ($semesterAverage > 0) {
-                $semesterAverages[] = $semesterAverage;
+            if ($academicYearAverage > 0) {
+                $academicYearAverages[] = $academicYearAverage;
             }
         }
 
-        // Check if we have 4 semester averages
-        if (count($semesterAverages) < 4) {
+        // Check if we have 4 academic year averages
+        if (count($academicYearAverages) < 4) {
             return;
         }
 
-        // Calculate overall average across the 4 semesters
-        $overallAverage = array_sum($semesterAverages) / count($semesterAverages);
+        // Calculate overall average across the 4 academic years
+        $overallAverage = array_sum($academicYearAverages) / count($academicYearAverages);
 
         // Check if average meets or exceeds 4.0 (40 on the 50-point scale)
         if ($overallAverage >= 4.0) {
@@ -182,7 +189,8 @@ private function checkAndUpdateTeacherStatus($teacherId)
                 'teacher_name' => $teacher->name,
                 'new_status' => 'Calon Guru Tetap',
                 'overall_average' => $overallAverage,
-                'semester_averages' => $semesterAverages
+                'academic_year_averages' => $academicYearAverages,
+                'academic_years' => $latestFourAcademicYears->toArray()
             ]);
         }
 
@@ -191,6 +199,44 @@ private function checkAndUpdateTeacherStatus($teacherId)
             'teacher_id' => $teacherId,
             'error' => $e->getMessage()
         ]);
+    }
+}
+
+/**
+ * Calculate teacher's average score for a specific academic year
+ *
+ * @param int $teacherId
+ * @param string $academicYear
+ * @return float
+ */
+private function calculateTeacherAcademicYearAverage($teacherId, $academicYear)
+{
+    try {
+        // Get all evaluations for this teacher in the specific academic year
+        $evaluations = Evaluation::whereHas('semester', function($query) use ($academicYear) {
+            $query->where('tahun_ajaran', $academicYear);
+        })
+        ->where('teacher_id', $teacherId)
+        ->get();
+
+        if ($evaluations->isEmpty()) {
+            return 0;
+        }
+
+        // Calculate average score for the academic year
+        $totalScore = $evaluations->sum('score');
+        $average = $totalScore / $evaluations->count();
+
+        // Convert from 50-point scale to 5-point scale for comparison
+        return ($average / 50) * 5;
+
+    } catch (\Exception $e) {
+        \Log::error('Failed to calculate academic year average', [
+            'teacher_id' => $teacherId,
+            'academic_year' => $academicYear,
+            'error' => $e->getMessage()
+        ]);
+        return 0;
     }
 }
 
