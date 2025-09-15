@@ -10,7 +10,7 @@
   </a>
 </div>
 
-<div class="table-container overflow-auto xl:overflow-hidden">
+<div class="table-container overflow-auto 2xl:overflow-hidden">
   <table class="min-w-full" id="semesters">
     <thead class="table-header">
       <tr>

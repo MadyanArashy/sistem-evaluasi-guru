@@ -40,7 +40,7 @@
     </div>
 
     <!-- Teachers Table -->
-    <div class="table-container overflow-auto xl:overflow-hidden">
+    <div class="table-container overflow-auto 2xl:overflow-hidden">
       <div class="p-8">
         <div class="flex justify-between items-center mb-6">
           <h2 class="section-title">
@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto xl:overflow-hidden">
+        <div class="overflow-x-auto 2xl:overflow-hidden">
           <table class="w-full">
             <thead class="table-header">
               <tr>

@@ -105,7 +105,7 @@
         @include('partials.success')
       @endif
 
-      <div class="table-container overflow-auto xl:overflow-hidden">
+      <div class="table-container overflow-auto 2xl:overflow-hidden">
         <table class="min-w-full" id="guruTable">
           <thead class="table-header">
             <tr>
