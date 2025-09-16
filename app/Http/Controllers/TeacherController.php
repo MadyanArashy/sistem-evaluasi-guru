@@ -251,7 +251,7 @@ public function index()
           $user->id
         );
 
-        return redirect()->route('teacher.index')->with('success', 'Guru berhasil diperbarui!');
+        return redirect()->route('home')->with('success', 'Guru berhasil diperbarui!');
     }
 
     /**

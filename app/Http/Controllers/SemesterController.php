@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluation;
 use App\Models\Semester;
 use Illuminate\Http\Request;
 
@@ -74,8 +75,15 @@ class SemesterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Semester $semester)
-    {
-        //
-    }
+    public function destroy(string $id)
+  {
+    $semester = Semester::findOrFail($id);
+
+    Evaluation::where('semester_id', $semester->id)->delete();
+
+    $semester->delete();
+
+    return redirect()->route('admin')->with('success', 'successfully deleted semester!');
+  }
+
 }

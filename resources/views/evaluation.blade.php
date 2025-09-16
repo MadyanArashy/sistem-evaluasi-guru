@@ -110,7 +110,7 @@
             </label>
             <select id="semesterSelect" class="semester-dropdown" required>
               <option value="" disabled selected>-- Pilih Semester --</option>
-              @foreach(Semester::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'asc')->get() as $semester)
+              @foreach(Semester::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'desc')->get() as $semester)
                 <option value="{{ $semester->id }}">
                   {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}, {{ $semester->tahun_ajaran }}
                 </option>

@@ -52,7 +52,7 @@ class AdminUserController extends Controller
       Auth::user()->id,
     );
 
-    return redirect()->to(route('admin') . '#users')->with('success', `$role $name created`);
+    return redirect()->to(route('admin') . '#users')->with('success', "$role $name created");
   }
 
   public function update(Request $request, string $id)
@@ -105,9 +105,9 @@ class AdminUserController extends Controller
 
     ActivityLogger::log(
       'delete user',
-      `successfully deleted user account $user->name`,
+      "successfully deleted user account $user->name",
       'delete',
-      Auth::user(),
+      Auth::user()->id,
     );
 
     return redirect()->to(route('admin') . '#users')->with('success', 'User deleted successfully.');
