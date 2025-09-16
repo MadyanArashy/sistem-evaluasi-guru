@@ -4,7 +4,7 @@
     <i class="fas fa-users-cog text-blue-600"></i>
     Data Semester
   </h3>
-  <a href="{{ route('semester.create') }}" class="add-btn">
+  <a href="{{ route('semester.create') }}" class="add-btn action-btn">
     <i class="fas fa-plus"></i>
     Tambah Semester
   </a>
