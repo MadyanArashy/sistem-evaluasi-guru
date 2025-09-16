@@ -27,25 +27,37 @@ class SemesterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
-  {
+  public function store(Request $request)
+{
     $validated = $request->validate([
-      "tahun_ajaran" => "required|regex:/^\d{4}-\d{4}$/", // format 2025-2026
-      "semester"     => "required|in:1,2",
+        "tahun_ajaran" => "required|regex:/^\d{4}-\d{4}$/", // format 2025-2026
+        "semester"     => "required|in:1,2",
     ]);
 
     // Validasi tambahan: pastikan tahun kedua = tahun pertama + 1
     [$start, $end] = explode('-', $validated['tahun_ajaran']);
     if ((int)$end !== (int)$start + 1) {
-      return back()->withErrors([
-        'tahun_ajaran' => 'Format tahun ajaran harus berurutan, contoh: 2025-2026',
-      ])->withInput();
+        return back()->withErrors([
+            'tahun_ajaran' => 'Format tahun ajaran harus berurutan, contoh: 2025-2026',
+        ])->withInput();
+    }
+
+    // ✅ Cek duplikasi semester dengan tahun ajaran yang sama
+    $exists = Semester::where('tahun_ajaran', $validated['tahun_ajaran'])
+                      ->where('semester', $validated['semester'])
+                      ->exists();
+
+    if ($exists) {
+        return back()->withErrors([
+            'semester' => 'Semester dengan tahun ajaran ini sudah ada.',
+        ])->withInput();
     }
 
     Semester::create($validated);
 
     return redirect()->route('admin')->with('success', 'Semester berhasil disimpan!');
-  }
+}
+
 
 
     /**
