@@ -1,3 +1,18 @@
+<style>
+  .adminColor {
+  background: linear-gradient(to bottom right, #dc2626, #b91c1c);
+  }
+  .evaluatorColor {
+    background: linear-gradient(to right bottom, rgb(34, 197, 94), rgb(22, 163, 74));
+  }
+  .teacherColor {
+    background: linear-gradient(to right bottom, rgb(234, 120, 50), rgb(200, 90, 40));
+  }
+  .defaultColor {
+    background: linear-gradient(to right bottom, rgb(71, 85, 105), rgb(51, 65, 85));
+  }
+</style>
+
 <!-- Users Table -->
 <div class="section-header">
   <h3 class="section-title">
@@ -17,6 +32,7 @@
         <th class="text-left">No</th>
         <th class="text-left">Nama</th>
         <th class="text-center">Role</th>
+        <th class="text-center">Email</th>
         <th class="text-center">Pembuatan Akun</th>
         <th class="text-center">Tindakan</th>
       </tr>
@@ -30,20 +46,34 @@
         </div>
       </td>
       <td class="flex items-center gap-2 p-6">
-      <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-user text-white"></i>
-      </div>
-      <div class="min-w-[150px]">
-        <div class="component-name font-semibold">{{ $data->name }}</div>
-        <div class="component-description text-gray-500">{{ $data->id }}</div>
-      </div>
-    </td>
-    <td class="p-6 text-center w-32">
-      <div class="weight-badge inline-flex items-center gap-1">
-        <i class="fas fa-user-tag"></i>
-        {{ $data->role }}
-      </div>
-    </td>
+        <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-user text-white"></i>
+        </div>
+        <div class="min-w-[150px]">
+          <div class="component-name font-semibold">{{ $data->name }}</div>
+          <div class="component-description text-gray-500">{{ $data->id }}</div>
+        </div>
+      </td>
+      @php
+        switch($data->role) {
+          case 'admin': $statusColor = 'adminColor';break;
+          case 'evaluator': $statusColor = 'evaluatorColor';break;
+          case 'guru': $statusColor = 'teacherColor';break;
+          default: $statusColor = 'defaultColor';
+        }
+      @endphp
+      <td class="p-6 text-center w-32">
+        <div class="weight-badge inline-flex items-center gap-1 {{ $statusColor }}">
+          <i class="fas fa-user-tag"></i>
+          {{ $data->role }}
+        </div>
+      </td>
+      <td class="p-6 text-center w-32">
+        <div class="score-badge inline-flex items-center gap-1">
+          <i class="fas fa-envelope"></i>
+          {{ $data->email }}
+        </div>
+      </td>
       <td class="p-6 text-center">
         {{ $data->created_at->format('d M Y') }}
       </td>

@@ -26,25 +26,6 @@
   border-radius: 1px;
 }
 
-.add-btn {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .table-header {
   background: linear-gradient(135deg, #f8fafc, #e2e8f0);
   position: relative;
@@ -98,10 +79,6 @@
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
-  }
-
-  .add-btn {
-    justify-content: center;
   }
 }
 </style>
