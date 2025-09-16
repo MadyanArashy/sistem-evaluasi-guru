@@ -3,7 +3,7 @@
     <i class="fas fa-list-check text-blue-600"></i>
     Kriteria Evaluasi
   </h3>
-  <a href="{{ route('criteria.create') }}" class="add-btn">
+  <a href="{{ route('criteria.create') }}" class="add-btn action-btn">
     <i class="fas fa-plus"></i>
     Tambah Kriteria
   </a>

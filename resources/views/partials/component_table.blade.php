@@ -3,13 +3,13 @@
             <i class="fas fa-puzzle-piece text-purple-600"></i>
             Komponen Evaluasi
           </h3>
-          <a href="{{ route('component.create') }}" class="add-btn">
+          <a href="{{ route('component.create') }}" class="add-btn action-btn">
             <i class="fas fa-plus"></i>
             Tambah Komponen
           </a>
         </div>
 
-        <div class="table-container overflow-auto xl:overflow-hidden">
+        <div class="table-container overflow-auto 2xl:overflow-hidden">
           <table class="min-w-full" id="components">
             <thead class="table-header">
               <tr>

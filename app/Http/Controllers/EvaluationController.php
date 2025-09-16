@@ -125,63 +125,47 @@ public function bulkStore(Request $request)
 private function checkAndUpdateTeacherStatus($teacherId)
 {
     try {
-        // Get teacher
         $teacher = Teacher::find($teacherId);
+        if (!$teacher) return;
 
-        if (!$teacher) {
-            return;
-        }
-
-        // Skip if teacher already has "Calon Guru Tetap" status
         if ($teacher->status === 'Calon Guru Tetap') {
             return;
         }
 
-        // Get all academic years with evaluations for this teacher
-        $academicYearsWithEvaluations = Semester::whereHas('evaluations', function($query) use ($teacherId) {
-            $query->where('teacher_id', $teacherId);
+        // Get all semesters with evaluations for this teacher
+        $semestersWithEvaluations = Semester::whereHas('evaluations', function($q) use ($teacherId) {
+            $q->where('teacher_id', $teacherId);
         })
-        ->select('tahun_ajaran')
-        ->distinct()
         ->orderBy('tahun_ajaran', 'asc')
-        ->pluck('tahun_ajaran');
+        ->orderBy('id', 'asc')
+        ->pluck('id');
 
-        // Check if teacher has evaluations in at least 4 different academic years
-        if ($academicYearsWithEvaluations->count() < 4) {
-            return;
-        }
+        // Require at least 4 semesters
+        if ($semestersWithEvaluations->count() < 4) return;
 
-        // Get the latest 4 academic years
-        $latestFourAcademicYears = $academicYearsWithEvaluations->take(-4);
+        // Take the latest 4 semesters
+        $latestFourSemesters = $semestersWithEvaluations->take(-4);
 
-        $academicYearAverages = [];
-
-        foreach ($latestFourAcademicYears as $academicYear) {
-            $academicYearAverage = $this->calculateTeacherAcademicYearAverage($teacherId, $academicYear);
-
-            if ($academicYearAverage > 0) {
-                $academicYearAverages[] = $academicYearAverage;
+        $semesterAverages = [];
+        foreach ($latestFourSemesters as $semesterId) {
+            $avg = $this->calculateTeacherSemesterAverage($teacherId, $semesterId);
+            if ($avg > 0) {
+                $semesterAverages[] = $avg;
             }
         }
 
-        // Check if we have 4 academic year averages
-        if (count($academicYearAverages) < 4) {
-            return;
-        }
+        if (count($semesterAverages) < 4) return;
 
-        // Calculate overall average across the 4 academic years
-        $overallAverage = array_sum($academicYearAverages) / count($academicYearAverages);
+        // ✅ New rule: ALL 4 semester averages must be >= 4.0
+        $allAboveFour = collect($semesterAverages)->every(fn($avg) => $avg >= 4.0);
 
-        // Check if average meets or exceeds 4.0 (40 on the 50-point scale)
-        if ($overallAverage >= 4.0) {
-            // Update teacher status
+        if ($allAboveFour) {
             $teacher->update(['status' => 'Calon Guru Tetap']);
 
-            // Log the status change
             $user = Auth::user();
             ActivityLogger::log(
                 'teacher status updated',
-                "Teacher {$teacher->name} ({$teacher->id}) status automatically updated to 'Calon Guru Tetap' with average score {$overallAverage}",
+                "Teacher {$teacher->name} ({$teacher->id}) status automatically updated to 'Calon Guru Tetap'. Semester averages: " . implode(', ', $semesterAverages),
                 'update',
                 $user->id
             );
@@ -190,9 +174,8 @@ private function checkAndUpdateTeacherStatus($teacherId)
                 'teacher_id' => $teacherId,
                 'teacher_name' => $teacher->name,
                 'new_status' => 'Calon Guru Tetap',
-                'overall_average' => $overallAverage,
-                'academic_year_averages' => $academicYearAverages,
-                'academic_years' => $latestFourAcademicYears->toArray()
+                'semester_averages' => $semesterAverages,
+                'semesters' => $latestFourSemesters->toArray()
             ]);
         }
 
@@ -203,6 +186,8 @@ private function checkAndUpdateTeacherStatus($teacherId)
         ]);
     }
 }
+
+
 
 /**
  * Calculate teacher's average score for a specific academic year

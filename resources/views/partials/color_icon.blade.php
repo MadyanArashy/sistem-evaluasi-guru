@@ -99,8 +99,9 @@
       </div>
 
       <!-- Hidden inputs -->
-      <input type="hidden" name="style" id="styleInput">
-      <input type="hidden" name="icon" id="iconInput">
+      <input type="hidden" name="style" id="styleInput" value="{{ request()->routeis('criteria.edit') ? old('style', $selectedStyle) : '' }}">
+      <input type="hidden" name="icon" id="iconInput" value="{{ request()->routeIs('criteria.edit') ? old('icon', $selectedIcon) : '' }}">
+
 
 
 
@@ -179,5 +180,35 @@ document.addEventListener('click', e => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const styleInput = document.getElementById('styleInput');
+  const iconInput = document.getElementById('iconInput');
+  const label = document.getElementById('selectedLabel');
+  const colorLabel = document.getElementById('selectedColorLabel');
+  const iconToggle = document.getElementById('toggle');
+
+  // Ambil nilai lama dari hidden input
+  const initialIcon = iconInput.value;
+  const initialStyle = styleInput.value;
+
+  // Set ikon awal
+  if (initialIcon) {
+    label.innerHTML = `<i class="${initialIcon}"></i>`;
+  }
+
+  // Set warna awal
+  if (initialStyle) {
+    let colorName = "Custom";
+    const matchedItem = Array.from(document.querySelectorAll('.color-item'))
+      .find(item => item.getAttribute('data-value') === initialStyle);
+    if (matchedItem) {
+      colorName = matchedItem.querySelector('span').textContent.trim();
+    }
+
+    colorLabel.innerHTML =
+      `<span class="inline-block w-4 h-4 rounded-sm mr-2" style="background: ${initialStyle}"></span>${colorName}`;
+    iconToggle.style.background = initialStyle;
+  }
+})
     </script>
 </div>

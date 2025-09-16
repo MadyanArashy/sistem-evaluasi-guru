@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
+::root {
+  font-size: 16px;
+}
+
 * {
   font-family: 'Inter', sans-serif;
 }
@@ -396,6 +400,21 @@
   overflow: hidden;
 }
 
+.danger-alert {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.4));
+  border: 2px solid rgba(255, 24, 78, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #f70000;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
 .success-alert::before {
   content: '';
   position: absolute;
@@ -404,6 +423,16 @@
   width: 6px;
   height: 100%;
   background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.danger-alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(135deg, #f70000, #770011);
 }
 
 .action-btn {

@@ -4,13 +4,13 @@
     <i class="fas fa-users-cog text-blue-600"></i>
     Data Users
   </h3>
-  <a href="{{ route('user.create') }}" class="add-btn">
+  <a href="{{ route('user.create') }}" class="add-btn action-btn">
     <i class="fas fa-plus"></i>
     Tambah User
   </a>
 </div>
 
-<div class="table-container overflow-auto xl:overflow-hidden">
+<div class="table-container overflow-auto 2xl:overflow-hidden">
   <table class="min-w-full" id="users">
     <thead class="table-header">
       <tr>

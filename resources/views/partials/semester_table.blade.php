@@ -4,13 +4,13 @@
     <i class="fas fa-users-cog text-blue-600"></i>
     Data Semester
   </h3>
-  <a href="{{ route('semester.create') }}" class="add-btn">
+  <a href="{{ route('semester.create') }}" class="add-btn action-btn">
     <i class="fas fa-plus"></i>
     Tambah Semester
   </a>
 </div>
 
-<div class="table-container overflow-auto xl:overflow-hidden">
+<div class="table-container overflow-auto 2xl:overflow-hidden">
   <table class="min-w-full" id="semesters">
     <thead class="table-header">
       <tr>
