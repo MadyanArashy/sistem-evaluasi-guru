@@ -11,27 +11,6 @@
   background-clip: text;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid rgba(37, 99, 235, 0.1);
-  position: relative;
-}
-
-.section-header::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #2563eb, #0ea5e9);
-  border-radius: 1px;
-}
-
 .search-filter-section {
   display: flex;
   flex-direction: column;
