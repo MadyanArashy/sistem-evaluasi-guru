@@ -192,7 +192,7 @@
                         <i class="fas fa-edit"></i> Edit
                       </a>
                       <form action="{{ route('teacher.destroy', $data->id) }}" method="POST" style="display:inline;">
-                        <input type="hidden" name="_token" value="8jpRS8h47Gw9ojvpmWcv9rUzT3o5GcKH4Kn7CAJd" autocomplete="off">              <input type="hidden" name="_method" value="DELETE">              <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
+                        @csrf         <input type="hidden" name="_method" value="DELETE">              <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
                           <i class="fas fa-trash"></i> Hapus
                         </button>
                       </form>
