@@ -45,15 +45,6 @@
   gap: 8px;
 }
 
-.table-container {
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 40px;
-}
-
 .table-header {
   background: linear-gradient(135deg, #f8fafc, #e2e8f0);
   position: relative;
@@ -101,10 +92,6 @@
 
   .section-title {
     font-size: 1.5rem;
-  }
-
-  .table-container {
-    border-radius: 16px;
   }
 
   .section-header {

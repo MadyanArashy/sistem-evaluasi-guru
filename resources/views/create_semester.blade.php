@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col items-center mb-8">
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-full mb-3 shadow-md">
-                <i class="fas fa-user-plus text-white text-3xl"></i>
+                <i class="fa-solid fa-school text-white text-3xl"></i>
             </div>
             <h2 class="text-3xl font-bold text-gray-800">Tambah Semester Baru</h2>
             <p class="text-gray-500 text-sm mt-1">Isi form di bawah untuk menambahkan semester baru</p>

@@ -56,14 +56,14 @@ class EvaluationController extends Controller
       return redirect()->back()->with('success', 'Evaluasi berhasil disimpan');
     }
 
- public function bulkStore(Request $request)
+public function bulkStore(Request $request)
 {
     try {
         $validated = $request->validate([
             'evaluations' => 'required|array|min:1',
             'evaluations.*.teacher_id'   => 'required|integer|exists:teachers,id',
             'evaluations.*.component_id' => 'required|integer|exists:eval_components,id',
-            'evaluations.*.semester_id' => 'required|integer|exists:semesters,id',
+            'evaluations.*.semester_id'  => 'required|integer|exists:semesters,id',
             'evaluations.*.user_id'      => 'required|integer|exists:users,id',
             'evaluations.*.score'        => 'required|numeric|min:0|max:50',
         ]);
@@ -75,17 +75,24 @@ class EvaluationController extends Controller
             return $item;
         }, $validated['evaluations']);
 
+        // ambil teacher dan semester dari data pertama
+        $teacherId  = $validated['evaluations'][0]['teacher_id'];
+        $semesterId = $validated['evaluations'][0]['semester_id'];
+
+        // 🔥 delete existing evaluations for this teacher + semester
+        Evaluation::where('teacher_id', $teacherId)
+                  ->where('semester_id', $semesterId)
+                  ->delete();
+
+        // insert new evaluations
         Evaluation::insert($evaluations);
 
-        // ambil teacher dari data pertama
-        $teacherId = $validated['evaluations'][0]['teacher_id'];
-        $teacher   = Teacher::find($teacherId);
-
-        // Check and update teacher status if criteria met
+        // update teacher status if criteria met
         $this->checkAndUpdateTeacherStatus($teacherId);
 
         // log the activity
-        $user = Auth::user();
+        $user    = Auth::user();
+        $teacher = Teacher::find($teacherId);
 
         ActivityLogger::log(
             'create evaluations',
@@ -96,7 +103,7 @@ class EvaluationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Semua evaluasi berhasil disimpan',
+            'message' => 'Evaluasi berhasil diperbarui',
         ], 201);
 
     } catch (\Throwable $e) {
@@ -108,12 +115,7 @@ class EvaluationController extends Controller
     }
 }
 
-/**
- * Check if teacher meets criteria for status update and update if necessary
- *
- * @param int $teacherId
- * @return void
- */
+
 /**
  * Check if teacher meets criteria for status update and update if necessary
  *

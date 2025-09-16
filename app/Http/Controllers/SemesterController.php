@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Evaluation;
 use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SemesterController extends Controller
 {
@@ -21,17 +22,31 @@ class SemesterController extends Controller
      */
     public function create()
     {
-      return view('create_semester');
+      $semesters = Semester::orderByDesc('id')->get();
+      return view('create_semester',  compact('semesters'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-  public function store(Request $request)
+
+public function store(Request $request)
 {
     $validated = $request->validate([
-        "tahun_ajaran" => "required|regex:/^\d{4}-\d{4}$/", // format 2025-2026
-        "semester"     => "required|in:1,2",
+        "tahun_ajaran" => [
+            "required",
+            "regex:/^\d{4}-\d{4}$/", // format 2025-2026
+        ],
+        "semester" => [
+            "required",
+            Rule::in([1, 2]),
+            Rule::unique('semesters')->where(function ($query) use ($request) {
+                return $query->where('tahun_ajaran', $request->tahun_ajaran)
+                             ->where('semester', $request->semester);
+            }),
+        ],
+    ], [
+        'semester.unique' => 'Semester dengan Tahun Ajaran ini sudah ada.',
     ]);
 
     // Validasi tambahan: pastikan tahun kedua = tahun pertama + 1
@@ -39,17 +54,6 @@ class SemesterController extends Controller
     if ((int)$end !== (int)$start + 1) {
         return back()->withErrors([
             'tahun_ajaran' => 'Format tahun ajaran harus berurutan, contoh: 2025-2026',
-        ])->withInput();
-    }
-
-    // ✅ Cek duplikasi semester dengan tahun ajaran yang sama
-    $exists = Semester::where('tahun_ajaran', $validated['tahun_ajaran'])
-                      ->where('semester', $validated['semester'])
-                      ->exists();
-
-    if ($exists) {
-        return back()->withErrors([
-            'semester' => 'Semester dengan tahun ajaran ini sudah ada.',
         ])->withInput();
     }
 
