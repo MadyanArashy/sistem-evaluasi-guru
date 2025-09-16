@@ -83,6 +83,16 @@
           <div class="floating-circle"></div>
           <div class="floating-circle"></div>
         </div>
+       @if ($errors->any())
+          <div class="danger-alert">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+
         {{ $slot }}
       </main>
     </div>
