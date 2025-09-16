@@ -113,7 +113,7 @@ class EvalComponentController extends Controller
 
 
     // redirect balik
-    return redirect()->route('admin')->with('success', "Berhasil ubah kriteria \"$request->name\"!");
+    return redirect()->to(route('admin').'#components')->with('success', "Berhasil ubah kriteria \"$request->name\"!");
     }
 
     /**

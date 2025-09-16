@@ -45,29 +45,29 @@
         <div class="flex justify-between items-center mb-6">
           <h2 class="section-title">
             <i class="fas fa-graduation-cap mr-3"></i>
-            Daftar Guru SMK Informatika Pesat
+            Daftar Guru SMK <span class="hidden sm:block">Informatika Pesat</span>
           </h2>
 
-          <!-- Academic Year Filter -->
           <div class="flex items-center space-x-4">
-            <form method="GET" action="{{ route('home') }}" class="flex items-center space-x-2">
-              <label for="tahun_ajaran" class="text-blue-300 text-sm font-semibold">Filter Tahun Ajaran:</label>
-              <select name="tahun_ajaran" id="tahun_ajaran" onchange="this.form.submit()"
-                      class="bg-blue-600/80 border-2 border-blue-400 rounded-lg px-4 py-2 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 hover:bg-blue-500/80 transition-colors duration-200">
-                <option value="" class="bg-gray-800">Semua Tahun</option>
-                @foreach ($allSemesters->unique('tahun_ajaran') as $semester)
-                  <option value="{{ $semester->tahun_ajaran }}" {{ request('tahun_ajaran') === $semester->tahun_ajaran ? 'selected' : '' }} class="bg-gray-800">
-                    {{ $semester->tahun_ajaran }}
-                  </option>
-                @endforeach
-              </select>
-            </form>
-          </div>
-        </div>
-
-        <div class="flex items-center">
-          <div class="action-btn promote-btn">
-            <a href="{{ route('teacher.create') }}">Tambah Guru</a>
+            <!-- Academic Year Filter -->
+            <div class="flex items-center space-x-4">
+              <form method="GET" action="{{ route('home') }}" class="flex items-center space-x-2">
+                <label for="tahun_ajaran" class="text-blue-300 text-sm font-semibold">Filter Tahun Ajaran:</label>
+                <select name="tahun_ajaran" id="tahun_ajaran" onchange="this.form.submit()"
+                class="bg-blue-600/80 border-2 border-blue-400 rounded-lg px-4 py-2 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 hover:bg-blue-500/80 transition-colors duration-200">
+                  <option value="" class="bg-gray-800">Tahun Kini</option>
+                  @foreach ($allSemesters->unique('tahun_ajaran') as $semester)
+                    <option value="{{ $semester->tahun_ajaran }}" {{ request('tahun_ajaran') === $semester->tahun_ajaran ? 'selected' : '' }} class="bg-gray-800">
+                      {{ $semester->tahun_ajaran }}
+                    </option>
+                    @endforeach
+                  </select>
+                </form>
+              </div>
+              <div class="add-btn action-btn">
+                <i class="fas fa-plus"></i>
+                <a href="{{ route('teacher.create') }}" class="hidden lg:block">Tambah Guru</a>
+              </div>
           </div>
         </div>
 
@@ -148,7 +148,7 @@
                   </div>
                 </td>
                 <td class="p-4">
-                 <div class="flex items-start space-x-3">
+                 <div class="flex items-center space-x-3">
                     <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
                       <i class="fas fa-user text-white text-base"></i>
                     </div>

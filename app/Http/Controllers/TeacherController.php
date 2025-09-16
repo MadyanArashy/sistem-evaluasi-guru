@@ -90,7 +90,7 @@ public function index()
     {
         // Restrict access for guru users
         if (Auth::check() && Auth::user()->role === 'guru') {
-            return redirect()->route('teacher.index')
+            return redirect()->route('home')
                 ->with('error', 'Anda tidak memiliki akses untuk menambah guru');
         }
 
@@ -119,7 +119,7 @@ public function index()
           $user->id
         );
 
-        return redirect()->route('teacher.index')->with('success','Guru berhasil ditambahkan!');
+        return redirect()->route('home')->with('success','Guru berhasil ditambahkan!');
     }
 
     /**
@@ -214,7 +214,7 @@ public function index()
     {
         // Restrict access for guru users
         if (Auth::check() && Auth::user()->role === 'guru') {
-            return redirect()->route('teacher.index')
+            return redirect()->route('home')
                 ->with('error', 'Anda tidak memiliki akses untuk mengedit guru');
         }
 
@@ -228,7 +228,7 @@ public function index()
     {
         // Restrict access for guru users
         if (Auth::check() && Auth::user()->role === 'guru') {
-            return redirect()->route('teacher.index')
+            return redirect()->route('home')
                 ->with('error', 'Anda tidak memiliki akses untuk mengupdate guru');
         }
 
@@ -352,7 +352,7 @@ public function promote($id)
     {
         // Restrict access for guru users
         if (Auth::check() && Auth::user()->role === 'guru') {
-            return redirect()->route('teacher.index')
+            return redirect()->route('home')
                 ->with('error', 'Anda tidak memiliki akses untuk menghapus guru');
         }
 
@@ -368,6 +368,6 @@ public function promote($id)
           $user->id
         );
 
-        return redirect()->route('teacher.index')->with('success', 'Teacher successfully deleted');
+        return redirect()->route('home')->with('success', 'Teacher successfully deleted');
     }
 }

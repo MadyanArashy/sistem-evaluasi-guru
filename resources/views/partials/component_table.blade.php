@@ -3,7 +3,7 @@
             <i class="fas fa-puzzle-piece text-purple-600"></i>
             Komponen Evaluasi
           </h3>
-          <a href="{{ route('component.create') }}" class="add-btn">
+          <a href="{{ route('component.create') }}" class="add-btn action-btn">
             <i class="fas fa-plus"></i>
             Tambah Komponen
           </a>
