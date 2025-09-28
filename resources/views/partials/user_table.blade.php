@@ -49,7 +49,7 @@
         <div class="w-12 h-12 p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
           <i class="fas fa-user text-white"></i>
         </div>
-        <div class="min-w-[150px]">
+        <div class="w-120px">
           <div class="component-name font-semibold">{{ $data->name }}</div>
           <div class="component-description text-gray-500">{{ $data->id }}</div>
         </div>

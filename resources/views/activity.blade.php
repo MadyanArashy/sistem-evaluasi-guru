@@ -77,11 +77,6 @@
   gap: 16px;
 }
 
-.pagination-info {
-  color: #6b7280;
-  font-weight: 500;
-}
-
 .pagination-info span {
   color: #374151;
   font-weight: 700;
@@ -260,7 +255,7 @@
       </div>
 
       <!-- Pagination Section -->
-      <div class="pagination-section">
+      {{-- <div class="pagination-section">
         @if(method_exists($activities, 'total'))
           <!-- For paginated results -->
           <div class="pagination-info">
@@ -316,13 +311,16 @@
             </button>
           </div>
         @endif
-      </div>
+      </div> --}}
+       <div class="pagination-container">
+          {{ $activities->appends(request()->query())->links('custom.pagination') }}
+        </div>
     </div>
   </div>
 </div>
 
 <!-- Enhanced JavaScript for Search and Filter -->
-<script>
+{{-- <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Enhanced search functionality
   const searchInput = document.getElementById('searchInput');
@@ -432,5 +430,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-</script>
+</script> --}}
 </x-app-layout>

@@ -15,6 +15,12 @@
   position: relative;
 }
 
+@media (max-width: 1536px) { /* 2xl breakpoint di Tailwind */
+  .section-header {
+    padding: 30px 20px; /* atas-bawah 30px, kanan-kiri 20px */
+  }
+}
+
 .section-header::after {
   content: '';
   position: absolute;
@@ -65,12 +71,6 @@
 }
 
 @media (max-width: 768px) {
-  .content-card {
-    margin: 16px;
-    padding: 24px;
-    border-radius: 24px;
-  }
-
   .section-title {
     font-size: 1.5rem;
   }

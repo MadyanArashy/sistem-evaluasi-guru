@@ -54,11 +54,15 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
-  padding-right: 20px;
-  padding-left: 20px;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding: 0; /* default tanpa padding */
 }
+
+@media (min-width: 1536px) { /* 2xl breakpoint di Tailwind */
+  .content-card {
+    padding: 30px 20px; /* atas-bawah 30px, kanan-kiri 20px */
+  }
+}
+
 
 .content-card::before {
   content: '';
