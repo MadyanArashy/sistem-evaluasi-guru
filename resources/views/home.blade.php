@@ -47,7 +47,6 @@
             <i class="fas fa-graduation-cap mr-3"></i>
             Daftar Guru SMK <span class="hidden sm:block">Informatika Pesat</span>
           </h2>
-
           <div class="flex items-center space-x-4">
             <!-- Academic Year Filter -->
             <div class="flex items-center space-x-4">
@@ -70,7 +69,6 @@
               </div>
           </div>
         </div>
-
         <!-- Pagination Info -->
         <div class="flex justify-between items-center mb-4">
           <div class="text-sm text-gray-600">
@@ -80,134 +78,126 @@
             Halaman {{ $teachers->currentPage() }} dari {{ $teachers->lastPage() }}
           </div>
         </div>
+      </div>
 
-        <div class="overflow-x-auto 2xl:overflow-hidden">
-          <table class="w-full">
-            <thead class="table-header">
-              <tr>
-                <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Profil Guru
-                </th>
-                <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Kualifikasi
-                </th>
-                <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Bidang Keahlian
-                </th>
-                <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Status
-                </th>
-                @if(auth()->check() && auth()->user()->role !== 'guru')
-                @foreach($semesters->take(3) as $semester)
-                <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  {{ $semester->tahun_ajaran }}<br>
-                  <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
-                </th>
-                @endforeach
-                @else
-                @foreach($semesters as $semester)
-                <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  {{ $semester->tahun_ajaran }}<br>
-                  <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
-                </th>
-                @endforeach
-                @endif
-                <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($teachers as $data)
-              <tr class="table-row">
-                <td class="p-4">
-                  <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                      {{ substr($data->name, 0, 1) }}
-                    </div>
-                    <div>
-                      <p class="text-lg font-bold text-gray-900 block">{{ $data->name }}</p>
-                      <div class="text-sm text-gray-500">Guru Profesional</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-4">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
-                    <i class="fas fa-medal mr-1"></i>
-                    {{ $data->degree }}
-                  </span>
-                </td>
-                <td class="p-4">
-                  <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                      <i class="fas fa-laptop-code text-white text-base"></i>
-                    </div>
-                    <div>
-                      <div class="text-sm font-bold text-gray-900">{{ $data->subject }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="p-4">
-                 <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                      <i class="fas fa-user text-white text-base"></i>
-                    </div>
-                    <div class="text-sm font-bold text-gray-900">
-                      {{ $data->status }}
-                    </div>
-                  </div>
-
-                </td>
-                @if(auth()->check() && auth()->user()->role !== 'guru')
-                @foreach($semesters->take(3) as $semester)
-                <td class="p-4 text-center">
-                  <div class="score-badge">
-                    <i class="fas fa-star mr-1"></i>
-                    <span class="evalScore">
-                      {{ $scores[$data->id][$semester->id]['score'] ?? '0.00' }}
-                    </span>
-                  </div>
-                </td>
-                @endforeach
-                @else
-                @foreach($semesters as $semester)
-                <td class="p-4 text-center">
-                  <div class="score-badge">
-                    <i class="fas fa-star mr-1"></i>
-                    <span class="evalScore">
-                      {{ $scores[$data->id][$semester->id]['score'] ?? '0.00' }}
-                    </span>
-                  </div>
-                </td>
-                @endforeach
-                @endif
-                <td class="p-4 text-center">
-                  <div class="flex flex-col items-center space-y-1">
-                    <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="detail-btn">
-                      <i class="fas fa-eye mr-2"></i>
-                      Detail
-                    </a>
-                    <div class="flex justify-center space-x-2">
-                      <a href="{{ route('teacher.edit', $data->id) }}" class="action-btn edit-btn">
-                        <i class="fas fa-edit"></i> Edit
-                      </a>
-                      <form action="{{ route('teacher.destroy', $data->id) }}" method="POST" style="display:inline;">
-                        @csrf         <input type="hidden" name="_method" value="DELETE">              <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
-                          <i class="fas fa-trash"></i> Hapus
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+      <div class="w-full overflow-x-auto lg:overflow-x-hidden">
+        <table class="w-full table-auto border-collapse">
+          <thead class="table-header">
+            <tr>
+              <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                Profil Guru
+              </th>
+              <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                Bidang Keahlian
+              </th>
+              <th class="p-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                Status
+              </th>
+              @if(auth()->check() && auth()->user()->role !== 'guru')
+              @foreach($semesters->take(3) as $semester)
+              <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
+                {{ $semester->tahun_ajaran }}<br>
+                <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
+              </th>
               @endforeach
-            </tbody>
-          </table>
+              @else
+              @foreach($semesters as $semester)
+              <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
+                {{ $semester->tahun_ajaran }}<br>
+                <small class="text-xs">{{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }}</small>
+              </th>
+              @endforeach
+              @endif
+              <th class="p-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider w-56">
+                Aksi
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($teachers as $data)
+            <tr class="table-row">
+              <td class="p-4">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {{ substr($data->name, 0, 1) }}
+                  </div>
+                  <div>
+                    <p class="text-lg font-bold text-gray-900 block">{{ $data->name }}</p>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
+                      <i class="fas fa-medal mr-1"></i>
+                      {{ $data->degree }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4">
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-laptop-code text-white text-base"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-bold text-gray-900">{{ $data->subject }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4">
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-user text-white text-base"></i>
+                  </div>
+                  <div class="text-sm font-bold text-gray-900">
+                    {{ $data->status }}
+                  </div>
+                </div>
 
-          <!-- Pagination Controls -->
-          <div class="pagination-container">
-            {{ $teachers->appends(request()->query())->links('custom.pagination') }}
-          </div>
+              </td>
+              @if(auth()->check() && auth()->user()->role !== 'guru')
+              @foreach($semesters->take(3) as $semester)
+              <td class="p-4 text-center">
+                <div class="score-badge">
+                  <i class="fas fa-star mr-1"></i>
+                  <span class="evalScore">
+                    {{ $scores[$data->id][$semester->id]['score'] ?? '0.00' }}
+                  </span>
+                </div>
+              </td>
+              @endforeach
+              @else
+              @foreach($semesters as $semester)
+              <td class="p-4 text-center">
+                <div class="score-badge">
+                  <i class="fas fa-star mr-1"></i>
+                  <span class="evalScore">
+                    {{ $scores[$data->id][$semester->id]['score'] ?? '0.00' }}
+                  </span>
+                </div>
+              </td>
+              @endforeach
+              @endif
+              <td class="p-4 text-center">
+                <div class="flex flex-row items-center space-x-1">
+                  <a href="{{ route('teacher.show', ['id' => $data->id]) }}" class="action-btn detail-btn">
+                    <i class="fas fa-eye mr-2"></i>
+                    Detail
+                  </a>
+                  <a href="{{ route('teacher.edit', $data->id) }}" class="action-btn edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                  </a>
+                  <form action="{{ route('teacher.destroy', $data->id) }}" method="POST" style="display:inline;">
+                    @csrf         <input type="hidden" name="_method" value="DELETE">              <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this criteria?')">
+                      <i class="fas fa-trash"></i> Hapus
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+          {{ $teachers->appends(request()->query())->links('custom.pagination') }}
         </div>
       </div>
     </div>
