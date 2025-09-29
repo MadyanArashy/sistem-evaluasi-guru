@@ -220,7 +220,7 @@
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
-              <div class="px-6 py-3 bg-green-500 text-white rounded-full font-bold text-lg">Sangat Baik</div>
+              <div class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold text-lg" id="scoreCategory">Belum Dinilai</div>
             </div>
           </div>
         </div>
@@ -237,6 +237,36 @@
       @endif
     </div>
   </div>
-</script>
+  <script>
+  function updateScoreCategory(score) {
+    const categoryElement = document.getElementById('scoreCategory');
+    let category = '';
+    let categoryClass = '';
+
+    if (score >= 4.0) {
+        category = 'Sangat Baik';
+        categoryClass = 'bg-green-500';
+    } else if (score >= 3.0) {
+        category = 'Baik';
+        categoryClass = 'bg-blue-500';
+    } else if (score >= 2.0) {
+        category = 'Cukup';
+        categoryClass = 'bg-yellow-500';
+    } else if (score > 0) {
+        category = 'Kurang';
+        categoryClass = 'bg-red-500';
+    } else {
+        category = 'Belum Dinilai';
+        categoryClass = 'bg-gray-400';
+    }
+
+    categoryElement.textContent = category;
+    categoryElement.className = `px-6 py-3 ${categoryClass} text-white rounded-full font-bold text-lg`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateScoreCategory({{ $overallScore }});
+  })
+  </script>
 
 </x-app-layout>

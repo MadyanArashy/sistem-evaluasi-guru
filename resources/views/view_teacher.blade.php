@@ -229,11 +229,9 @@
                 <a href="{{ route('teacher.semester', ['id' => $teacher->id, 'semester_id' => $semesterId]) }}" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
                   <i class="fas fa-eye"></i> Lihat Detail
                 </a>
-                @if(auth()->check() && auth()->user()->role !== 'guru')
                 <a href="{{ route('teacher.report', ['id' => $teacher->id, 'semester_id' => $semesterId]) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm" target="_blank" rel="noopener noreferrer">
                   <i class="fas fa-print"></i> Cetak
                 </a>
-                @endif
               </div>
             </div>
           </div>
@@ -253,7 +251,7 @@
             </div>
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Kategori</p>
-              <div class="px-6 py-3 bg-green-500 text-white rounded-full font-bold text-lg">Sangat Baik</div>
+              <div class="px-6 py-3 bg-gray-400 text-white rounded-full font-bold text-lg" id="scoreCategory">Belum Dinilai</div>
             </div>
           </div>
         </div>
@@ -262,15 +260,6 @@
      <!-- Action Buttons -->
       @if(auth()->check() && auth()->user()->role !== 'guru')
       <div class="flex justify-center space-x-4 mt-8">
-        <button class="add-btn action-btn">
-          <i class="fa-solid fa-edit mr-2"></i>
-          Edit Evaluasi
-        </button>
-        <a href="{{ route('teacher.report', ['id' => $teacher->id]) }}" class="more-btn action-btn" target="_blank" rel="noopener noreferrer">
-          <i class="fa-solid fa-print mr-2"></i>
-          Cetak Laporan
-        </a>
-
         <!-- Promote to Guru Tetap Button -->
         @if(auth()->user()->role === 'evaluator' && $teacher->status === 'Calon Guru Tetap')
         <form action="{{ route('teacher.promote', ['id' => $teacher->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin mempromosikan {{ $teacher->name }} menjadi Guru Tetap?')">
@@ -286,6 +275,36 @@
       @endif
     </div>
   </div>
-</script>
 
+  <script>
+  function updateScoreCategory(score) {
+    const categoryElement = document.getElementById('scoreCategory');
+    let category = '';
+    let categoryClass = '';
+
+    if (score >= 4.0) {
+        category = 'Sangat Baik';
+        categoryClass = 'bg-green-500';
+    } else if (score >= 3.0) {
+        category = 'Baik';
+        categoryClass = 'bg-blue-500';
+    } else if (score >= 2.0) {
+        category = 'Cukup';
+        categoryClass = 'bg-yellow-500';
+    } else if (score > 0) {
+        category = 'Kurang';
+        categoryClass = 'bg-red-500';
+    } else {
+        category = 'Belum Dinilai';
+        categoryClass = 'bg-gray-400';
+    }
+
+    categoryElement.textContent = category;
+    categoryElement.className = `px-6 py-3 ${categoryClass} text-white rounded-full font-bold text-lg`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateScoreCategory({{ $overallScore }});
+  })
+  </script>
 </x-app-layout>
