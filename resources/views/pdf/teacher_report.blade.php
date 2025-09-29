@@ -126,7 +126,14 @@
                     <small>{{ $data->description }}</small>
                   </td>
                   <td class="score">
-                    {{ number_format(\App\Models\Evaluation::where('component_id', $data->id)->where('teacher_id', $teacher->id)->latest()->first()?->score / 10, 1) ?? '-' }}/5.0
+                    @php
+                      $query = \App\Models\Evaluation::where('component_id', $data->id)->where('teacher_id', $teacher->id);
+                      if ($semester) {
+                        $query->where('semester_id', $semester->id);
+                      }
+                      $evaluation = $query->latest()->first();
+                    @endphp
+                    {{ $evaluation ? number_format($evaluation->score / 10, 1) : '-' }}/5.0
                   </td>
                   <td class="score">{{ $data->weight }}%</td>
                   @if($loop->first)

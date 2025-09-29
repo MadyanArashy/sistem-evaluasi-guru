@@ -27,7 +27,8 @@ Route::middleware('auth')->group(function () {
 // Halaman-Halaman guru
 Route::middleware('auth')->group(function () {
     Route::get('/teacher/show/{id}', [TeacherController::class, 'show'])->name('teacher.show');
-    Route::get('/teacher/report/{id}', [TeacherController::class, 'report'])->name('teacher.report');
+    Route::get('/teacher/{id}/semester/{semester_id}', [TeacherController::class, 'showSemester'])->name('teacher.semester');
+    Route::get('/teacher/report/{id}/{semester_id?}', [TeacherController::class, 'report'])->name('teacher.report');
     Route::post('/teacher', [TeacherController::class, 'store'])->name('teacher.store');
     Route::delete('/teacher/{id}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
     Route::get('/create-teacher', [TeacherController::class, 'create'])->name('teacher.create');
