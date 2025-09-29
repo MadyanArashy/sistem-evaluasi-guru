@@ -54,11 +54,15 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
-  padding-right: 20px;
-  padding-left: 20px;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding: 0; /* default tanpa padding */
 }
+
+@media (min-width: 1536px) { /* 2xl breakpoint di Tailwind */
+  .content-card {
+    padding: 30px 20px; /* atas-bawah 30px, kanan-kiri 20px */
+  }
+}
+
 
 .content-card::before {
   content: '';
@@ -189,7 +193,7 @@
 .detail-btn {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
-  padding: 10px 20px;
+  padding: 8px 12px;
   border-radius: 12px;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -436,7 +440,6 @@
 }
 
 .action-btn {
-  padding: 12px 20px;
   border-radius: 10px;
   font-weight: 600;
   font-size: 0.875rem;

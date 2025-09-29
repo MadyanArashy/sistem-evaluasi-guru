@@ -1,5 +1,32 @@
 <x-app-layout>
 <style>
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+  position: relative;
+}
+
+@media (max-width: 1536px) { /* 2xl breakpoint di Tailwind */
+  .section-header {
+    padding: 30px 20px; /* atas-bawah 30px, kanan-kiri 20px */
+  }
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 1px;
+}
+
 .header-title {
   color: white;
   font-size: 2rem;
@@ -63,69 +90,6 @@
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-}
-
-.pagination-section {
-  margin-top: 32px;
-  padding: 24px;
-  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.6));
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.pagination-info {
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.pagination-info span {
-  color: #374151;
-  font-weight: 700;
-}
-
-.pagination-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.pagination-btn {
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 2px solid rgba(99, 102, 241, 0.1);
-  background: rgba(255, 255, 255, 0.9);
-  color: #374151;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 44px;
-  text-align: center;
-  text-decoration: none;
-}
-
-.pagination-btn:hover {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-}
-
-.pagination-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 .time-badge {
@@ -260,7 +224,7 @@
       </div>
 
       <!-- Pagination Section -->
-      <div class="pagination-section">
+      {{-- <div class="pagination-section">
         @if(method_exists($activities, 'total'))
           <!-- For paginated results -->
           <div class="pagination-info">
@@ -316,13 +280,16 @@
             </button>
           </div>
         @endif
-      </div>
+      </div> --}}
+       <div class="pagination-container">
+          {{ $activities->appends(request()->query())->links('custom.pagination') }}
+        </div>
     </div>
   </div>
 </div>
 
 <!-- Enhanced JavaScript for Search and Filter -->
-<script>
+{{-- <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Enhanced search functionality
   const searchInput = document.getElementById('searchInput');
@@ -432,5 +399,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-</script>
+</script> --}}
 </x-app-layout>

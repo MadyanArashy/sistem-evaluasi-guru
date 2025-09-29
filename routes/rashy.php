@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified', 'evaluator.only'])->group(function () {
 });
 
 Route::get('/activity', function () {
-  $activities = Activity::latest()->get();
+  $activities = Activity::latest()->paginate(10);
   return view('activity', compact('activities'));
 })->middleware(['auth', 'verified', 'admin.only'])->name('activity');
 

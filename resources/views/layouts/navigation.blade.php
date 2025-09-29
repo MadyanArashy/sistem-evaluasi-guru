@@ -38,7 +38,7 @@
       <i class="fa-solid fa-user-gear mr-2"></i> Admin
     </a>
 
-    {{-- Submenu admin --}}
+    <!-- Submenu admin -->
     @if(request()->routeIs('admin'))
       <div class="hidden lg:block ml-10 space-y-1 text-sm">
         <a href="#semesters" class="block px-4 py-2 text-white/70 hover:text-white hover:translate-x-1 transition-all duration-300">Semesters</a>
@@ -48,6 +48,12 @@
       </div>
     @endif
   @endif
+  
+  <!-- Download Buku Panduan -->
+    <a href="{{ asset('Buku_Panduan_Sistem_Evaluasi_Guru.pdf') }}" target="_blank"  {{-- download="Buku Panduan Sistem Evaluasi Guru" --}}
+    class="block px-6 py-3 border-l-4 transition-all duration-300 hover:bg-white/10 hover:border-white hover:translate-x-1 border-transparent text-white/90">
+      <i class="fa-solid fa-file"></i> Buku Panduan
+    </a>
 
   <!-- Aktivitas (login, pembuatan, dll.) -->
   @if(auth()->user()->role === 'admin')
