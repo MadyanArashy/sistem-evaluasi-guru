@@ -149,9 +149,10 @@ public function index()
         // Calculate scores for each semester
         $semesterScores = [];
         foreach ($teacherSemesters as $semester) {
-            $score = $this->calculateTeacherScore($teacher->id, $semester->id);
+            $scoreData = $this->calculateTeacherScore($teacher->id, $semester->id);
             $semesterScores[$semester->id] = [
-                'score' => $score,
+                'score' => $scoreData['total'],
+                'criteria_scores' => $scoreData['criteria'],
                 'semester_name' => $semester->semester == 1 ? 'Ganjil' : 'Genap',
                 'tahun_ajaran' => $semester->tahun_ajaran,
                 'semester' => $semester
@@ -160,9 +161,44 @@ public function index()
 
         // Calculate overall score (latest semester)
         $latestSemester = $teacherSemesters->first();
-        $overallScore = $latestSemester ? $this->calculateTeacherScore($teacher->id, $latestSemester->id) : 0;
+        $overallScore = $latestSemester ? $this->calculateTeacherScore($teacher->id, $latestSemester->id)['total'] : 0;
 
         return view('view_teacher', compact(['teacher', 'evalcomponents', 'criterias', 'semesterScores', 'overallScore']));
+    }
+
+    /**
+     * Display the specified teacher for a specific semester.
+     */
+    public function showSemester(string $id, string $semester_id)
+    {
+        $teacher = Teacher::findOrFail($id);
+
+        // Check if user is guru and trying to access another teacher's data
+        if (Auth::check() && Auth::user()->role === 'guru' && Auth::user()->teacher_id != $id) {
+            return redirect()->route('teacher.show', ['id' => Auth::user()->teacher_id])
+                ->with('error', 'Anda hanya dapat melihat data guru Anda sendiri');
+        }
+
+        $semester = \App\Models\Semester::findOrFail($semester_id);
+
+        // Check if the semester has evaluations for this teacher
+        $hasEvaluations = Evaluation::where('teacher_id', $teacher->id)
+            ->where('semester_id', $semester_id)
+            ->exists();
+
+        if (!$hasEvaluations) {
+            return redirect()->route('teacher.show', $teacher->id)
+                ->with('error', 'Tidak ada evaluasi untuk semester ini.');
+        }
+
+        $evalcomponents = EvalComponent::all();
+        $criterias = Criteria::all();
+
+        // Calculate score for this semester
+        $scoreData = $this->calculateTeacherScore($teacher->id, $semester->id);
+        $overallScore = $scoreData['total'];
+
+        return view('view_teacher_semester', compact(['teacher', 'evalcomponents', 'criterias', 'semester', 'overallScore']));
     }
 
     private function calculateTeacherScore($teacherId, $semesterId)
@@ -172,6 +208,7 @@ public function index()
         $criteriaGroups = $evalcomponents->groupBy('criteria_id');
 
         $finalScore = 0;
+        $criteriaScores = [];
 
         // Calculate score for each criteria
         foreach ($criteriaGroups as $criteriaId => $evalcomponentsGroup) {
@@ -200,11 +237,16 @@ public function index()
             $criteriaScore = $criteriaTotalWeight > 0 ?
                 ($criteriaWeightedSum / $criteriaTotalWeight) : 0;
 
+            $criteriaScores[$criteriaId] = round($criteriaScore, 2);
+
             // Apply criteria weight to overall score
             $finalScore += ($criteriaScore * $criteriaWeight) / 100;
         }
 
-        return round($finalScore, 2);
+        return [
+            'total' => round($finalScore, 2),
+            'criteria' => $criteriaScores
+        ];
     }
 
     /**
@@ -257,7 +299,7 @@ public function index()
     /**
      * Generate PDF report for the specified teacher.
      */
-    public function report(string $id)
+    public function report(string $id, string $semester_id = null)
     {
         $teacher = Teacher::findOrFail($id);
 
@@ -270,22 +312,37 @@ public function index()
         $evalcomponents = EvalComponent::all();
         $criterias = Criteria::all();
 
-        // Get latest semester for this teacher
-        $latestSemester = \App\Models\Semester::whereHas('evaluations', function($query) use ($teacher) {
-            $query->where('teacher_id', $teacher->id);
-        })
-        ->orderBy('tahun_ajaran', 'desc')
-        ->orderBy('semester', 'desc')
-        ->first();
+        if ($semester_id) {
+            $semester = \App\Models\Semester::findOrFail($semester_id);
+            // Check if the semester has evaluations for this teacher
+            $hasEvaluations = Evaluation::where('teacher_id', $teacher->id)
+                ->where('semester_id', $semester_id)
+                ->exists();
+            if (!$hasEvaluations) {
+                return redirect()->back()->with('error', 'Tidak ada evaluasi untuk semester ini.');
+            }
+        } else {
+            // Get latest semester for this teacher
+            $semester = \App\Models\Semester::whereHas('evaluations', function($query) use ($teacher) {
+                $query->where('teacher_id', $teacher->id);
+            })
+            ->orderBy('tahun_ajaran', 'desc')
+            ->orderBy('semester', 'desc')
+            ->first();
+        }
 
-        $score = $latestSemester ? $this->calculateTeacherScore($teacher->id, $latestSemester->id) : 0;
-        $semester = $latestSemester;
+        $score = $semester ? $this->calculateTeacherScore($teacher->id, $semester->id)['total'] : 0;
 
         // Load PDF view
         $pdf = Pdf::loadView('pdf.teacher_report', compact(['teacher', 'evalcomponents', 'criterias', 'score', 'semester']));
 
         // Return PDF download
-        return $pdf->download('laporan_guru_' . $teacher->name . '.pdf');
+        $filename = 'laporan_guru_' . $teacher->name;
+        if ($semester) {
+            $filename .= '_' . $semester->tahun_ajaran . '_' . ($semester->semester == 1 ? 'Ganjil' : 'Genap');
+        }
+        $filename .= '.pdf';
+        return $pdf->download($filename);
     }
 
     /**

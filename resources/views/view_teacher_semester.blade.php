@@ -73,6 +73,13 @@
 
   <div class="mx-auto px-2 py-12 relative z-10">
     <div class="content-card">
+      <!-- Back Button -->
+      <div class="mb-4">
+        <a href="{{ route('teacher.show', $teacher->id) }}" class="text-blue-600 hover:text-blue-800">
+          <i class="fas fa-arrow-left mr-2"></i>Kembali ke Detail Guru
+        </a>
+      </div>
+
       <!-- Teacher Header -->
       <div class="flex flex-col md:flex-row md:justify-between md:items-center">
         <div class="flex items-center mb-8 space-x-8">
@@ -89,15 +96,11 @@
             <p class="component-description">
               {{ $teacher->status }}
             </p>
+            <p class="text-lg font-semibold text-gray-700">
+              Semester: {{ $semester->semester == 1 ? 'Ganjil' : 'Genap' }} {{ $semester->tahun_ajaran }}
+            </p>
           </div>
         </div>
-        @if(auth()->check() && auth()->user()->role === 'evaluator')
-        <div>
-          <a href="{{ route('evaluation.create', ["id" => $teacher->id]) }}" class="action-btn detail-btn text-lg">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i></i>Evaluasi Baru
-          </a>
-        </div>
-        @endif
       </div>
 
       <!-- Success Message -->
@@ -164,6 +167,10 @@
               @foreach($evalcomponentsGroup as $data)
               @php
                 $criteria = Criteria::find($data->criteria_id);
+                $evaluation = Evaluation::where('component_id', $data->id)
+                  ->where('teacher_id', $teacher->id)
+                  ->where('semester_id', $semester->id)
+                  ->latest()->first();
               @endphp
                 <tr class="table-row">
                   <td class="p-6">
@@ -180,13 +187,6 @@
                     <div class="score-badge">
                       <i class="fas fa-star mr-1"></i>
                       <span class="evalScore">
-                        @php
-                          $latestSemester = collect($semesterScores)->keys()->first();
-                          $evaluation = $latestSemester ? Evaluation::where('component_id', $data->id)
-                            ->where('teacher_id', $teacher->id)
-                            ->where('semester_id', $latestSemester)
-                            ->latest()->first() : null;
-                        @endphp
                         {{ $evaluation ? number_format($evaluation->score / 10, 1) : '-' }}
                       </span>/5.0
                     </div>
@@ -209,43 +209,10 @@
         </table>
       </div>
 
-      <!-- Semester Scores History -->
-      @if(count($semesterScores) > 0)
-      <div class="mt-8 p-8 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200">
-        <div class="text-center mb-6">
-          <h3 class="text-2xl font-bold gradient-text">Riwayat Penilaian per Semester</h3>
-          <p class="text-gray-600 mt-2">Data lengkap dari semester pertama bekerja hingga sekarang</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          @foreach($semesterScores as $semesterId => $semesterData)
-          <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-purple-100 hover:shadow-xl transition-shadow duration-300">
-            <div class="text-center">
-              <div class="text-sm text-gray-500 mb-1">{{ $semesterData['tahun_ajaran'] }}</div>
-              <div class="text-lg font-bold text-purple-600 mb-3">{{ $semesterData['semester_name'] }}</div>
-              <div class="text-3xl font-bold text-purple-700 mb-2">{{ $semesterData['score'] }}</div>
-              <div class="text-xs text-gray-500 mb-4">Skor Evaluasi</div>
-              <div class="flex justify-center space-x-2">
-                <a href="{{ route('teacher.semester', ['id' => $teacher->id, 'semester_id' => $semesterId]) }}" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
-                  <i class="fas fa-eye"></i> Lihat Detail
-                </a>
-                @if(auth()->check() && auth()->user()->role !== 'guru')
-                <a href="{{ route('teacher.report', ['id' => $teacher->id, 'semester_id' => $semesterId]) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm" target="_blank" rel="noopener noreferrer">
-                  <i class="fas fa-print"></i> Cetak
-                </a>
-                @endif
-              </div>
-            </div>
-          </div>
-          @endforeach
-        </div>
-      </div>
-      @endif
-
       <!-- Overall Score Section -->
       <div class="mt-8 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200">
         <div class="text-center">
-          <h3 class="text-2xl font-bold gradient-text mb-4">Skor Evaluasi Keseluruhan</h3>
+          <h3 class="text-2xl font-bold gradient-text mb-4">Skor Evaluasi Semester Ini</h3>
           <div class="flex justify-center items-center space-x-8">
             <div class="text-center">
               <p class="text-sm text-gray-600 mb-2">Total Skor</p>
@@ -262,26 +229,10 @@
      <!-- Action Buttons -->
       @if(auth()->check() && auth()->user()->role !== 'guru')
       <div class="flex justify-center space-x-4 mt-8">
-        <button class="add-btn action-btn">
-          <i class="fa-solid fa-edit mr-2"></i>
-          Edit Evaluasi
-        </button>
-        <a href="{{ route('teacher.report', ['id' => $teacher->id]) }}" class="more-btn action-btn" target="_blank" rel="noopener noreferrer">
+        <a href="{{ route('teacher.report', ['id' => $teacher->id, 'semester_id' => $semester->id]) }}" class="more-btn action-btn" target="_blank" rel="noopener noreferrer">
           <i class="fa-solid fa-print mr-2"></i>
-          Cetak Laporan
+          Cetak Laporan Semester Ini
         </a>
-
-        <!-- Promote to Guru Tetap Button -->
-        @if(auth()->user()->role === 'evaluator' && $teacher->status === 'Calon Guru Tetap')
-        <form action="{{ route('teacher.promote', ['id' => $teacher->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin mempromosikan {{ $teacher->name }} menjadi Guru Tetap?')">
-          @csrf
-          @method('PUT')
-          <button type="submit" class="promote-btn action-btn">
-            <i class="fa-solid fa-star mr-2"></i>
-            Promosikan ke Guru Tetap
-          </button>
-        </form>
-        @endif
       </div>
       @endif
     </div>
