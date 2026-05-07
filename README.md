@@ -112,7 +112,4 @@ npm run build   # Production build
 
 ## License
 
-Proyek ini menggunakan lisensi MIT.
-
-```
-```
+Proyek ini menggunakan [lisensi MIT.](https://github.com/MadyanArashy/sistem-evaluasi-guru/blob/main/LICENSE)
